@@ -156,7 +156,7 @@ def main() -> None:
         "check_ratio_all_years": round(float(from_label.sum() / max(from_source.sum(), 1e-9)), 4),
     }
     out = REPO / "docs" / "phase1" / f"labels_forest_{region['name']}.json"
-    out.write_text(json.dumps(result, indent=2))
+    out.write_text(json.dumps(result, indent=2), newline="\n")
     print(json.dumps(result, indent=2))
 
 

@@ -40,7 +40,7 @@ def main() -> None:
 
     out = cfg_path.with_suffix(".csv")
     with out.open("w", newline="") as f:
-        w = csv.writer(f)
+        w = csv.writer(f, lineterminator="\n")
         w.writerow(["tile_id", "super_block", "split"])
         for tile in sorted(result, key=lambda t: t.tile_id):
             w.writerow([tile.tile_id, *result[tile]])
@@ -56,7 +56,7 @@ def main() -> None:
         "training_tiles_touching_a_scored_tile": touching,
         "file": out.name,
     }
-    cfg_path.with_name(cfg_path.stem + "_report.json").write_text(json.dumps(report, indent=2))
+    cfg_path.with_name(cfg_path.stem + "_report.json").write_text(json.dumps(report, indent=2), newline="\n")
     print(json.dumps(report, indent=2))
 
 

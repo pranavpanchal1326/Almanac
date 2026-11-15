@@ -70,7 +70,7 @@ def main() -> None:
         "tiles_with_wrong_shape": shape_errors,
     }
     out = REPO / "docs" / "phase1" / f"store_{region['name']}.json"
-    out.write_text(json.dumps(result, indent=2))
+    out.write_text(json.dumps(result, indent=2), newline="\n")
     print(json.dumps(result, indent=2))
 
 

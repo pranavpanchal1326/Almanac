@@ -254,8 +254,8 @@ def main() -> None:
     report["seconds"] = round(time.time() - t0)
     out = REPO / "docs" / "phase1" / "baseline_report.json"
     text = json.dumps(report, indent=1, default=float)
-    out.write_text(text)
-    with (REPO / "docs" / "phase1" / "test_touch_log.jsonl").open("a") as f:
+    out.write_text(text, newline="\n")
+    with (REPO / "docs" / "phase1" / "test_touch_log.jsonl").open("a", newline="\n") as f:
         f.write(
             json.dumps(
                 {
@@ -307,7 +307,7 @@ def write_markdown(report: dict, path: Path) -> None:
                     f"| {k} | {b['ap']:.4f} | {b['ap_ci95'][0]:.4f} to {b['ap_ci95'][1]:.4f} | {skill} | {p['0.001']:.3f} | {p['0.01']:.3f} | {p['0.05']:.3f} | {b['brier']:.5f} | {b['log_loss']:.4f} | {b['ece']:.4f} | {f['1']:.3f} / {f['3']:.3f} / {f['9']:.3f} |"
                 )
             lines.append("")
-    path.write_text("\n".join(lines))
+    path.write_text("\n".join(lines), newline="\n")
 
 
 if __name__ == "__main__":

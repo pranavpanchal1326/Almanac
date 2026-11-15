@@ -44,7 +44,7 @@ def main() -> None:
     lines = [f"{d}  {p.relative_to(DATA).as_posix()}" for d, p in zip(digests, paths, strict=True)]
     out = REPO / "configs" / "manifests" / f"{split.stem}.sha256"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text("\n".join(lines) + "\n")
+    out.write_text("\n".join(lines) + "\n", newline="\n")
     print(f"{len(lines)} files; manifest sha256 {hashlib.sha256(out.read_bytes()).hexdigest()}")
 
 

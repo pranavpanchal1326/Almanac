@@ -76,7 +76,7 @@ def main() -> None:
     }
     out = REPO / "docs" / "phase1" / "stream_trial.json"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(result, indent=2))
+    out.write_text(json.dumps(result, indent=2), newline="\n")
     print(json.dumps(result, indent=2))
 
 

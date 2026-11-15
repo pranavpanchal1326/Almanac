@@ -194,7 +194,7 @@ def main() -> None:
     report["seconds"] = round(time.time() - t0)
 
     out = REPO / "docs" / "phase1" / "threshold_study.json"
-    out.write_text(json.dumps(report, indent=2))
+    out.write_text(json.dumps(report, indent=2), newline="\n")
     record = {
         "name": "amazon_cerrado_v1",
         "task": "1.8",
@@ -211,7 +211,7 @@ def main() -> None:
     }
     thr = REPO / "configs" / "thresholds" / "amazon_cerrado_v1.json"
     thr.parent.mkdir(parents=True, exist_ok=True)
-    thr.write_text(json.dumps(record, indent=1))
+    thr.write_text(json.dumps(record, indent=1), newline="\n")
     print(json.dumps({k: v for k, v in report.items() if k != "rules"}, indent=2))
     for name, entry in report["rules"].items():
         print(name, {k: v for k, v in entry.items() if k not in ("by_end_year", "stable_flag_rate_by_class")})

@@ -1,0 +1,8 @@
+# Byte-exact files: digests in the pre-registration are taken over the repository bytes.
+* text=auto eol=lf
+*.tsq binary
+*.tsr binary
+*.ots binary
+*.der binary
+*.npz binary
+*.jpg binary

@@ -75,7 +75,7 @@ def main() -> None:
             for k in hits
         }
         print(n, out["by_tiles"][str(n)], flush=True)
-    (REPO / "docs" / "phase1" / "bootstrap_coverage.json").write_text(json.dumps(out, indent=2))
+    (REPO / "docs" / "phase1" / "bootstrap_coverage.json").write_text(json.dumps(out, indent=2), newline="\n")
 
 
 if __name__ == "__main__":
