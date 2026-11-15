@@ -119,14 +119,14 @@ The tile bootstrap undercovers AP when few tiles carry the signal
 ## Gate 1
 
 Decision record: [ADR 0003](../adr/0003-gate-1.md), accepted 2026-11-16. Passes on every condition
-but the public commit; no model is trained until `bfc789d` is public.
+but the public commit; no model is trained until `32a245e` is public.
 
 | Condition | State |
 |---|---|
 | Baseline report reproduces | Yes: two runs, identical |
 | Split committed | Yes |
 | Threshold committed | Yes |
-| Pre-registration timestamped | Yes: FreeTSA and DigiCert RFC 3161 tokens (2026-11-15 18:14 UTC), OpenTimestamps pending; [record](../prereg/2027.01.record.md) |
+| Pre-registration timestamped | Yes: FreeTSA and DigiCert RFC 3161 tokens (2026-11-15 19:00 UTC), OpenTimestamps pending; [record](../prereg/2027.01.record.md) |
 | Public commit | **No.** The repository has no public remote yet |
 
 ## Next
