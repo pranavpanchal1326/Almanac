@@ -27,7 +27,7 @@ Gate 0 passes on its written criterion; the threshold rule must be redesigned in
 | 0.7 | How the pyramid was built | Done | [pyramid.json](pyramid.json): renormalised mean of level 0 |
 | 0.8 | Change maps and pictures | Done | [figures/](figures/) |
 | 0.9 | Noise floor | Done | [noise_floor.json](noise_floor.json) |
-| 0.10 | Gate review | **Needs the team** | ADR 0001 is written as *proposed* |
+| 0.10 | Gate review | Done | ADR 0001 accepted by the project owner on 2026-11-15 |
 | 0.11 | Difference encoding | Done | [diffenc.json](diffenc.json): gain 1.0–1.4×; recommend not adopting |
 
 ## 1. Environment (0.1)
