@@ -98,8 +98,17 @@ def _layer(arr: np.ndarray, index: int) -> np.ndarray | None:
 
 
 def tile_examples(
-    cube: TileCube, target: int, task: str, rule: ChangeRule, with_features: bool = True
+    cube: TileCube,
+    target: int,
+    task: str,
+    rule: ChangeRule,
+    with_features: bool = True,
+    truth: bool = True,
 ) -> TileExamples:
+    """Examples for ``target``. With ``truth=False`` (a forecast for a year whose truth does not exist
+    yet) the target year is not read at all: ``y`` is all False, and the embedding task's
+    eligibility drops the target-year validity condition, which is applied at grading instead.
+    Inputs, scores and forest-task eligibility do not depend on ``truth``."""
     if task not in TASKS:
         raise ValueError(task)
     assert cube.forest_start is not None and cube.forest_lost is not None
@@ -112,12 +121,13 @@ def tile_examples(
     elig = (cube.land >= LAND_MIN) & cube.valid[vi]
     if task == "forest":
         elig &= cube.forest_start[lab] >= FOREST_MIN
-        truth = cube.forest_lost[lab] >= LOSS_EVENT
+        y = cube.forest_lost[lab] >= LOSS_EVENT if truth else np.zeros_like(elig)
     else:
-        elig &= cube.valid[YEARS.index(target)]
-        truth = rule.events(cube, target)
+        if truth:
+            elig &= cube.valid[YEARS.index(target)]
+        y = rule.events(cube, target) if truth else np.zeros_like(elig)
     rows = np.flatnonzero(elig.ravel())
-    ex = TileExamples(rows, truth.ravel()[rows])
+    ex = TileExamples(rows, y.ravel()[rows])
 
     # Past change (pairs ending at or before the issue year).
     pair = issue - YEARS[1]

@@ -72,3 +72,25 @@ def test_examples_use_nothing_from_the_target_year(task: str) -> None:
     for k in base.scores:
         np.testing.assert_array_equal(base.scores[k], after.scores[k])
     assert not np.array_equal(base.y, after.y)
+
+
+@pytest.mark.parametrize("task", ["forest", "embedding"])
+def test_forecast_mode_changes_nothing_but_truth(task: str) -> None:
+    rng = np.random.default_rng(3)
+    cube = _cube(rng)
+    rule = ChangeRule(centres=np.eye(64)[:4], class_tau=np.full(4, 0.15))
+    cube.valid[8, :4] = False  # some cells invalid in 2025: the embedding task drops them
+    full = tile_examples(cube, 2025, task, rule)
+    fc = tile_examples(cube, 2025, task, rule, truth=False)
+    if task == "forest":
+        np.testing.assert_array_equal(full.rows, fc.rows)
+    else:
+        assert set(full.rows) < set(fc.rows)
+    keep = np.isin(fc.rows, full.rows)
+    np.testing.assert_array_equal(full.features, fc.features[keep])
+    for k in full.scores:
+        np.testing.assert_array_equal(full.scores[k], fc.scores[k][keep])
+    assert not fc.y.any()
+    # 2026 has no truth at all and still works in forecast mode.
+    f26 = tile_examples(cube, 2026, task, rule, truth=False)
+    assert f26.rows.size > 0 and f26.features is not None and not f26.y.any()

@@ -8,6 +8,9 @@ Guards: training uses only tiles marked "train" in the split and target years in
 which must all be 2023 or earlier; validation uses only "validation" tiles and target 2024. The test
 year (2025) is never read here.
 
+Resumable: the full training state is saved at every validation check; running the same command
+again continues from there. A finished run (``last.pt`` present) is left alone.
+
 Smoke mode (task 2.2): overfits one fixed batch, then measures peak GPU memory and throughput for
 each candidate batch size. Writes nothing but prints a JSON summary.
 """
@@ -177,7 +180,7 @@ def smoke(cfg: dict, device: str) -> None:
     print(json.dumps(result, indent=2))
 
 
-def train(cfg: dict, out: Path, device: str, dry: bool = False) -> None:
+def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int = 0) -> None:
     dcfg, ncfg, w = build(cfg)
     o = cfg["optim"]
     if max(cfg["train_targets"]) > 2023:
@@ -190,7 +193,17 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False) -> None:
         cfg = dict(cfg, workers=2, optim=o)
         tiles, val_tiles = tiles[:60], tiles[:4]
     out.mkdir(parents=True, exist_ok=True)
-    (out / "config.json").write_text(json.dumps(cfg, indent=1), newline="\n")
+    if (out / "last.pt").exists():
+        print(f"{out} already finished; nothing to do", flush=True)
+        return
+    state_path = out / "state.pt"
+    resuming = state_path.exists()
+    if resuming:
+        saved = json.loads((out / "config.json").read_text())
+        if saved.get("_sha256") != cfg["_sha256"]:
+            raise SystemExit("configuration changed since this run started; refusing to resume")
+    else:
+        (out / "config.json").write_text(json.dumps(cfg, indent=1), newline="\n")
     torch.manual_seed(cfg["seed"])
     np.random.seed(cfg["seed"])
     index = PatchIndex.build(tiles, cfg["train_targets"], dcfg)
@@ -200,9 +213,24 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False) -> None:
     for p in ema.parameters():
         p.requires_grad_(False)
     opt = torch.optim.AdamW(net.parameters(), lr=o["lr"], weight_decay=o["weight_decay"])
+    step, epoch, best, elapsed = 0, 0, -1.0, 0.0
+    if resuming:
+        st = torch.load(state_path, map_location=device, weights_only=False)
+        net.load_state_dict(st["net"])
+        ema.load_state_dict(st["ema"])
+        opt.load_state_dict(st["opt"])
+        torch.set_rng_state(st["rng_cpu"].cpu())
+        if device == "cuda":
+            torch.cuda.set_rng_state(st["rng_cuda"].cpu())
+        step, epoch, best, elapsed = st["step"], st["epoch"], st["best"], st["elapsed"]
+        # Keep only log lines up to the saved step, in case a crash left a later one.
+        lines = (out / "log.jsonl").read_text().splitlines()
+        kept = [ln for ln in lines if json.loads(ln)["step"] <= step]
+        (out / "log.jsonl").write_text("".join(ln + "\n" for ln in kept), newline="\n")
+        print(f"resuming at step {step} (epoch {epoch}, best {best:.5f})", flush=True)
     log = (out / "log.jsonl").open("a", newline="\n")
-    step, epoch, best = 0, 0, -1.0
-    t0 = time.time()
+    t0 = time.time() - elapsed
+    checks_this_session = 0
     while step < o["steps"]:
         specs = sampler.draw(o["batch"] * o["eval_every"], epoch)
         loader = torch.utils.data.DataLoader(
@@ -210,7 +238,7 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False) -> None:
             batch_size=o["batch"],
             num_workers=cfg["workers"],
             persistent_workers=False,
-            pin_memory=True,
+            pin_memory=device == "cuda",
         )
         net.train()
         acc: dict[str, float] = {}
@@ -243,6 +271,27 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False) -> None:
             best = rec["val2024_ap_forest"]
             torch.save({"ema": ema.state_dict(), "step": step, "config": cfg}, out / "best.pt")
         epoch += 1
+        # Full state at every check, written atomically: a stop costs at most one interval. The
+        # sampler is seeded by (seed, epoch), so a resumed run draws the same patches.
+        state = {
+            "net": net.state_dict(),
+            "ema": ema.state_dict(),
+            "opt": opt.state_dict(),
+            "rng_cpu": torch.get_rng_state(),
+            "rng_cuda": torch.cuda.get_rng_state() if device == "cuda" else None,
+            "step": step,
+            "epoch": epoch,
+            "best": best,
+            "elapsed": time.time() - t0,
+        }
+        torch.save(state, out / "state.pt.part")
+        (out / "state.pt.part").replace(state_path)
+        checks_this_session += 1
+        if stop_after and checks_this_session >= stop_after and step < o["steps"]:
+            print(
+                f"stopping after {checks_this_session} checks at step {step}; run again to resume", flush=True
+            )
+            return
     torch.save({"ema": ema.state_dict(), "step": step, "config": cfg}, out / "last.pt")
 
 
@@ -252,9 +301,11 @@ def main() -> None:
     ap.add_argument("--out", type=Path)
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--dry", action="store_true", help="30 steps; validates on training tiles")
+    ap.add_argument("--stop-after", type=int, default=0, help="end this session after N checks")
+    ap.add_argument("--cpu", action="store_true", help="run on the CPU (tests)")
     args = ap.parse_args()
     cfg = load_config(args.config)
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "cuda" if torch.cuda.is_available() and not args.cpu else "cpu"
     if device == "cuda":
         # On Windows the driver spills to system memory instead of failing, which is silently ~50x
         # slower. Cap the allocator at the card's memory so an oversized batch fails fast.
@@ -264,7 +315,7 @@ def main() -> None:
     else:
         if args.out is None:
             raise SystemExit("--out is required for training")
-        train(cfg, args.out, device, dry=args.dry)
+        train(cfg, args.out, device, dry=args.dry, stop_after=args.stop_after)
 
 
 if __name__ == "__main__":
