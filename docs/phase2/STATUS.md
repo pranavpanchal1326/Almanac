@@ -59,7 +59,7 @@ so an oversized batch fails at once.
 
 | Run | Started (UTC) | Outcome |
 |---|---|---|
-| B5, attempt 1 | 2026-11-15 20:31 | **Crashed** at about step 7,000 (GPU out of memory). A test job started alongside it on the CPU created a CUDA context through pinned memory and took GPU memory B5 needed. Validation 2024 forest-loss AP at steps 2,000 / 4,000 / 6,000: 0.2414 / 0.2479 / 0.2394. Kept in `D:/almanac-data/runs/failed/`. |
+| B5, attempt 1 | 2026-11-15 20:31 | **Crashed** after step 6,000, before the next check (GPU out of memory). A test job started alongside it on the CPU created a CUDA context through pinned memory and took GPU memory B5 needed. Validation 2024 forest-loss AP at steps 2,000 / 4,000 / 6,000: 0.2414 / 0.2479 / 0.2394. Kept in `D:/almanac-data/runs/failed/`. |
 | B5, attempt 2 | 2026-11-15 21:29 | Running, from step 0, with the same configuration and seed. |
 
 Fixes after attempt 1: pinned memory only on GPU runs; training saves its full state at every
