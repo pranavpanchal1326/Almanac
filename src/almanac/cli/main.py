@@ -22,8 +22,10 @@ from almanac.io.reader import TransferLog, read_block
 app = typer.Typer(no_args_is_help=True, add_completion=False, help=__doc__)
 index_app = typer.Typer(no_args_is_help=True, help="The supplier index.")
 fetch_app = typer.Typer(no_args_is_help=True, help="Download data from the supplier.")
+stream_app = typer.Typer(no_args_is_help=True, help="Streaming passes that keep only summaries.")
 app.add_typer(index_app, name="index")
 app.add_typer(fetch_app, name="fetch")
+app.add_typer(stream_app, name="stream")
 
 DEFAULT_INDEX = Path("D:/almanac-data/index/aef_index.parquet")
 IndexOpt = Annotated[Path, typer.Option("--index", help="Local copy of aef_index.parquet.")]
@@ -117,6 +119,56 @@ def fetch_block(
         path = out / f"{block_id(tile, block_row, block_col)}_{row.year}.npy"
         np.save(path, values)
         typer.echo(f"{path.name}  {log.bytes / 1e6:.1f} MB transferred  valid {valid.mean():.4f}")
+
+
+@stream_app.command("level")
+def stream_level(
+    out: Annotated[Path, typer.Option(help="Folder for the per-tile summaries.")],
+    level: Annotated[int, typer.Option(help="Pyramid level, 5..13.")] = 6,
+    zone: Annotated[str | None, typer.Option(help="One UTM zone, for example 50N. Default: all.")] = None,
+    limit: Annotated[int | None, typer.Option(help="Stop after this many tiles (for trials).")] = None,
+    workers: Annotated[int, typer.Option(help="Concurrent connections, at most 16.")] = 12,
+    index: IndexOpt = DEFAULT_INDEX,
+) -> None:
+    """Read one level of every tile and year once; keep change summaries only. Safe to re-run."""
+    from almanac.data.stream import StreamReport, run_stream
+    from almanac.io.http import RangeClient
+    from almanac.io.level import read_level
+
+    work = index_mod.tiles_with_years(index, zone)
+    if limit is not None:
+        work = work[:limit]
+
+    def show(r: StreamReport) -> None:
+        rate = r.tiles_done / max(r.seconds, 1e-9) * 3600
+        typer.echo(
+            f"{r.tiles_done + r.tiles_skipped}/{r.tiles_total} tiles, {r.tiles_failed} failed, "
+            f"{r.bytes_fetched / 1e6:.0f} MB, {rate:.0f} tiles/hour"
+        )
+
+    with RangeClient(connections=workers) as client:
+        report = run_stream(work, level, out, lambda url: read_level(client, url, level), workers, show)
+        stats = client.stats
+    typer.echo(
+        f"done: {report.tiles_done} new, {report.tiles_skipped} already present, "
+        f"{report.tiles_failed} failed, {report.bytes_fetched / 1e6:.0f} MB in {report.seconds:.0f} s; "
+        f"{stats.requests} requests, {stats.retries} retries, peak {stats.peak_in_flight} in flight"
+    )
+    if report.tiles_failed:
+        raise typer.Exit(code=1)
+
+
+@stream_app.command("coverage")
+def stream_coverage(
+    out: Annotated[Path, typer.Option(help="Folder holding the per-tile summaries.")],
+    level: Annotated[int, typer.Option(help="Pyramid level.")] = 6,
+) -> None:
+    """Coverage report: tiles visited per year, bytes fetched, bytes on disk."""
+    import json
+
+    from almanac.data.stream import coverage
+
+    typer.echo(json.dumps(coverage(out, level), indent=2))
 
 
 if __name__ == "__main__":

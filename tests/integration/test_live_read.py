@@ -45,3 +45,21 @@ def test_reader_matches_the_suppliers_north_up_sidecar() -> None:
     via_vrt = read_block_via_vrt(url.removesuffix(".tiff") + ".vrt", row, col)
     np.testing.assert_array_equal(values, via_vrt)
     assert not np.array_equal(values[:, ::-1, :], via_vrt)
+
+
+def test_two_request_level_read_matches_a_standard_read() -> None:
+    import rasterio
+
+    from almanac.io.http import RangeClient
+    from almanac.io.level import read_level
+    from almanac.io.reader import GDAL_ENV
+
+    url, _row, _col = _fixture_source()
+    with RangeClient(connections=2) as client:
+        got = read_level(client, url, 6)
+        assert client.stats.requests == 2
+    assert got.values_chw.shape == (64, 128, 128) and got.values_chw.dtype == np.int8
+    assert got.bytes_fetched < 1_500_000
+    with rasterio.Env(**GDAL_ENV), rasterio.open(f"/vsicurl/{url}", OVERVIEW_LEVEL=5) as ds:
+        reference = ds.read()[:, ::-1, :]
+    np.testing.assert_array_equal(got.values_chw, reference)

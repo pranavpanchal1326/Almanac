@@ -45,6 +45,21 @@ def files_for_point(index_path: Path, lon: float, lat: float) -> list[IndexRow]:
     return [IndexRow(int(y), to_https(p), TileRef(z, int(w), int(s))) for y, p, z, w, s in rows]
 
 
+def tiles_with_years(index_path: Path, utm_zone: str | None = None) -> list[tuple[TileRef, dict[int, str]]]:
+    """Every tile footprint with the address of its file for each year present, in a fixed order."""
+    con = duckdb.connect()
+    sql = "SELECT utm_zone, utm_west, utm_south, year, path FROM read_parquet(?)"
+    params: list[str] = [str(index_path)]
+    if utm_zone is not None:
+        sql += " WHERE utm_zone = ?"
+        params.append(utm_zone)
+    rows = con.execute(sql + " ORDER BY utm_zone, utm_west, utm_south, year", params).fetchall()
+    out: dict[TileRef, dict[int, str]] = {}
+    for zone, west, south, year, path in rows:
+        out.setdefault(TileRef(zone, int(west), int(south)), {})[int(year)] = to_https(path)
+    return list(out.items())
+
+
 def counts_per_year(index_path: Path) -> list[tuple[int, int, int]]:
     """(year, files, UTM zones) for each year."""
     con = duckdb.connect()
