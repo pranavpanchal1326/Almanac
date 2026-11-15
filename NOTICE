@@ -1,0 +1,16 @@
+Almanac
+Copyright 2026 pranavpanchal1326
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The licence covers the code and documentation written for this project. It does not cover the
+third-party material below, which keeps its own terms.
+
+- AlphaEarth Foundations Satellite Embedding dataset, produced by Google and Google DeepMind,
+  used under CC-BY 4.0. Read from the Source Cooperative mirror; not redistributed here.
+- Global Forest Change 2000-2025 v1.13 (Hansen, M. C. et al. 2013, Science 342: 850-853;
+  University of Maryland), used under CC-BY 4.0. Not redistributed here; derived per-cell
+  statistics appear in reports.
+- Figures in docs/phase0/figures contain modified Copernicus Sentinel data.
+- Certificates and timestamp tokens in docs/prereg/proofs were issued by FreeTSA and DigiCert
+  and are included only so that the timestamps can be verified.

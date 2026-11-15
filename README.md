@@ -111,6 +111,11 @@ rasters for the region in `D:/almanac-data/labels/gfc`.
 | `tests` | Unit, property, golden and live-read tests |
 | `docs` | Phase reports, decision records, pre-registration and proofs |
 
+## Licence
+
+Code and documentation: [Apache License 2.0](LICENSE). Third-party data, figures and timestamp
+certificates keep their own terms; see [NOTICE](NOTICE).
+
 ## Attribution
 
 The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind.
