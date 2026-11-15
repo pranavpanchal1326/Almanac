@@ -118,8 +118,8 @@ The tile bootstrap undercovers AP when few tiles carry the signal
 
 ## Gate 1
 
-Decision record: [ADR 0003](../adr/0003-gate-1.md), accepted 2026-11-16. Passes on every condition
-but the public commit; no model is trained until `ed2cf4f` is public.
+Decision record: [ADR 0003](../adr/0003-gate-1.md), accepted 2026-11-16. **Gate 1 passed and closed
+on 2026-11-16**, when the stamped commit `ed2cf4f` became public.
 
 | Condition | State |
 |---|---|
@@ -127,10 +127,9 @@ but the public commit; no model is trained until `ed2cf4f` is public.
 | Split committed | Yes |
 | Threshold committed | Yes |
 | Pre-registration timestamped | Yes: FreeTSA and DigiCert RFC 3161 tokens (2026-11-15 19:05 UTC), OpenTimestamps pending; [record](../prereg/2027.01.record.md) |
-| Public commit | **No.** The repository has no public remote yet |
+| Public commit | Yes: published 2026-11-16, [https://github.com/pranavpanchal1326/Almanac](https://github.com/pranavpanchal1326/Almanac) |
 
 ## Next
 
-1. Publish the repository (or at least the pre-registration commit) so the commit is public.
-2. Upgrade the OpenTimestamps proof once Bitcoin confirms it (`ots upgrade`).
-3. Phase 2: specify the model in section 10 of the pre-registration before training it.
+1. Upgrade the OpenTimestamps proof once Bitcoin confirms it (`ots upgrade`).
+2. Phase 2: specify the model in section 10 of the pre-registration before training it.
