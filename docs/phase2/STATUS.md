@@ -3,7 +3,7 @@
 Started 2026-11-16. Question: does a learned model beat the best simple method (B4) on places and
 years it has not seen? Rules: [pre-registration](../prereg/2027.01.md) and
 [amendment 1](../prereg/2027.01.amendment-1.md) (the model specification, timestamped before any
-training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, OpenTimestamps pending).
+training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, and Bitcoin block 976,013, mined 20:43:06 UTC; the proof's commitment matches that block's Merkle root).
 
 | ID | Task | Status | Evidence |
 |---|---|---|---|
