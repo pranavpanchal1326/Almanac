@@ -56,7 +56,7 @@ class RangeClient:
         self.stats = TransferStats()
         self._gate = threading.BoundedSemaphore(connections)
         self._client = httpx.Client(
-            http2=True,
+            http2=False,  # the HTTP/2 path is not safe under threads (protocol errors in the first run)
             timeout=timeout_s,
             limits=httpx.Limits(max_connections=connections, max_keepalive_connections=connections),
             headers={"User-Agent": "almanac-research-client"},
@@ -95,7 +95,9 @@ class RangeClient:
                         last = httpx.HTTPStatusError(
                             f"HTTP {resp.status_code} for {url}", request=resp.request, response=resp
                         )
-                    except (httpx.TransportError, httpx.TimeoutException) as exc:
+                    except httpx.HTTPStatusError:
+                        raise
+                    except Exception as exc:  # transport, timeout and protocol errors are all retried
                         last = exc
                     time.sleep(min(60.0, 2.0**attempt))
                 raise RuntimeError(f"gave up after {self.max_retries + 1} attempts: {url}") from last
