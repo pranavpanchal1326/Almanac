@@ -118,6 +118,9 @@ The tile bootstrap undercovers AP when few tiles carry the signal
 
 ## Gate 1
 
+Decision record: [ADR 0003](../adr/0003-gate-1.md), proposed 2026-11-16. Passes on every condition
+but the public commit; no model is trained until `bfc789d` is public.
+
 | Condition | State |
 |---|---|
 | Baseline report reproduces | Yes: two runs, identical |
