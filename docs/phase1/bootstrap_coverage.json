@@ -1,0 +1,33 @@
+{
+  "cells_per_tile": 200,
+  "reps": 40,
+  "draws": 300,
+  "true_ap": 0.4677986665022709,
+  "true_rel": 0.5984710692257067,
+  "by_tiles": {
+    "60": {
+      "ap": {
+        "coverage": 0.65,
+        "interval_entirely_above_truth": 0.35,
+        "mean_estimate": 0.5011665491925248
+      },
+      "rel": {
+        "coverage": 0.7,
+        "interval_entirely_above_truth": 0.3,
+        "mean_estimate": 0.6491674090681677
+      }
+    },
+    "240": {
+      "ap": {
+        "coverage": 0.825,
+        "interval_entirely_above_truth": 0.175,
+        "mean_estimate": 0.4795241793103154
+      },
+      "rel": {
+        "coverage": 0.975,
+        "interval_entirely_above_truth": 0.025,
+        "mean_estimate": 0.5946256295418623
+      }
+    }
+  }
+}

@@ -1,0 +1,369 @@
+{
+  "task": "1.8",
+  "split_file": "configs/splits/amazon_cerrado_v1.csv",
+  "tiles": 800,
+  "cell_pairs": 64565694,
+  "q": 0.99,
+  "loss_event_share": 0.025,
+  "fit_end_years": [
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "eval_end_years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "n_classes": 12,
+  "thresholds": {
+    "global_tau": 0.12555,
+    "class_tau": [
+      0.05396,
+      0.13696,
+      0.09674,
+      0.03424,
+      0.13406,
+      0.18755,
+      0.17089,
+      0.04354,
+      0.25395,
+      0.18079,
+      0.02238,
+      0.0919
+    ],
+    "history_z_star": 9.35
+  },
+  "class_share_of_land": [
+    0.1187,
+    0.1287,
+    0.0943,
+    0.1193,
+    0.0366,
+    0.1941,
+    0.0258,
+    0.0725,
+    0.0077,
+    0.0152,
+    0.1648,
+    0.0221
+  ],
+  "class_loss_rate": [
+    0.0058,
+    0.0457,
+    0.0002,
+    0.0197,
+    0.1136,
+    0.0265,
+    0.0081,
+    0.0495,
+    0.028,
+    0.0897,
+    0.005,
+    0.0206
+  ],
+  "rules": {
+    "global": {
+      "stable_flag_rate": 0.0112,
+      "land_flag_rate": 0.0136,
+      "loss_cell_recall_same_year": 0.0697,
+      "large_loss_recall_same_year": 0.2484,
+      "flags_on_loss_cells_share": 0.1358,
+      "stable_flag_rate_by_class": [
+        0.0012,
+        0.0137,
+        0.0049,
+        0.0002,
+        0.0224,
+        0.0321,
+        0.0573,
+        0.0004,
+        0.0553,
+        0.0407,
+        0.0,
+        0.0027
+      ],
+      "class_rate_max_over_min": 8877.72,
+      "by_end_year": {
+        "2020": {
+          "stable_flag_rate": 0.0065,
+          "land_flag_rate": 0.0087,
+          "loss_cell_recall": 0.0499
+        },
+        "2021": {
+          "stable_flag_rate": 0.0076,
+          "land_flag_rate": 0.0098,
+          "loss_cell_recall": 0.0696
+        },
+        "2022": {
+          "stable_flag_rate": 0.0112,
+          "land_flag_rate": 0.0133,
+          "loss_cell_recall": 0.0665
+        },
+        "2023": {
+          "stable_flag_rate": 0.0138,
+          "land_flag_rate": 0.0162,
+          "loss_cell_recall": 0.0721
+        },
+        "2024": {
+          "stable_flag_rate": 0.0162,
+          "land_flag_rate": 0.0188,
+          "loss_cell_recall": 0.077
+        },
+        "2025": {
+          "stable_flag_rate": 0.0119,
+          "land_flag_rate": 0.0151,
+          "loss_cell_recall": 0.0833
+        }
+      },
+      "loss_last_year_recall": 0.065,
+      "auc_vs_loss": 0.7342,
+      "ap_vs_loss": 0.0664,
+      "ap_base_rate": 0.0248
+    },
+    "class": {
+      "stable_flag_rate": 0.0128,
+      "land_flag_rate": 0.0176,
+      "loss_cell_recall_same_year": 0.1305,
+      "large_loss_recall_same_year": 0.3828,
+      "flags_on_loss_cells_share": 0.2063,
+      "stable_flag_rate_by_class": [
+        0.0219,
+        0.0097,
+        0.0091,
+        0.0118,
+        0.0185,
+        0.0104,
+        0.0208,
+        0.0153,
+        0.011,
+        0.0109,
+        0.0108,
+        0.0113
+      ],
+      "class_rate_max_over_min": 2.41,
+      "by_end_year": {
+        "2020": {
+          "stable_flag_rate": 0.0041,
+          "land_flag_rate": 0.0071,
+          "loss_cell_recall": 0.0812
+        },
+        "2021": {
+          "stable_flag_rate": 0.0086,
+          "land_flag_rate": 0.0119,
+          "loss_cell_recall": 0.0995
+        },
+        "2022": {
+          "stable_flag_rate": 0.0117,
+          "land_flag_rate": 0.0161,
+          "loss_cell_recall": 0.1214
+        },
+        "2023": {
+          "stable_flag_rate": 0.0126,
+          "land_flag_rate": 0.0185,
+          "loss_cell_recall": 0.1372
+        },
+        "2024": {
+          "stable_flag_rate": 0.0201,
+          "land_flag_rate": 0.0255,
+          "loss_cell_recall": 0.1614
+        },
+        "2025": {
+          "stable_flag_rate": 0.0192,
+          "land_flag_rate": 0.0263,
+          "loss_cell_recall": 0.1804
+        }
+      },
+      "loss_last_year_recall": 0.1001,
+      "auc_vs_loss": 0.6235,
+      "ap_vs_loss": 0.0963,
+      "ap_base_rate": 0.0248
+    },
+    "history": {
+      "stable_flag_rate": 0.0088,
+      "land_flag_rate": 0.0119,
+      "loss_cell_recall_same_year": 0.0969,
+      "large_loss_recall_same_year": 0.3495,
+      "flags_on_loss_cells_share": 0.2168,
+      "stable_flag_rate_by_class": [
+        0.0032,
+        0.0105,
+        0.0177,
+        0.0006,
+        0.0135,
+        0.0161,
+        0.0418,
+        0.0009,
+        0.0239,
+        0.0154,
+        0.0,
+        0.0166
+      ],
+      "class_rate_max_over_min": 1141.56,
+      "by_end_year": {
+        "2020": {
+          "stable_flag_rate": 0.004,
+          "land_flag_rate": 0.0057,
+          "loss_cell_recall": 0.0619
+        },
+        "2021": {
+          "stable_flag_rate": 0.0174,
+          "land_flag_rate": 0.0196,
+          "loss_cell_recall": 0.1038
+        },
+        "2022": {
+          "stable_flag_rate": 0.0082,
+          "land_flag_rate": 0.0112,
+          "loss_cell_recall": 0.0938
+        },
+        "2023": {
+          "stable_flag_rate": 0.0103,
+          "land_flag_rate": 0.0144,
+          "loss_cell_recall": 0.1033
+        },
+        "2024": {
+          "stable_flag_rate": 0.007,
+          "land_flag_rate": 0.0106,
+          "loss_cell_recall": 0.1033
+        },
+        "2025": {
+          "stable_flag_rate": 0.0058,
+          "land_flag_rate": 0.0098,
+          "loss_cell_recall": 0.1158
+        }
+      },
+      "loss_last_year_recall": 0.0623,
+      "auc_vs_loss": 0.6379,
+      "ap_vs_loss": 0.0883,
+      "ap_base_rate": 0.0248
+    },
+    "phase0_tau": {
+      "stable_flag_rate": 0.6027,
+      "land_flag_rate": 0.6329,
+      "loss_cell_recall_same_year": 0.9177,
+      "large_loss_recall_same_year": 0.9953,
+      "flags_on_loss_cells_share": 0.0561,
+      "stable_flag_rate_by_class": [
+        0.5675,
+        0.9355,
+        0.671,
+        0.3158,
+        0.9421,
+        0.9333,
+        0.985,
+        0.4481,
+        0.7925,
+        0.9285,
+        0.1475,
+        0.7599
+      ],
+      "class_rate_max_over_min": 6.68,
+      "by_end_year": {
+        "2020": {
+          "stable_flag_rate": 0.439,
+          "land_flag_rate": 0.4769,
+          "loss_cell_recall": 0.8199
+        },
+        "2021": {
+          "stable_flag_rate": 0.6339,
+          "land_flag_rate": 0.6621,
+          "loss_cell_recall": 0.92
+        },
+        "2022": {
+          "stable_flag_rate": 0.6235,
+          "land_flag_rate": 0.6537,
+          "loss_cell_recall": 0.9358
+        },
+        "2023": {
+          "stable_flag_rate": 0.6355,
+          "land_flag_rate": 0.6675,
+          "loss_cell_recall": 0.9445
+        },
+        "2024": {
+          "stable_flag_rate": 0.5987,
+          "land_flag_rate": 0.6296,
+          "loss_cell_recall": 0.921
+        },
+        "2025": {
+          "stable_flag_rate": 0.6838,
+          "land_flag_rate": 0.7078,
+          "loss_cell_recall": 0.9641
+        }
+      },
+      "loss_last_year_recall": 0.9174
+    },
+    "fixed_0.2": {
+      "stable_flag_rate": 0.0028,
+      "land_flag_rate": 0.0038,
+      "loss_cell_recall_same_year": 0.0255,
+      "large_loss_recall_same_year": 0.1021,
+      "flags_on_loss_cells_share": 0.1742,
+      "stable_flag_rate_by_class": [
+        0.0001,
+        0.0024,
+        0.0021,
+        0.0,
+        0.0054,
+        0.0089,
+        0.0107,
+        0.0001,
+        0.0211,
+        0.0072,
+        0.0,
+        0.0002
+      ],
+      "class_rate_max_over_min": 21111.37,
+      "by_end_year": {
+        "2020": {
+          "stable_flag_rate": 0.0015,
+          "land_flag_rate": 0.0023,
+          "loss_cell_recall": 0.0187
+        },
+        "2021": {
+          "stable_flag_rate": 0.0018,
+          "land_flag_rate": 0.0027,
+          "loss_cell_recall": 0.0252
+        },
+        "2022": {
+          "stable_flag_rate": 0.0031,
+          "land_flag_rate": 0.004,
+          "loss_cell_recall": 0.0284
+        },
+        "2023": {
+          "stable_flag_rate": 0.0033,
+          "land_flag_rate": 0.0043,
+          "loss_cell_recall": 0.0265
+        },
+        "2024": {
+          "stable_flag_rate": 0.0041,
+          "land_flag_rate": 0.0051,
+          "loss_cell_recall": 0.0254
+        },
+        "2025": {
+          "stable_flag_rate": 0.0032,
+          "land_flag_rate": 0.0042,
+          "loss_cell_recall": 0.0289
+        }
+      },
+      "loss_last_year_recall": 0.0233
+    }
+  },
+  "decision": {
+    "ranked_by_recall": [
+      "class",
+      "history",
+      "global"
+    ],
+    "class_spread": {
+      "global": 8877.72,
+      "class": 2.41,
+      "history": 1141.56
+    },
+    "chosen": "class"
+  },
+  "seconds": 567
+}

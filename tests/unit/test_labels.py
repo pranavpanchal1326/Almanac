@@ -81,3 +81,19 @@ def test_sampling_places_loss_at_the_right_cell_north_up(tmp_path: Path) -> None
 def test_missing_source_tile_is_an_error(tmp_path: Path) -> None:
     with pytest.raises(FileNotFoundError):
         sample_source_on_tile(TileRef("21S", 581920, 9180800), 6, 4, tmp_path)
+
+
+def test_forest_by_year_tracks_standing_forest() -> None:
+    from almanac.data.labels import forest_by_year
+
+    cover = np.full((4, 4), 80, dtype=np.uint8)
+    cover[:, 2:] = 10  # right half never forest
+    fine = np.zeros((4, 4), dtype=np.uint8)
+    fine[0, 0] = 18  # forest lost in 2018
+    fine[0, 1] = 5  # forest lost in 2005
+    fine[0, 2] = 19  # loss outside forest: not counted
+    start, lost = forest_by_year(fine, cover, sub=2, years=[2018, 2019])
+    np.testing.assert_allclose(start[:, 0, 0], [0.75, 0.5])
+    np.testing.assert_allclose(lost[:, 0, 0], [0.25, 0.0])
+    assert start[:, 0, 1].sum() == 0 and lost[:, 0, 1].sum() == 0
+    np.testing.assert_allclose(start[:, 1, 0], [1.0, 1.0])

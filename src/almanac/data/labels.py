@@ -103,6 +103,42 @@ def loss_share_by_year(lossyear_fine: np.ndarray, sub: int, years: Sequence[int]
     return out
 
 
+#: Tree cover in 2000 at or above this percentage makes a source point forest (the producer's and
+#: Global Forest Watch's usual definition).
+FOREST_COVER_PCT = 30
+
+
+def forest_by_year(
+    lossyear_fine: np.ndarray,
+    cover_fine: np.ndarray,
+    sub: int,
+    years: Sequence[int],
+    cover_pct: int = FOREST_COVER_PCT,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Forest at the start of each year and forest lost during it, as shares of each coarse cell.
+
+    A source point is forest at the start of year ``Y`` if its tree cover in 2000 was at least
+    ``cover_pct`` and it had not been lost in any year before ``Y``. Gain is ignored, as the source
+    does not date it. Returns two float32 arrays ``[len(years), side, side]``: ``start`` and
+    ``lost`` (points that were forest at the start of ``Y`` and are lost in ``Y``).
+    """
+    n = lossyear_fine.shape[0]
+    if lossyear_fine.shape != (n, n) or cover_fine.shape != (n, n) or n % sub:
+        raise ValueError("fine grids must be square, equal, with a side that is a multiple of sub")
+    side = n // sub
+    forest2000 = cover_fine >= cover_pct
+    start = np.empty((len(years), side, side), dtype=np.float32)
+    lost = np.empty((len(years), side, side), dtype=np.float32)
+    for i, year in enumerate(years):
+        if not GFC_FIRST_YEAR <= year <= GFC_LAST_YEAR + 1:
+            raise ValueError(f"year {year} outside the source's range")
+        code = year - GFC_FIRST_YEAR + 1
+        standing = forest2000 & ((lossyear_fine == 0) | (lossyear_fine >= code))
+        start[i] = standing.reshape(side, sub, side, sub).mean(axis=(1, 3))
+        lost[i] = (standing & (lossyear_fine == code)).reshape(side, sub, side, sub).mean(axis=(1, 3))
+    return start, lost
+
+
 def cumulative_loss_share(lossyear_fine: np.ndarray, sub: int, through_year: int) -> np.ndarray:
     """Share of each coarse cell lost in any year from 2001 through ``through_year``."""
     n = lossyear_fine.shape[0]

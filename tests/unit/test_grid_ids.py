@@ -39,3 +39,11 @@ def test_block_rows_count_from_the_north() -> None:
 def test_point_outside_tile_is_rejected() -> None:
     with pytest.raises(ValueError):
         block_for_utm(TILE, 499990, 5100000)
+
+
+def test_tile_id_round_trip_below_the_equator_in_a_northern_zone() -> None:
+    from almanac.grid.ids import TileRef, parse_tile_id
+
+    tile = TileRef("21N", 418080, -81920)
+    assert tile.tile_id == "21N_E418080_N-81920"
+    assert parse_tile_id(tile.tile_id) == tile

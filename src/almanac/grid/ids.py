@@ -14,7 +14,7 @@ from dataclasses import dataclass
 
 from almanac.common.constants import BLOCK, BLOCKS_PER_SIDE, CELL_M, TILE
 
-_TILE_RE = re.compile(r"^(\d{1,2}[NS])_E(\d+)_N(\d+)$")
+_TILE_RE = re.compile(r"^(\d{1,2}[NS])_E(\d+)_N(-?\d+)$")
 _BLOCK_RE = re.compile(r"^(.+)_b(\d)_(\d)$")
 
 
