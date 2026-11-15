@@ -57,3 +57,5 @@ mv "$out/.ots-input.ots" "$out/$name.ots"
 rm -f "$out/.ots-input"
 "$OTS" info "$out/$name.ots" | head -5
 echo "sha256 $(sha256sum "$file" | cut -d' ' -f1)  $name"
+# Text outputs in LF, matching .gitattributes, so the working copy equals the committed bytes.
+sed -i 's/\r$//' "$out/$name".*.pem "$out/$name".*.verify.txt
