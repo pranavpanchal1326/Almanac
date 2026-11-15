@@ -8,10 +8,10 @@ the plan to the lock is in [PLAN.md](PLAN.md). Gate 1 on 6 December.
 | 1.1 | Streaming reader with resume and a concurrency cap | Done | Tests; trial below |
 | 1.2–1.3 | Region data on disk | Done | [store_amazon_cerrado.json](store_amazon_cerrado.json) |
 | 1.4 | Forest-loss label at 640 m | Done | [labels_forest_amazon_cerrado.json](labels_forest_amazon_cerrado.json) |
-| 1.7 | Split | Done, proposed | `configs/splits/amazon_cerrado_v1.*` |
-| 1.8 | Change threshold, redesigned | Not started | |
-| 1.9–1.11 | Baselines, evaluation harness, baseline report | Not started | |
-| 1.13 | Pre-registration | Not started | |
+| 1.7 | Split | Done, fixed by the pre-registration | `configs/splits/amazon_cerrado_v1.*` |
+| 1.8 | Change threshold, redesigned | Done | [THRESHOLD.md](THRESHOLD.md) |
+| 1.9–1.11 | Baselines, evaluation harness, baseline report | Done | [baseline_report.md](baseline_report.md) |
+| 1.13 | Pre-registration | Accepted 2026-11-15, timestamped | [2027.01.md](../prereg/2027.01.md), [proofs](../prereg/proofs/README.md) |
 | 1.5, 1.6, 1.12 | Built-up label, drivers, detail blocks | Parked | PLAN.md |
 
 ## Region store (1.2–1.3)
@@ -84,9 +84,50 @@ but not after any model has been scored.
 re-run that skipped everything. Scaled to the planet: about 19 hours and 170 GB. Not run; see
 ADR 0002.
 
+## Forest extent (added for 1.9)
+
+Forest at the start of a year: share of a cell's 400 sample points with tree cover in 2000 of at
+least 30% (Global Forest Change treecover2000, downloaded 2026-11-15, 16 rasters, checksums in
+`D:/almanac-data/labels/gfc/SHA256SUMS`) and no earlier loss. Not checked against published
+forest area.
+
+## Change threshold (1.8)
+
+Per-class rule chosen; it catches 13% of forest-loss cells at a 1% false-alarm rate on stable land,
+against 7% for one regional threshold. Embedding change is a weak detector of forest loss at
+640 m, and its rate drifts upward 2020–2025. Details in [THRESHOLD.md](THRESHOLD.md).
+
+## Baselines (1.9–1.11)
+
+Forest-loss task, average precision (base rate in brackets):
+
+| Set | B0 | B2 last change | B3 proximity | B4 trees |
+|---|---|---|---|---|
+| Validation 2024 | (0.066) | 0.089 | 0.200 | **0.246** |
+| Validation 2023 | (0.035) | 0.065 | 0.129 | **0.216** |
+| Test 2025 | (0.035) | 0.063 | 0.160 | **0.315** |
+| Held-out region 2025 | (0.051) | 0.214 | 0.283 | **0.549** |
+
+B1 scores as B2 (identical change score, as derived). B4 is the reference for the win condition.
+The report was generated twice, from two commits, and every one of its numbers matched
+(`tools/phase1/compare_reports.py`). Both runs read the 2025 test truth and are logged in
+[test_touch_log.jsonl](test_touch_log.jsonl).
+
+The tile bootstrap undercovers AP when few tiles carry the signal
+([bootstrap_coverage.json](bootstrap_coverage.json)); the pre-registration adds a guard for it.
+
+## Gate 1
+
+| Condition | State |
+|---|---|
+| Baseline report reproduces | Yes: two runs, identical |
+| Split committed | Yes |
+| Threshold committed | Yes |
+| Pre-registration timestamped | Yes: FreeTSA and DigiCert RFC 3161 tokens (2026-11-15 18:14 UTC), OpenTimestamps pending; [record](../prereg/2027.01.record.md) |
+| Public commit | **No.** The repository has no public remote yet |
+
 ## Next
 
-1. Task 1.8: study year-to-year change against the forest label on the training tiles, and choose
-   a threshold rule.
-2. Tasks 1.9–1.11: baselines and the evaluation harness, forest loss first.
-3. Task 1.13: pre-registration, before any model is trained.
+1. Publish the repository (or at least the pre-registration commit) so the commit is public.
+2. Upgrade the OpenTimestamps proof once Bitcoin confirms it (`ots upgrade`).
+3. Phase 2: specify the model in section 10 of the pre-registration before training it.
