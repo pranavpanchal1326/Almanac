@@ -10,6 +10,7 @@ from almanac.data.stream import (
     INVALID_CODE,
     coverage,
     decode_delta,
+    embedding_path,
     encode_delta,
     load_summary,
     run_stream,
@@ -126,3 +127,15 @@ def test_connection_cap_is_enforced() -> None:
         RangeClient(connections=17)
     with pytest.raises(ValueError):
         RangeClient(connections=0)
+
+
+def test_keep_writes_the_stored_values_as_read(tmp_path: Path) -> None:
+    supplier = Supplier(2)
+    keep = tmp_path / "emb"
+    run_stream(supplier.work, LEVEL, tmp_path / "sum", supplier.fetch, workers=2, keep_dir=keep)
+    for tile, urls in supplier.work:
+        with np.load(embedding_path(keep, LEVEL, tile)) as f:
+            assert f["years"].tolist() == sorted(urls)
+            assert f["stored"].dtype == np.int8
+            for i, year in enumerate(f["years"]):
+                np.testing.assert_array_equal(f["stored"][i], supplier.data[urls[int(year)]])

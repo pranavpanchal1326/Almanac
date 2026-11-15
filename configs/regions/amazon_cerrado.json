@@ -1,0 +1,12 @@
+{
+  "name": "amazon_cerrado",
+  "description": "Bounding box around the Brazilian Amazon and Cerrado. It also takes in the Andean foothills, the Guianas and Brazil's Atlantic coast north of 24 S; labels and splits decide later which cells count.",
+  "bbox_wgs84": {
+    "west": -74.0,
+    "south": -24.0,
+    "east": -41.0,
+    "north": 5.0
+  },
+  "chosen": "2026-11-15",
+  "why": "First region of the regional start: two independent yearly forest-loss sources, the highest clearing volume of the candidate regions, commodities covered by the EU deforestation law."
+}

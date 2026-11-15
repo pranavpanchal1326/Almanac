@@ -45,18 +45,33 @@ def files_for_point(index_path: Path, lon: float, lat: float) -> list[IndexRow]:
     return [IndexRow(int(y), to_https(p), TileRef(z, int(w), int(s))) for y, p, z, w, s in rows]
 
 
-def tiles_with_years(index_path: Path, utm_zone: str | None = None) -> list[tuple[TileRef, dict[int, str]]]:
-    """Every tile footprint with the address of its file for each year present, in a fixed order."""
+def tiles_with_years(
+    index_path: Path,
+    utm_zone: str | None = None,
+    bbox: tuple[float, float, float, float] | None = None,
+) -> list[tuple[TileRef, dict[int, str]]]:
+    """Every tile footprint with the address of its file for each year present, in a fixed order.
+
+    ``bbox`` is (west, south, east, north) in WGS 84; a tile is included when its footprint box
+    overlaps it.
+    """
     con = duckdb.connect()
     sql = "SELECT utm_zone, utm_west, utm_south, year, path FROM read_parquet(?)"
-    params: list[str] = [str(index_path)]
+    params: list[str | float] = [str(index_path)]
+    clauses: list[str] = []
     if utm_zone is not None:
-        sql += " WHERE utm_zone = ?"
+        clauses.append("utm_zone = ?")
         params.append(utm_zone)
+    if bbox is not None:
+        west, south, east, north = bbox
+        clauses.append("wgs84_east >= ? AND wgs84_west <= ? AND wgs84_north >= ? AND wgs84_south <= ?")
+        params += [west, east, south, north]
+    if clauses:
+        sql += " WHERE " + " AND ".join(clauses)
     rows = con.execute(sql + " ORDER BY utm_zone, utm_west, utm_south, year", params).fetchall()
     out: dict[TileRef, dict[int, str]] = {}
-    for zone, west, south, year, path in rows:
-        out.setdefault(TileRef(zone, int(west), int(south)), {})[int(year)] = to_https(path)
+    for zone, west_m, south_m, year, path in rows:
+        out.setdefault(TileRef(zone, int(west_m), int(south_m)), {})[int(year)] = to_https(path)
     return list(out.items())
 
 

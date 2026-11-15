@@ -128,14 +128,25 @@ def stream_level(
     zone: Annotated[str | None, typer.Option(help="One UTM zone, for example 50N. Default: all.")] = None,
     limit: Annotated[int | None, typer.Option(help="Stop after this many tiles (for trials).")] = None,
     workers: Annotated[int, typer.Option(help="Concurrent connections, at most 16.")] = 12,
+    region: Annotated[Path | None, typer.Option(help="Region file from configs/regions.")] = None,
+    keep: Annotated[Path | None, typer.Option(help="Also keep the stored values in this folder.")] = None,
     index: IndexOpt = DEFAULT_INDEX,
 ) -> None:
-    """Read one level of every tile and year once; keep change summaries only. Safe to re-run."""
+    """Read one level of every tile and year once and write change summaries. Safe to re-run.
+
+    Without --keep the embeddings are discarded after the summary is written.
+    """
     from almanac.data.stream import StreamReport, run_stream
     from almanac.io.http import RangeClient
     from almanac.io.level import read_level
 
-    work = index_mod.tiles_with_years(index, zone)
+    bbox = None
+    if region is not None:
+        import json
+
+        b = json.loads(region.read_text())["bbox_wgs84"]
+        bbox = (b["west"], b["south"], b["east"], b["north"])
+    work = index_mod.tiles_with_years(index, zone, bbox)
     if limit is not None:
         work = work[:limit]
 
@@ -147,7 +158,7 @@ def stream_level(
         )
 
     with RangeClient(connections=workers) as client:
-        report = run_stream(work, level, out, lambda url: read_level(client, url, level), workers, show)
+        report = run_stream(work, level, out, lambda url: read_level(client, url, level), workers, show, keep)
         stats = client.stats
     typer.echo(
         f"done: {report.tiles_done} new, {report.tiles_skipped} already present, "

@@ -112,16 +112,40 @@ def summarise_tile(tile: TileRef, level: int, reads: dict[int, LevelRead]) -> di
     }
 
 
-def process_tile(tile: TileRef, urls: dict[int, str], level: int, out_dir: Path, fetch: Fetch) -> int:
-    """Read, summarise and write one tile. Returns bytes fetched."""
-    reads = {year: fetch(url) for year, url in sorted(urls.items()) if year in YEARS}
-    arrays = summarise_tile(tile, level, reads)
-    path = summary_path(out_dir, level, tile)
+def embedding_path(keep_dir: Path, level: int, tile: TileRef) -> Path:
+    return keep_dir / f"L{level}" / tile.utm_zone / f"{tile.tile_id}.npz"
+
+
+def _write_atomic(path: Path, arrays: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_name(f"{path.name}.{os.getpid()}.part")
     with tmp.open("wb") as f:
         np.savez_compressed(f, **arrays)
-    tmp.replace(path)  # atomic: a summary either exists whole or not at all
+    tmp.replace(path)  # atomic: a file either exists whole or not at all
+
+
+def process_tile(
+    tile: TileRef,
+    urls: dict[int, str],
+    level: int,
+    out_dir: Path,
+    fetch: Fetch,
+    keep_dir: Path | None = None,
+) -> int:
+    """Read, summarise and write one tile. Returns bytes fetched.
+
+    With ``keep_dir`` the stored values are kept too, as read: int8 ``[years present, 64, H, W]``,
+    north-up, with the list of years. The summary is written last and marks the tile as done.
+    """
+    reads = {year: fetch(url) for year, url in sorted(urls.items()) if year in YEARS}
+    arrays = summarise_tile(tile, level, reads)
+    if keep_dir is not None:
+        years = sorted(reads)
+        _write_atomic(
+            embedding_path(keep_dir, level, tile),
+            {"stored": np.stack([reads[y].values_chw for y in years]), "years": np.array(years)},
+        )
+    _write_atomic(summary_path(out_dir, level, tile), arrays)
     return sum(r.bytes_fetched for r in reads.values())
 
 
@@ -142,6 +166,7 @@ def run_stream(
     fetch: Fetch,
     workers: int,
     progress: Callable[[StreamReport], None] | None = None,
+    keep_dir: Path | None = None,
 ) -> StreamReport:
     """Process every tile that has no summary yet. Failures are logged and left for the next run."""
     report = StreamReport()
@@ -156,7 +181,7 @@ def run_stream(
     errors_path = out_dir / f"L{level}" / "errors.jsonl"
     pool = ThreadPoolExecutor(max_workers=workers)
     try:
-        futures = {pool.submit(process_tile, t, u, level, out_dir, fetch): t for t, u in todo}
+        futures = {pool.submit(process_tile, t, u, level, out_dir, fetch, keep_dir): t for t, u in todo}
         for future in as_completed(futures):
             tile = futures[future]
             try:
