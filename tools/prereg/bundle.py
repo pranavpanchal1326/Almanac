@@ -1,6 +1,6 @@
 """Write the file that gets timestamped: SHA-256 of everything issue 2027.01 depends on.
 
-Usage: python tools/prereg/bundle.py 2027.01
+Usage: python tools/prereg/bundle.py 2027.01  (or 2027.01.amendment-1)
 
 Run on a clean tree, at the commit that holds the pre-registration and the baseline report. Writes
 docs/prereg/<issue>.code-commit.txt (the commit id) and docs/prereg/<issue>.bundle.sha256 in
@@ -50,7 +50,20 @@ def main() -> None:
     commit_file = REPO / "docs" / "prereg" / f"{issue}.code-commit.txt"
     commit_file.write_text(f"{commit}\n", newline="\n")
     code = sorted(p for p in tracked if p.startswith(("src/", "tools/", "tests/", "configs/")) and p)
-    paths = [prereg, commit_file.relative_to(REPO).as_posix(), *EVIDENCE, *code]
+    # An amendment ("2027.01.amendment-1") also binds the stamped issue and its proofs, so the
+    # two timestamps form a chain.
+    earlier = []
+    if ".amendment-" in issue:
+        base = issue.split(".amendment-")[0]
+        earlier = sorted(
+            p
+            for p in tracked
+            if p.startswith((f"docs/prereg/{base}.", "docs/prereg/proofs/"))
+            and p != prereg
+            and ".amendment-" not in p
+        )
+    evidence = [p for p in EVIDENCE if p in tracked]
+    paths = [prereg, commit_file.relative_to(REPO).as_posix(), *earlier, *evidence, *code]
     missing = [p for p in paths if not (REPO / p).is_file()]
     if missing:
         raise SystemExit(f"missing: {missing}")

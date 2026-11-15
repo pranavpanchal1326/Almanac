@@ -1,5 +1,10 @@
 # Timestamp proofs for issue 2027.01
 
+Two documents are stamped: the pre-registration (`2027.01`) and its amendment 1, the model
+specification (`2027.01.amendment-1`). Each has its own bundle, commit file and proofs, named
+after it; the steps below are written for `2027.01` and work the same with the amendment's names.
+The amendment's bundle also lists the stamped pre-registration and its proofs.
+
 What is timestamped is one file, `docs/prereg/2027.01.bundle.sha256`. It lists the SHA-256 of the
 pre-registration, the code commit id, every source, tool, test and configuration file, the
 evidence it relies on, and (through the data manifest) all 8,128 data files. Only the bundle's
@@ -17,20 +22,25 @@ stamping time.
 
 ## Verify, from a clean checkout
 
-1. The bundle covers the files you have:
+Code keeps changing after a stamp, so the files are checked at the commit that was stamped.
+
+1. The stamped commit is in the public history:
 
    ```bash
-   sha256sum -c docs/prereg/2027.01.bundle.sha256
+   c=$(cat docs/prereg/2027.01.code-commit.txt); git merge-base --is-ancestor $c HEAD && echo ok
    ```
 
-2. The code commit named in the bundle is the one you checked out:
+2. The bundle covers that commit's files exactly:
 
    ```bash
-   git rev-parse HEAD^{commit} && cat docs/prereg/2027.01.code-commit.txt
+   git worktree add ../almanac-stamped $c && cp docs/prereg/2027.01.bundle.sha256 docs/prereg/2027.01.code-commit.txt ../almanac-stamped/docs/prereg/
    ```
 
-   The proofs are committed after the stamped commit, so `HEAD` will be later; check that the named
-   commit is an ancestor: `git merge-base --is-ancestor $(cat docs/prereg/2027.01.code-commit.txt) HEAD`.
+   ```bash
+   cd ../almanac-stamped && sha256sum -c docs/prereg/2027.01.bundle.sha256; cd -
+   ```
+
+   The bundle and commit files are copied in because they were written after the commit they name.
 
 3. The RFC 3161 tokens (OpenSSL 3):
 
