@@ -1,0 +1,20 @@
+{
+  "split": "amazon_cerrado_v1",
+  "tiles": 2020,
+  "tiles_by_split": {
+    "buffer": 575,
+    "held_out": 120,
+    "test": 379,
+    "train": 800,
+    "validation": 146
+  },
+  "super_blocks_by_split": {
+    "buffer": 156,
+    "held_out": 16,
+    "test": 49,
+    "train": 165,
+    "validation": 21
+  },
+  "training_tiles_touching_a_scored_tile": 0,
+  "file": "amazon_cerrado_v1.csv"
+}

@@ -75,6 +75,31 @@ def tiles_with_years(
     return list(out.items())
 
 
+def tile_footprints(
+    index_path: Path, bbox: tuple[float, float, float, float]
+) -> dict[TileRef, tuple[float, float, float, float]]:
+    """WGS 84 box (west, south, east, north) of every tile whose footprint overlaps ``bbox``."""
+    west, south, east, north = bbox
+    rows = (
+        duckdb.connect()
+        .execute(
+            """
+        SELECT utm_zone, utm_west, utm_south,
+               min(wgs84_west), min(wgs84_south), max(wgs84_east), max(wgs84_north)
+        FROM read_parquet(?)
+        WHERE wgs84_east >= ? AND wgs84_west <= ? AND wgs84_north >= ? AND wgs84_south <= ?
+        GROUP BY utm_zone, utm_west, utm_south
+        ORDER BY utm_zone, utm_west, utm_south
+        """,
+            [str(index_path), west, east, south, north],
+        )
+        .fetchall()
+    )
+    return {
+        TileRef(z, int(w), int(s)): (float(a), float(b), float(c), float(d)) for z, w, s, a, b, c, d in rows
+    }
+
+
 def counts_per_year(index_path: Path) -> list[tuple[int, int, int]]:
     """(year, files, UTM zones) for each year."""
     con = duckdb.connect()

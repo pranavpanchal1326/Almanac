@@ -1,0 +1,61 @@
+{
+  "region": "amazon_cerrado",
+  "source": "GFC-2025-v1.13",
+  "level": 6,
+  "sub_samples_per_side": 20,
+  "tiles_labelled": 2020,
+  "tiles_built_this_run": 823,
+  "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "loss_ha_by_year_all_tiles": [
+    4986841,
+    5297659,
+    5457184,
+    5337038,
+    5840494,
+    5696454,
+    8550612,
+    5466653
+  ],
+  "note_on_totals": "tiles of neighbouring UTM zones overlap, so the all-tile total counts some land twice",
+  "check_sample_tiles": 25,
+  "check_loss_ha_from_label": [
+    69336,
+    64939,
+    64462,
+    69351,
+    80555,
+    60042,
+    73753,
+    85453
+  ],
+  "check_loss_ha_counted_on_source": [
+    69270,
+    64805,
+    64439,
+    69290,
+    80448,
+    60013,
+    73670,
+    85366
+  ],
+  "check_ratio_by_year": [
+    1.001,
+    1.0021,
+    1.0004,
+    1.0009,
+    1.0013,
+    1.0005,
+    1.0011,
+    1.001
+  ],
+  "check_ratio_all_years": 1.001
+}

@@ -1,83 +1,92 @@
 # Phase 1 — Scoreboard: status
 
-Started 2026-11-15. Calendar weeks: 23 Nov–6 Dec. Gate 1 on 6 December.
+Updated 2026-11-15. Scope is the Amazon + Cerrado region ([ADR 0002](../adr/0002-regional-start.md));
+the plan to the lock is in [PLAN.md](PLAN.md). Gate 1 on 6 December.
 
-| ID | Task | Status |
-|---|---|---|
-| 1.1 | Streaming reader for L6 with resume and a concurrency cap | **Done**, trialled on 150 tiles |
-| 1.2 | Commit the patch-selection rule, run the pass over the planet | Not started; needs a go-ahead (below) |
-| 1.3–1.13 | Store, labels, drivers, splits, threshold, baselines, harness, report, pre-registration | Not started |
+| ID | Task | Status | Evidence |
+|---|---|---|---|
+| 1.1 | Streaming reader with resume and a concurrency cap | Done | Tests; trial below |
+| 1.2–1.3 | Region data on disk | Done | [store_amazon_cerrado.json](store_amazon_cerrado.json) |
+| 1.4 | Forest-loss label at 640 m | Done | [labels_forest_amazon_cerrado.json](labels_forest_amazon_cerrado.json) |
+| 1.7 | Split | Done, proposed | `configs/splits/amazon_cerrado_v1.*` |
+| 1.8 | Change threshold, redesigned | Not started | |
+| 1.9–1.11 | Baselines, evaluation harness, baseline report | Not started | |
+| 1.13 | Pre-registration | Not started | |
+| 1.5, 1.6, 1.12 | Built-up label, drivers, detail blocks | Parked | PLAN.md |
 
-## Task 1.1: what was built
-
-- `almanac stream level --out <folder> [--zone 50N] [--limit N] [--workers 12]` reads the 640 m
-  level of every tile for all nine years and writes one summary file per tile. Nothing else is
-  kept.
-- `almanac stream coverage --out <folder>` reports tiles visited per year and bytes.
-- **Two requests per file.** The header and every level's directory fit in the first 128 KiB, and
-  the 64 planes of the 640 m level lie in one span that ends within 1.2 MB of the start of the
-  file. The reader fetches the header, then exactly that span. The result equals a standard read,
-  value for value (live test). This answers open questions 4 and 6: there is no need to go
-  through the sidecar file for coarse levels, and the planes of a level are stored together.
-- **Resume.** A summary is written whole or not at all. A second run skips every tile that has
-  one. Tested by killing a synthetic supplier part-way and re-running: nothing lost, nothing read
-  twice.
-- **Concurrency cap.** One client object holds a semaphore; more than 16 connections is refused
-  at construction. The trial peaked at 12 in flight.
-
-### What a summary holds
-
-One file per tile, about 53 KB: the change between each pair of consecutive years for every cell
-(one byte per cell, square-root scale), validity per year, no-data share, vector-length
-percentiles, and the address, entity tag, date, size and content digest of every file read.
-
-The blueprint asked for change counts per patch above the threshold. The whole change field is
-kept instead, because the threshold rule is open (ADR 0001). Any rule can then be tried in task 1.8
-without streaming the planet again.
-
-## Trial: 150 tiles of zone 50N, nine years
+## Region store (1.2–1.3)
 
 | Measure | Value |
 |---|---|
-| Files read | 1,350 |
-| Time | 296 s at 12 connections: about 1,830 tiles an hour |
-| Transfer | 735 MB: 4.9 MB per tile, 544 KB per file |
-| Requests | 2,700, of which 118 (4%) needed a retry |
-| Failures | 0 |
-| Summaries on disk | 8 MB: 53 KB per tile |
-| Re-run | 150 skipped, 0 requests |
-| Share of cells with data | 57% (the rest is sea) |
+| Tiles on disk | 2,020 of 2,020 |
+| Files read | 18,099 |
+| Tiles lacking at least one year | 23 (2017–2020 and 2022 are the incomplete years) |
+| Transfer | 12.5 GB, in 28,152 requests after the client fix, 1 retry, 0 failures |
+| Embeddings on disk | 10.1 GB (`D:\almanac-data\embeddings`), stored values as read |
+| Summaries on disk | 0.14 GB |
+| Cells with data | 81% (the rest is sea or outside coverage) |
+| Tile-years with vector length outside [0.98, 1.02] | 0 |
+| Files with the wrong shape or type | 0 |
 
-### Projection to the planet
+The first run used HTTP/2 and lost 27 tiles to protocol errors raised when one connection was
+shared between threads. The client now uses HTTP/1.1 with connection reuse and retries every
+transport error. The re-run completed every tile.
 
-| Measure | Projection for 34,266 tiles | Blueprint acceptance |
+Not checked: gate Q8 (re-reading entity tags) and gate Q9 (duplicates). Tiles of neighbouring UTM
+zones overlap, so some ground is held twice; anything that sums area over tiles must allow for it.
+
+## Forest-loss label (1.4)
+
+Source: Global Forest Change v1.13, loss year and data mask, CC-BY 4.0 (licence read from the
+producer's page). Each 640 m cell is sampled at 20 × 20 points, 32 m apart.
+
+Per tile: share of each cell lost in each year 2018–2025, share lost 2001–2017, and share of land.
+
+| Check | Result | Target |
 |---|---|---|
-| Time | about 19 hours | "a night" |
-| Transfer | about 170 GB | planned 130 GB |
-| Requests | about 605,000 | — |
-| Disk | about 1.8 GB | under 2 GB |
+| Lost area from the label ÷ lost area counted on the 30 m source, 25 random tiles, all years | 1.001 | within 2% |
+| Same, worst single year | 1.0021 | within 2% |
 
-These scale one zone's first 150 tiles to the world. Zones with more land will cost more per
-tile, so treat the transfer and disk figures as rough. The 4% retry rate says the mirror is
-already pushing back at 12 connections; going to 16 is unlikely to help.
+Lost area by year over all tiles (million hectares; overlapping tiles counted twice, so compare
+years, not absolute size):
 
-### First look at change at 640 m (one zone, not the world)
+| 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 |
+|---|---|---|---|---|---|---|---|
+| 4.99 | 5.30 | 5.46 | 5.34 | 5.84 | 5.70 | **8.55** | 5.47 |
 
-Over all cells with data in the 150 tiles: median change 0.025, 99th percentile 0.25. The share of
-cells above a fixed threshold of 0.2 swings from 0.1% to 4.6% between year pairs. A fixed global
-threshold would therefore make "how much changed" depend mostly on which year pair it is. This
-supports setting the threshold relative to each year pair, each cell's own history, or both.
+2024 is about 1.5 times a normal year, consistent with that year's drought and fires. Any fold
+that tests on 2024 faces a year unlike its training years, and fire loss is not the same event as
+clearing. The blueprint's check against published country totals was not done; it needs country
+boundaries, which are not in the project yet.
 
-## Decision needed before task 1.2
+## Split (1.7)
 
-The store of kept patches (task 1.3) needs the selection rule, the rule needs the threshold, and
-the threshold needs the planet's change statistics. So the planet has to be read twice:
+Super-blocks of 2° × 2° assigned by a seeded hash, 70 / 10 / 20. The south-west Amazon
+(68°W–60°W, 13°S–7°S) is held out of training entirely. Training tiles that touch a scored tile
+are set aside.
 
-1. **Summary pass**: about 19 hours and 170 GB of transfer. It can start now; it does not depend
-   on any open decision.
-2. **Selection pass**, after task 1.8 fixes the threshold and the rule is committed: about the
-   same again, keeping the embeddings of the chosen patches.
+| Split | Tiles | Super-blocks |
+|---|---|---|
+| Train | 800 | 165 |
+| Buffer (unused) | 575 | — |
+| Validation | 146 | 21 |
+| Test | 379 | 49 |
+| Held-out region | 120 | 16 |
 
-The alternative is one pass with a provisional threshold, then re-reading if the threshold
-changes. Given what Phase 0 found about the threshold, two passes is the safer plan. It doubles
-the transfer on a free mirror, so the pass should run once, at night, at 12 connections or fewer.
+No training tile touches a validation, test or held-out tile. The buffer costs 28% of the tiles;
+that is the price of the no-shared-edge rule with blocks this small. The split is a proposal until
+it is fixed in the pre-registration: the seed, the block size and the held-out box can still change,
+but not after any model has been scored.
+
+## Task 1.1 trial, for the record
+
+150 tiles of zone 50N: two requests per file, 4.9 MB per tile, about 1,830 tiles an hour, and a
+re-run that skipped everything. Scaled to the planet: about 19 hours and 170 GB. Not run; see
+ADR 0002.
+
+## Next
+
+1. Task 1.8: study year-to-year change against the forest label on the training tiles, and choose
+   a threshold rule.
+2. Tasks 1.9–1.11: baselines and the evaluation harness, forest loss first.
+3. Task 1.13: pre-registration, before any model is trained.

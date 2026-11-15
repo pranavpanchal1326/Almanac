@@ -1,0 +1,26 @@
+{
+  "region": "amazon_cerrado",
+  "level": 6,
+  "tiles_in_region": 2020,
+  "tiles_on_disk": 2020,
+  "tiles_missing": 0,
+  "tiles_lacking_a_year": 23,
+  "files_read": 18099,
+  "tiles_per_year": {
+    "2017": 2008,
+    "2018": 1997,
+    "2019": 1997,
+    "2020": 1998,
+    "2021": 2020,
+    "2022": 2019,
+    "2023": 2020,
+    "2024": 2020,
+    "2025": 2020
+  },
+  "transfer_gb": 12.45,
+  "embeddings_gb": 10.09,
+  "summaries_gb": 0.14,
+  "mean_share_of_cells_with_data": 0.8059,
+  "tile_years_with_vector_length_outside_0.98_1.02": 0,
+  "tiles_with_wrong_shape": []
+}

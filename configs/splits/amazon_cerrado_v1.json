@@ -1,0 +1,16 @@
+{
+  "name": "amazon_cerrado_v1",
+  "region": "configs/regions/amazon_cerrado.json",
+  "seed": "almanac-split-2026-11-15",
+  "block_deg": 2.0,
+  "train_share": 0.7,
+  "validation_share": 0.1,
+  "held_out_box_wgs84": {
+    "west": -68.0,
+    "south": -13.0,
+    "east": -60.0,
+    "north": -7.0
+  },
+  "held_out_why": "South-west Amazon (Rondonia and the south of Amazonas state): an active clearing frontier, kept out of training entirely to test whether skill carries to an unseen front.",
+  "touch_margin_deg": 0.01
+}
