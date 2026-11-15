@@ -1,0 +1,10 @@
+Verification: OK
+Using configuration from C:/Program Files/Git/mingw64/etc/ssl//openssl.cnf
+Warning: certificate from 'docs/prereg/proofs/2027.01.bundle.sha256.freetsa.chain.pem' with subject '/O=Free TSA/OU=TSA/description=This certificate digitally signs documents and time stamp requests made using the freetsa.org online services/CN=www.freetsa.org/emailAddress=busilezas@mailbox.org/L=Wuerzburg/C=DE/ST=Bayern' is not a CA cert
+Using configuration from C:/Program Files/Git/mingw64/etc/ssl//openssl.cnf
+Policy OID: tsa_policy1
+Hash Algorithm: sha256
+Message data:
+Serial number: 0x0A0A76EA
+Time stamp: Nov 15 19:05:54 2026 GMT
+TSA: DirName:/O=Free TSA/OU=TSA/description=This certificate digitally signs documents and time stamp requests made using the freetsa.org online services/CN=www.freetsa.org/emailAddress=busilezas@mailbox.org/L=Wuerzburg/C=DE/ST=Bayern
