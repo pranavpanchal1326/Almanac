@@ -1,0 +1,35 @@
+{
+  "site": "alamein_coast",
+  "block_id": "35N_E663840_N3358720_b2_2",
+  "year": 2021,
+  "url": "https://data.source.coop/tge-labs/aef/v1/annual/2021/35N/x6kqk79xjidrq9mb4-0000008192-0000000000.tiff",
+  "reference_scene": {
+    "site": "alamein_coast",
+    "year": 2021,
+    "scene": "S2B_35RPQ_20210620_1_L2A",
+    "datetime": "2021-06-20T08:51:44.021000Z",
+    "cloud_cover": 0.0217,
+    "covered": 1.0
+  },
+  "Q1_orientation": {
+    "water_share_reference": 0.6276140213012695,
+    "water_share_north_half": 0.9606170654296875,
+    "water_share_south_half": 0.29461097717285156,
+    "agreement_north_up": 0.9890518188476562,
+    "agreement_flipped_vertically": 0.3226757049560547,
+    "agreement_flipped_horizontally": 0.7342662811279297,
+    "pass": true
+  },
+  "Q2_georeference": {
+    "best_shift_rows": 1,
+    "best_shift_cols": 0,
+    "agreement_at_best": 0.9889888531300286,
+    "agreement_at_zero": 0.9889400318705182,
+    "pass": true
+  },
+  "sidecar_cross_check": {
+    "raw_flipped_equals_sidecar": true,
+    "unflipped_equals_sidecar": false
+  },
+  "fixture": "tests/golden/orientation_coast.npz"
+}

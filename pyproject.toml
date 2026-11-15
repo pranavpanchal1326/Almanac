@@ -1,0 +1,72 @@
+[project]
+name = "almanac"
+version = "0.1.0"
+description = "Forecasts of Earth-surface change, locked before the truth exists."
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "duckdb>=2.0.0",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.4",
+    "pillow>=13.0.0",
+    "pydantic>=2",
+    "pyproj>=3.8.0",
+    "rasterio>=1.5.2",
+    "scikit-learn>=1.9.1",
+    "scipy>=1.18.1",
+    "typer>=0.29.1",
+    "zarr>=3",
+]
+
+[project.optional-dependencies]
+train = ["torch>=2.14"]
+
+[project.scripts]
+almanac = "almanac.cli.main:app"
+
+[build-system]
+requires = ["uv_build>=0.13.8,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.170.15",
+    "pyright>=1.1.414",
+    "pytest>=9.2.0",
+    "ruff>=0.17.5",
+]
+
+# GPU build chosen from the official PyTorch selector for Windows + CUDA 13.0
+# (RTX 50-series needs CUDA 12.8 or newer). Decision recorded in docs/adr/0000.
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu130" }
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"tools/**" = ["E501", "E402"]  # one-off scripts
+
+[tool.pyright]
+typeCheckingMode = "standard"
+include = ["src"]
+venvPath = "."
+venv = ".venv"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "network: reads from a live supplier",
+    "gpu: needs a GPU",
+    "slow: takes more than ten seconds",
+]
+addopts = "-m 'not network and not gpu' --strict-markers"

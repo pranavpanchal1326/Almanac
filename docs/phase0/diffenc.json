@@ -1,0 +1,162 @@
+[
+  {
+    "site": "xiongan",
+    "level": "L0 (512x512 crop)",
+    "codec": "zstd-9",
+    "raw_bytes": 150994944,
+    "as_read_bytes": 78701881,
+    "difference_bytes": 80324634,
+    "gain": 0.98,
+    "round_trip_exact": true
+  },
+  {
+    "site": "xiongan",
+    "level": "L0 (512x512 crop)",
+    "codec": "zstd-9+bitshuffle",
+    "raw_bytes": 150994944,
+    "as_read_bytes": 85447745,
+    "difference_bytes": 83175413,
+    "gain": 1.027,
+    "round_trip_exact": true
+  },
+  {
+    "site": "xiongan",
+    "level": "L6 (16x16)",
+    "codec": "zstd-9",
+    "raw_bytes": 147456,
+    "as_read_bytes": 126764,
+    "difference_bytes": 105725,
+    "gain": 1.199,
+    "round_trip_exact": true
+  },
+  {
+    "site": "xiongan",
+    "level": "L6 (16x16)",
+    "codec": "zstd-9+bitshuffle",
+    "raw_bytes": 147456,
+    "as_read_bytes": 114924,
+    "difference_bytes": 105490,
+    "gain": 1.089,
+    "round_trip_exact": true
+  },
+  {
+    "site": "novo_progresso",
+    "level": "L0 (512x512 crop)",
+    "codec": "zstd-9",
+    "raw_bytes": 150994944,
+    "as_read_bytes": 79996377,
+    "difference_bytes": 72464026,
+    "gain": 1.104,
+    "round_trip_exact": true
+  },
+  {
+    "site": "novo_progresso",
+    "level": "L0 (512x512 crop)",
+    "codec": "zstd-9+bitshuffle",
+    "raw_bytes": 150994944,
+    "as_read_bytes": 87060651,
+    "difference_bytes": 77100278,
+    "gain": 1.129,
+    "round_trip_exact": true
+  },
+  {
+    "site": "novo_progresso",
+    "level": "L6 (16x16)",
+    "codec": "zstd-9",
+    "raw_bytes": 147456,
+    "as_read_bytes": 122544,
+    "difference_bytes": 93453,
+    "gain": 1.311,
+    "round_trip_exact": true
+  },
+  {
+    "site": "novo_progresso",
+    "level": "L6 (16x16)",
+    "codec": "zstd-9+bitshuffle",
+    "raw_bytes": 147456,
+    "as_read_bytes": 112076,
+    "difference_bytes": 94807,
+    "gain": 1.182,
+    "round_trip_exact": true
+  },
+  {
+    "site": "tanezrouft",
+    "level": "L0 (512x512 crop)",
+    "codec": "zstd-9",
+    "raw_bytes": 150994944,
+    "as_read_bytes": 43064889,
+    "difference_bytes": 40532662,
+    "gain": 1.062,
+    "round_trip_exact": true
+  },
+  {
+    "site": "tanezrouft",
+    "level": "L0 (512x512 crop)",
+    "codec": "zstd-9+bitshuffle",
+    "raw_bytes": 150994944,
+    "as_read_bytes": 57670320,
+    "difference_bytes": 48679063,
+    "gain": 1.185,
+    "round_trip_exact": true
+  },
+  {
+    "site": "tanezrouft",
+    "level": "L6 (16x16)",
+    "codec": "zstd-9",
+    "raw_bytes": 147456,
+    "as_read_bytes": 67318,
+    "difference_bytes": 48443,
+    "gain": 1.39,
+    "round_trip_exact": true
+  },
+  {
+    "site": "tanezrouft",
+    "level": "L6 (16x16)",
+    "codec": "zstd-9+bitshuffle",
+    "raw_bytes": 147456,
+    "as_read_bytes": 62538,
+    "difference_bytes": 47860,
+    "gain": 1.307,
+    "round_trip_exact": true
+  },
+  {
+    "site": "amazon_interior",
+    "level": "L0 (512x512 crop)",
+    "codec": "zstd-9",
+    "raw_bytes": 150994944,
+    "as_read_bytes": 62542888,
+    "difference_bytes": 50877707,
+    "gain": 1.229,
+    "round_trip_exact": true
+  },
+  {
+    "site": "amazon_interior",
+    "level": "L0 (512x512 crop)",
+    "codec": "zstd-9+bitshuffle",
+    "raw_bytes": 150994944,
+    "as_read_bytes": 76956713,
+    "difference_bytes": 59749501,
+    "gain": 1.288,
+    "round_trip_exact": true
+  },
+  {
+    "site": "amazon_interior",
+    "level": "L6 (16x16)",
+    "codec": "zstd-9",
+    "raw_bytes": 147456,
+    "as_read_bytes": 73499,
+    "difference_bytes": 59739,
+    "gain": 1.23,
+    "round_trip_exact": true
+  },
+  {
+    "site": "amazon_interior",
+    "level": "L6 (16x16)",
+    "codec": "zstd-9+bitshuffle",
+    "raw_bytes": 147456,
+    "as_read_bytes": 68626,
+    "difference_bytes": 58368,
+    "gain": 1.176,
+    "round_trip_exact": true
+  }
+]

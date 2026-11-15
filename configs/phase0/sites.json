@@ -1,0 +1,45 @@
+{
+  "comment": "Phase 0 sites (task 0.5). Coordinates are WGS 84 lon/lat of the point used to pick the block. See docs/phase0/sites.md for why each was chosen.",
+  "sites": [
+    {
+      "name": "xiongan",
+      "role": "change",
+      "type": "City edge",
+      "lon": 116.05,
+      "lat": 39.03,
+      "imagery_months": [4, 5, 9, 10]
+    },
+    {
+      "name": "novo_progresso",
+      "role": "change",
+      "type": "Deforestation front",
+      "lon": -55.6,
+      "lat": -7.2,
+      "imagery_months": [6, 7, 8]
+    },
+    {
+      "name": "tanezrouft",
+      "role": "stable",
+      "type": "Stable control, hyper-arid desert",
+      "lon": -1.0,
+      "lat": 22.7,
+      "imagery_months": [1, 2, 3, 11, 12]
+    },
+    {
+      "name": "amazon_interior",
+      "role": "stable",
+      "type": "Stable control, old-growth forest interior (added beyond the three required sites)",
+      "lon": -66.5,
+      "lat": -1.5,
+      "imagery_months": [7, 8, 9, 10]
+    },
+    {
+      "name": "alamein_coast",
+      "role": "orientation",
+      "type": "Coastline block for gates Q1 and Q2",
+      "lon": 28.95,
+      "lat": 30.83,
+      "imagery_months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    }
+  ]
+}

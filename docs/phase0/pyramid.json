@@ -1,0 +1,351 @@
+{
+  "site": "xiongan",
+  "block_id": "50N_E336160_N4259840_b2_7",
+  "year": 2021,
+  "transfer": {
+    "1": {
+      "bytes": 42547457,
+      "requests": 90
+    },
+    "2": {
+      "bytes": 46061981,
+      "requests": 98
+    },
+    "3": {
+      "bytes": 48889856,
+      "requests": 7
+    },
+    "6": {
+      "bytes": 835584,
+      "requests": 3
+    }
+  },
+  "vector_length_by_level": {
+    "0": {
+      "p01": 0.995455801486969,
+      "p50": 1.0000975131988525,
+      "p99": 1.0047245025634766,
+      "nodata_share": 0.0
+    },
+    "1": {
+      "p01": 0.9955050945281982,
+      "p50": 1.0000941753387451,
+      "p99": 1.0046957731246948,
+      "nodata_share": 0.0
+    },
+    "2": {
+      "p01": 0.9954769611358643,
+      "p50": 1.0000860691070557,
+      "p99": 1.0047346353530884,
+      "nodata_share": 0.0
+    },
+    "3": {
+      "p01": 0.9954251646995544,
+      "p50": 1.0000848770141602,
+      "p99": 1.004714012145996,
+      "nodata_share": 0.0
+    },
+    "6": {
+      "p01": 0.9955973029136658,
+      "p50": 0.9998797178268433,
+      "p99": 1.0037623643875122,
+      "nodata_share": 0.0
+    }
+  },
+  "comparisons": [
+    {
+      "comparison": "L1 from L0",
+      "candidate": "nearest(row 0, col 0)",
+      "exact_share": 0.19713842868804932,
+      "within_1_share": 0.504181981086731,
+      "mean_abs_diff": 2.642574906349182
+    },
+    {
+      "comparison": "L1 from L0",
+      "candidate": "nearest(row 0, col 1)",
+      "exact_share": 0.19935625791549683,
+      "within_1_share": 0.5086492896080017,
+      "mean_abs_diff": 2.6080586314201355
+    },
+    {
+      "comparison": "L1 from L0",
+      "candidate": "nearest(row 1, col 0)",
+      "exact_share": 0.199091374874115,
+      "within_1_share": 0.5084869265556335,
+      "mean_abs_diff": 2.6059281826019287
+    },
+    {
+      "comparison": "L1 from L0",
+      "candidate": "nearest(row 1, col 1)",
+      "exact_share": 0.19735652208328247,
+      "within_1_share": 0.5043264031410217,
+      "mean_abs_diff": 2.636625289916992
+    },
+    {
+      "comparison": "L1 from L0",
+      "candidate": "mean of stored integers",
+      "exact_share": 0.6810066103935242,
+      "within_1_share": 0.9099873900413513,
+      "mean_abs_diff": 0.5978394150733948
+    },
+    {
+      "comparison": "L1 from L0",
+      "candidate": "mean of decoded values",
+      "exact_share": 0.8658072352409363,
+      "within_1_share": 0.9992685914039612,
+      "mean_abs_diff": 0.13531595468521118
+    },
+    {
+      "comparison": "L1 from L0",
+      "candidate": "renormalised mean of decoded",
+      "exact_share": 0.8790661692619324,
+      "within_1_share": 0.9992693066596985,
+      "mean_abs_diff": 0.1220778226852417
+    },
+    {
+      "comparison": "L2 from L1",
+      "candidate": "nearest(row 0, col 0)",
+      "exact_share": 0.21601009368896484,
+      "within_1_share": 0.5288486480712891,
+      "mean_abs_diff": 2.5537126064300537
+    },
+    {
+      "comparison": "L2 from L1",
+      "candidate": "nearest(row 0, col 1)",
+      "exact_share": 0.21697735786437988,
+      "within_1_share": 0.5314176082611084,
+      "mean_abs_diff": 2.5277340412139893
+    },
+    {
+      "comparison": "L2 from L1",
+      "candidate": "nearest(row 1, col 0)",
+      "exact_share": 0.21740221977233887,
+      "within_1_share": 0.5322167873382568,
+      "mean_abs_diff": 2.5232222080230713
+    },
+    {
+      "comparison": "L2 from L1",
+      "candidate": "nearest(row 1, col 1)",
+      "exact_share": 0.21612977981567383,
+      "within_1_share": 0.5282204151153564,
+      "mean_abs_diff": 2.5514400005340576
+    },
+    {
+      "comparison": "L2 from L1",
+      "candidate": "mean of stored integers",
+      "exact_share": 0.6843945980072021,
+      "within_1_share": 0.9133529663085938,
+      "mean_abs_diff": 0.5887970924377441
+    },
+    {
+      "comparison": "L2 from L1",
+      "candidate": "mean of decoded values",
+      "exact_share": 0.8602850437164307,
+      "within_1_share": 0.999284029006958,
+      "mean_abs_diff": 0.14078640937805176
+    },
+    {
+      "comparison": "L2 from L1",
+      "candidate": "renormalised mean of decoded",
+      "exact_share": 0.8778374195098877,
+      "within_1_share": 0.9993090629577637,
+      "mean_abs_diff": 0.12322425842285156
+    },
+    {
+      "comparison": "L3 from L2",
+      "candidate": "nearest(row 0, col 0)",
+      "exact_share": 0.15983200073242188,
+      "within_1_share": 0.4179239273071289,
+      "mean_abs_diff": 3.587277412414551
+    },
+    {
+      "comparison": "L3 from L2",
+      "candidate": "nearest(row 0, col 1)",
+      "exact_share": 0.16060638427734375,
+      "within_1_share": 0.4208364486694336,
+      "mean_abs_diff": 3.54854679107666
+    },
+    {
+      "comparison": "L3 from L2",
+      "candidate": "nearest(row 1, col 0)",
+      "exact_share": 0.1605224609375,
+      "within_1_share": 0.42051219940185547,
+      "mean_abs_diff": 3.5530214309692383
+    },
+    {
+      "comparison": "L3 from L2",
+      "candidate": "nearest(row 1, col 1)",
+      "exact_share": 0.15990066528320312,
+      "within_1_share": 0.4185152053833008,
+      "mean_abs_diff": 3.5718936920166016
+    },
+    {
+      "comparison": "L3 from L2",
+      "candidate": "mean of stored integers",
+      "exact_share": 0.5717153549194336,
+      "within_1_share": 0.8611440658569336,
+      "mean_abs_diff": 0.9194259643554688
+    },
+    {
+      "comparison": "L3 from L2",
+      "candidate": "mean of decoded values",
+      "exact_share": 0.8110837936401367,
+      "within_1_share": 0.9977779388427734,
+      "mean_abs_diff": 0.19180774688720703
+    },
+    {
+      "comparison": "L3 from L2",
+      "candidate": "renormalised mean of decoded",
+      "exact_share": 0.8754787445068359,
+      "within_1_share": 0.9989748001098633,
+      "mean_abs_diff": 0.12624263763427734
+    },
+    {
+      "comparison": "L3 from L0",
+      "candidate": "nearest(row 0, col 0)",
+      "exact_share": 0.08433818817138672,
+      "within_1_share": 0.24144363403320312,
+      "mean_abs_diff": 6.75236701965332
+    },
+    {
+      "comparison": "L3 from L0",
+      "candidate": "nearest(row 0, col 7)",
+      "exact_share": 0.08503913879394531,
+      "within_1_share": 0.2434825897216797,
+      "mean_abs_diff": 6.701886177062988
+    },
+    {
+      "comparison": "L3 from L0",
+      "candidate": "nearest(row 7, col 0)",
+      "exact_share": 0.0847482681274414,
+      "within_1_share": 0.242401123046875,
+      "mean_abs_diff": 6.671252250671387
+    },
+    {
+      "comparison": "L3 from L0",
+      "candidate": "nearest(row 7, col 7)",
+      "exact_share": 0.08487987518310547,
+      "within_1_share": 0.24318790435791016,
+      "mean_abs_diff": 6.716050148010254
+    },
+    {
+      "comparison": "L3 from L0",
+      "candidate": "mean of stored integers",
+      "exact_share": 0.3683204650878906,
+      "within_1_share": 0.7210874557495117,
+      "mean_abs_diff": 1.491694450378418
+    },
+    {
+      "comparison": "L3 from L0",
+      "candidate": "mean of decoded values",
+      "exact_share": 0.6989812850952148,
+      "within_1_share": 0.9866065979003906,
+      "mean_abs_diff": 0.3149099349975586
+    },
+    {
+      "comparison": "L3 from L0",
+      "candidate": "renormalised mean of decoded",
+      "exact_share": 0.9673700332641602,
+      "within_1_share": 0.9998769760131836,
+      "mean_abs_diff": 0.03276634216308594
+    },
+    {
+      "comparison": "L6 from L3",
+      "candidate": "nearest(row 0, col 0)",
+      "exact_share": 0.05767822265625,
+      "within_1_share": 0.170654296875,
+      "mean_abs_diff": 9.25018310546875
+    },
+    {
+      "comparison": "L6 from L3",
+      "candidate": "nearest(row 0, col 7)",
+      "exact_share": 0.0567626953125,
+      "within_1_share": 0.16888427734375,
+      "mean_abs_diff": 9.29736328125
+    },
+    {
+      "comparison": "L6 from L3",
+      "candidate": "nearest(row 7, col 0)",
+      "exact_share": 0.056640625,
+      "within_1_share": 0.16522216796875,
+      "mean_abs_diff": 9.85040283203125
+    },
+    {
+      "comparison": "L6 from L3",
+      "candidate": "nearest(row 7, col 7)",
+      "exact_share": 0.0599365234375,
+      "within_1_share": 0.1796875,
+      "mean_abs_diff": 9.1024169921875
+    },
+    {
+      "comparison": "L6 from L3",
+      "candidate": "mean of stored integers",
+      "exact_share": 0.08709716796875,
+      "within_1_share": 0.395751953125,
+      "mean_abs_diff": 2.9527587890625
+    },
+    {
+      "comparison": "L6 from L3",
+      "candidate": "mean of decoded values",
+      "exact_share": 0.381591796875,
+      "within_1_share": 0.875732421875,
+      "mean_abs_diff": 0.76055908203125
+    },
+    {
+      "comparison": "L6 from L3",
+      "candidate": "renormalised mean of decoded",
+      "exact_share": 0.942626953125,
+      "within_1_share": 0.99951171875,
+      "mean_abs_diff": 0.05810546875
+    },
+    {
+      "comparison": "L6 from L0",
+      "candidate": "nearest(row 0, col 0)",
+      "exact_share": 0.044921875,
+      "within_1_share": 0.13592529296875,
+      "mean_abs_diff": 11.0416259765625
+    },
+    {
+      "comparison": "L6 from L0",
+      "candidate": "nearest(row 0, col 63)",
+      "exact_share": 0.0440673828125,
+      "within_1_share": 0.13653564453125,
+      "mean_abs_diff": 10.97607421875
+    },
+    {
+      "comparison": "L6 from L0",
+      "candidate": "nearest(row 63, col 0)",
+      "exact_share": 0.04583740234375,
+      "within_1_share": 0.13494873046875,
+      "mean_abs_diff": 11.30792236328125
+    },
+    {
+      "comparison": "L6 from L0",
+      "candidate": "nearest(row 63, col 63)",
+      "exact_share": 0.04949951171875,
+      "within_1_share": 0.1407470703125,
+      "mean_abs_diff": 10.83355712890625
+    },
+    {
+      "comparison": "L6 from L0",
+      "candidate": "mean of stored integers",
+      "exact_share": 0.0244140625,
+      "within_1_share": 0.23492431640625,
+      "mean_abs_diff": 3.81207275390625
+    },
+    {
+      "comparison": "L6 from L0",
+      "candidate": "mean of decoded values",
+      "exact_share": 0.25933837890625,
+      "within_1_share": 0.7603759765625,
+      "mean_abs_diff": 1.04876708984375
+    },
+    {
+      "comparison": "L6 from L0",
+      "candidate": "renormalised mean of decoded",
+      "exact_share": 0.994873046875,
+      "within_1_share": 1.0,
+      "mean_abs_diff": 0.005126953125
+    }
+  ]
+}
