@@ -126,10 +126,9 @@ on 2026-11-16**, when the stamped commit `ed2cf4f` became public.
 | Baseline report reproduces | Yes: two runs, identical |
 | Split committed | Yes |
 | Threshold committed | Yes |
-| Pre-registration timestamped | Yes: FreeTSA and DigiCert RFC 3161 tokens (2026-11-15 19:05 UTC), OpenTimestamps pending; [record](../prereg/2027.01.record.md) |
+| Pre-registration timestamped | Yes: FreeTSA and DigiCert RFC 3161 tokens (2026-11-15 19:05 UTC), OpenTimestamps confirmed in Bitcoin block 976,007; [record](../prereg/2027.01.record.md) |
 | Public commit | Yes: published 2026-11-16, [https://github.com/pranavpanchal1326/Almanac](https://github.com/pranavpanchal1326/Almanac) |
 
 ## Next
 
-1. Upgrade the OpenTimestamps proof once Bitcoin confirms it (`ots upgrade`).
-2. Phase 2: specify the model in section 10 of the pre-registration before training it.
+1. Phase 2: specify the model in section 10 of the pre-registration before training it.
