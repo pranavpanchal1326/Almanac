@@ -11,12 +11,17 @@ Writes, under OUT_DIR: ``tiles.csv`` (the 499 test and held-out tiles, sorted) a
 baseline and task, ``baselines/<B>_<task>.npy``: float16 ``[499, 128, 128]``, probability of the
 event in 2026, NaN where the cell is not eligible. Nothing from 2026 exists yet, and nothing from
 2025 beyond what was known at the end of 2025 is used.
+
+With CHECK_DIR as a third argument, the same models also write validation 2024 layers there in the
+same format (a grader test: grading them must reproduce the baseline report), and the fitted
+models are saved there as ``models_<task>.pkl``.
 """
 
 from __future__ import annotations
 
 import csv
 import json
+import pickle
 import sys
 import time
 from pathlib import Path
@@ -51,8 +56,29 @@ def fit(cfg: dict, train: list[str], task: str, rule) -> dict:
     return models
 
 
+def forecast_layers(tiles: list[str], target: int, task: str, rule, models: dict) -> dict[str, np.ndarray]:
+    layers = {k: np.full((len(tiles), SIDE, SIDE), np.nan, np.float32) for k in BASELINES}
+    for t, tid in enumerate(tiles):
+        cube = load_cube(tid, embeddings=True)
+        ex = tile_examples(cube, target, task, rule, truth=False)
+        if ex.rows.size == 0:
+            continue
+        assert ex.features is not None
+        p = {
+            "B0": np.full(ex.rows.size, models["base_rate"]),
+            "B4": models["B4"].predict_proba(ex.features)[:, 1],
+            **{k: models[k].predict(ex.scores[k]) for k in ("B1", "B2", "B3")},
+        }
+        for k in BASELINES:
+            layers[k][t].reshape(-1)[ex.rows] = p[k]
+        if (t + 1) % 100 == 0:
+            print(f"  {task} {target}: {t + 1}/{len(tiles)} tiles", flush=True)
+    return layers
+
+
 def main() -> None:
     cfg_path, out = Path(sys.argv[1]), Path(sys.argv[2])
+    check_dir = Path(sys.argv[3]) if len(sys.argv) > 3 else None
     cfg = json.loads(cfg_path.read_text())
     rule = load_rule(REPO / cfg["threshold"])
     with (REPO / cfg["split"]).open() as f:
@@ -64,6 +90,8 @@ def main() -> None:
     report = json.loads((REPO / "docs" / "phase1" / "baseline_report.json").read_text())
     t0 = time.time()
     check: dict = {}
+    if check_dir is not None:
+        check_dir.mkdir(parents=True, exist_ok=True)
     for task in TASKS:
         models = fit(cfg, by["train"], task, rule)
         print(f"{task}: fitted, {time.time() - t0:.0f}s", flush=True)
@@ -78,25 +106,18 @@ def main() -> None:
                     f"{task} {k}: refit AP {ap!r} != published {published[k]['ap']!r}; not forecasting"
                 )
         print(f"{task}: validation 2024 reproduces the report exactly", flush=True)
-        layers = {k: np.full((len(exam), SIDE, SIDE), np.nan, np.float32) for k in BASELINES}
-        for t, tid in enumerate(exam):
-            cube = load_cube(tid, embeddings=True)
-            ex = tile_examples(cube, TARGET, task, rule, truth=False)
-            if ex.rows.size == 0:
-                continue
-            assert ex.features is not None
-            p = {
-                "B0": np.full(ex.rows.size, models["base_rate"]),
-                "B4": models["B4"].predict_proba(ex.features)[:, 1],
-                **{k: models[k].predict(ex.scores[k]) for k in ("B1", "B2", "B3")},
-            }
-            for k in BASELINES:
-                layers[k][t].reshape(-1)[ex.rows] = p[k]
-            if (t + 1) % 100 == 0:
-                print(f"  {task}: forecast {t + 1}/{len(exam)} tiles, {time.time() - t0:.0f}s", flush=True)
+        layers = forecast_layers(exam, TARGET, task, rule, models)
+        print(f"{task}: 2026 forecast done, {time.time() - t0:.0f}s", flush=True)
+        if check_dir is not None:
+            with (check_dir / f"models_{task}.pkl").open("wb") as f:
+                pickle.dump(models, f)
+            for k, layer in forecast_layers(by["validation"], 2024, task, rule, models).items():
+                write_layer(check_dir / "baselines" / f"{k}_{task}.npy", layer)
         for k in BASELINES:
             write_layer(out / "baselines" / f"{k}_{task}.npy", layers[k])
     write_tiles(out / "tiles.csv", exam)
+    if check_dir is not None:
+        write_tiles(check_dir / "tiles.csv", by["validation"])
     (out / "baselines" / "reproduction_check.json").write_text(
         json.dumps(check, indent=1) + "\n", newline="\n"
     )

@@ -9,7 +9,7 @@ training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, OpenTimestamps
 |---|---|---|---|
 | 2.1 | Training store, dataset and balanced sampler | Done | `src/almanac/model/`, `tests/unit/test_model.py` |
 | 2.2 | Smoke test; memory and speed; batch and steps by the amendment's rules | Done | Below |
-| 2.3 | B5 (no neighbours), scored on validation first | Running | `D:/almanac-data/runs/stage_a_b5_s1` |
+| 2.3 | B5 (no neighbours), scored on validation first | Running (attempt 2) | `D:/almanac-data/runs/stage_a_b5_s1` |
 | 2.4 | Stage A: model M, two schedules, then three seeds | Not started | |
 | 2.5 | Ablations on validation | Not started | |
 | 2.6 | Calibration on validation 2024 | Not started | |
@@ -54,6 +54,18 @@ Expected wall time per run: about 8 hours of steps plus about 70 minutes of vali
 On Windows the GPU driver spills to system memory instead of failing when a batch does not fit,
 which is silently about 50 times slower; the training script caps the allocator at 95% of the card
 so an oversized batch fails at once.
+
+## Run log
+
+| Run | Started (UTC) | Outcome |
+|---|---|---|
+| B5, attempt 1 | 2026-11-15 20:31 | **Crashed** at about step 7,000 (GPU out of memory). A test job started alongside it on the CPU created a CUDA context through pinned memory and took GPU memory B5 needed. Validation 2024 forest-loss AP at steps 2,000 / 4,000 / 6,000: 0.2414 / 0.2479 / 0.2394. Kept in `D:/almanac-data/runs/failed/`. |
+| B5, attempt 2 | 2026-11-15 21:29 | Running, from step 0, with the same configuration and seed. |
+
+Fixes after attempt 1: pinned memory only on GPU runs; training saves its full state at every
+check and resumes from it (tested: a stopped and resumed run matches an uninterrupted one exactly);
+`tools/phase2/run_stage_a.sh` runs B5 and then model M (schedules a and b) and can be rerun at any
+time; no other GPU or memory-heavy job runs during training.
 
 ## The bar
 
