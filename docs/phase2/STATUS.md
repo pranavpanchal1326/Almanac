@@ -61,12 +61,39 @@ so an oversized batch fails at once.
 | Run | Started (UTC) | Outcome |
 |---|---|---|
 | B5, attempt 1 | 2026-11-15 20:31 | **Crashed** after step 6,000, before the next check (GPU out of memory). A test job started alongside it on the CPU created a CUDA context through pinned memory and took GPU memory B5 needed. Validation 2024 forest-loss AP at steps 2,000 / 4,000 / 6,000: 0.2414 / 0.2479 / 0.2394. Kept in `D:/almanac-data/runs/failed/`. |
-| B5, attempt 2 | 2026-11-15 21:29 | Running, from step 0, with the same configuration and seed. |
+| B5, attempt 2 | 2026-11-15 21:29 | **Completed** 100,000 steps on 2026-11-17 10:27 UTC (536 minutes). Best validation 2024 forest-loss AP **0.2816 at step 30,000**, the kept checkpoint; then collapsed (0.08–0.20 from step 56,000; 0.1592 at step 100,000). Kept as a reference candidate (amendment 2, section 4). |
+| B5 under A2 | see below | Queued after the measurement. |
 
 Fixes after attempt 1: pinned memory only on GPU runs; training saves its full state at every
 check and resumes from it (tested: a stopped and resumed run matches an uninterrupted one exactly);
 `tools/phase2/run_stage_a.sh` runs B5 and then model M (schedules a and b) and can be rerun at any
 time; no other GPU or memory-heavy job runs during training.
+
+## Measurements for amendment 2 (A2 networks)
+
+Run on 2026-11-17 after B5 attempt 2 finished, with nothing else on the GPU
+(`train.py <config> --smoke`):
+
+| | Model M (A2) | B5 (A2) |
+|---|---|---|
+| Parameters | 3,916,354 | 3,601,474 |
+| Overfit one batch, 250 steps: total loss | 0.851 → −0.290 | 1.465 → −0.275 |
+| Batch 8: peak memory, step time | 5.01 GiB, 0.318 s | 4.33 GiB, 0.272 s |
+| Batch 16 | out of memory | out of memory |
+| Data loading | 2.7 ms per patch (CPU) | 1.8 ms per patch |
+
+Rules of amendment 1, section 5, re-applied as amendment 2 requires: **batch 8** for both. Steps:
+8 hours is 28,800 s; at 0.318 s that is 90,566 steps for model M, so **90,000** (largest multiple
+of 2,000); at 0.272 s it is 105,882 for B5, so **100,000** (the cap). The step time grew with the
+explicit query-key normalisation, which no longer uses the fused attention path of amendment 1.
+
+Configurations after the rules (SHA-256):
+
+| File | SHA-256 |
+|---|---|
+| `configs/model/stage_a2_b5.json` | `424396210ba755a9b2e0ce1800bbcc1b5f18f07b2473e415ba56f335c98ba63c` |
+| `configs/model/stage_a2_m_a.json` | `cbc284d1cf9886bb314639b1b235aae7e778b082decb5ed3026c31e4481fb5a1` |
+| `configs/model/stage_a2_m_b.json` | `c12fa3e33be60326d52ee6b9735809dda1cecd2337e573891a528d670ad082ae` |
 
 ## Diagnosis of the B5 collapse (amendment 1 run)
 

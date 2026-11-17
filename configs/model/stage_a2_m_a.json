@@ -41,7 +41,7 @@
   "clip": 0.5,
   "ema": 0.999,
   "batch": 8,
-  "steps": 100000,
+  "steps": 90000,
   "eval_every": 2000
  }
 }
