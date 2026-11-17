@@ -84,8 +84,8 @@ Run on 2026-11-17 after B5 attempt 2 finished, with nothing else on the GPU
 
 Rules of amendment 1, section 5, re-applied as amendment 2 requires: **batch 8** for both. Steps:
 8 hours is 28,800 s; at 0.318 s that is 90,566 steps for model M, so **90,000** (largest multiple
-of 2,000); at 0.272 s it is 105,882 for B5, so **100,000** (the cap). The step time grew with the
-explicit query-key normalisation, which no longer uses the fused attention path of amendment 1.
+of 2,000); at 0.272 s it is 105,882 for B5, so **100,000** (the cap). The step time grew by about 14% (0.278 s to 0.318 s for model M) with the per-head
+query-key normalisation.
 
 Configurations after the rules (SHA-256):
 
