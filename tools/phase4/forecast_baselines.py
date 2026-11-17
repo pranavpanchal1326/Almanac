@@ -8,7 +8,7 @@ every AP must equal the published report's value to the last digit; otherwise th
 That shows the 2026 forecasts come from the same models that set the bar.
 
 Writes, under OUT_DIR: ``tiles.csv`` (the 499 test and held-out tiles, sorted) and one layer per
-baseline and task, ``baselines/<B>_<task>.npy``: float16 ``[499, 128, 128]``, probability of the
+baseline and task, ``baselines/<B>_<task>.npy``: float32 ``[499, 128, 128]``, probability of the
 event in 2026, NaN where the cell is not eligible. Nothing from 2026 exists yet, and nothing from
 2025 beyond what was known at the end of 2025 is used.
 
@@ -93,7 +93,12 @@ def main() -> None:
     if check_dir is not None:
         check_dir.mkdir(parents=True, exist_ok=True)
     for task in TASKS:
-        models = fit(cfg, by["train"], task, rule)
+        saved = check_dir / f"models_{task}.pkl" if check_dir is not None else None
+        if saved is not None and saved.exists():
+            with saved.open("rb") as f:
+                models = pickle.load(f)  # saved by an earlier run of this script; checked below
+        else:
+            models = fit(cfg, by["train"], task, rule)
         print(f"{task}: fitted, {time.time() - t0:.0f}s", flush=True)
         # Reproduction check on validation 2024 against the published report.
         y, _, _, probs = score_set(by["validation"], 2024, task, rule, models)

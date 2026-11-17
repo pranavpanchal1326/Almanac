@@ -1,9 +1,12 @@
 """Forecast packages (blueprint 11.2-11.3): layers, manifest and package digest.
 
-A layer is one ``.npy`` file, float16 ``[n_tiles, 128, 128]``: the probability of the event in
-each cell, NaN where the cell is not eligible. Tiles are in the order of ``tiles.csv``. Plain
-``.npy`` is used because it is byte-deterministic: two independent builds from the same inputs
-give the same digest. (Zip-based ``.npz`` embeds timestamps and would not.)
+A layer is one ``.npy`` file, float32 ``[n_tiles, 128, 128]``: the probability of the event in
+each cell, NaN where the cell is not eligible. Tiles are in the order of ``tiles.csv``.
+
+float32 keeps the ranking of the forecasts; float16 merged nearly equal scores into ties and moved
+AP by up to 5e-5 in a test against the baseline report. Plain ``.npy`` is used because it is
+byte-deterministic: two independent builds from the same inputs give the same digest. (Zip-based
+``.npz`` embeds timestamps and would not.)
 
 The manifest lists every file with its size and SHA-256, sorted by path, written as canonical
 JSON (sorted keys, no insignificant whitespace, UTF-8). The package digest is the SHA-256 of the
@@ -31,7 +34,7 @@ def write_layer(path: Path, probs: np.ndarray) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_name(path.name + ".part")
     with tmp.open("wb") as f:
-        np.save(f, probs.astype(np.float16), allow_pickle=False)
+        np.save(f, probs.astype(np.float32), allow_pickle=False)
     tmp.replace(path)
 
 
