@@ -9,8 +9,8 @@ training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, and Bitcoin bl
 |---|---|---|---|
 | 2.1 | Training store, dataset and balanced sampler | Done | `src/almanac/model/`, `tests/unit/test_model.py` |
 | 2.2 | Smoke test; memory and speed; batch and steps by the amendment's rules | Done | Below |
-| 2.3 | B5 (no neighbours), scored on validation first | Running (attempt 2) | `D:/almanac-data/runs/stage_a_b5_s1` |
-| 2.4 | Stage A: model M, two schedules, then three seeds | Not started | |
+| 2.3 | B5 (no neighbours), scored on validation first | Amendment 1 run: peaked at 0.2816, then collapsed; finishing its steps. A2 run next | `D:/almanac-data/runs/stage_a_b5_s1` |
+| 2.4 | Stage A: model M, two schedules, then three seeds | Held: recipe fixed by [amendment 2](../prereg/2027.01.amendment-2.md) | |
 | 2.5 | Ablations on validation | Not started | |
 | 2.6 | Calibration on validation 2024 | Not started | |
 | 2.7 | Stage B: one evaluation on 2025, logged | Not started | |
@@ -66,6 +66,30 @@ Fixes after attempt 1: pinned memory only on GPU runs; training saves its full s
 check and resumes from it (tested: a stopped and resumed run matches an uninterrupted one exactly);
 `tools/phase2/run_stage_a.sh` runs B5 and then model M (schedules a and b) and can be rerun at any
 time; no other GPU or memory-heavy job runs during training.
+
+## Diagnosis of the B5 collapse (amendment 1 run)
+
+Validation 2024 forest-loss AP rose to 0.2816 at step 30,000, then fell to 0.08–0.20 by step
+56,000. All three training-loss terms got worse together from step 30,000 (forest 0.110 → 0.150,
+embedding change 0.046 → 0.081, embedding likelihood −3.41 → −2.02): an optimisation failure, not
+overfitting.
+
+`python tools/phase2/diagnose.py configs/model/stage_a_b5.json <step-30,000 checkpoint> <step-58,000
+checkpoint>`, 24 training patches, averaged weights:
+
+| Block | Max attention logit, step 30k → 58k | Mean entropy (max 1.79) | Rows >99% on one year |
+|---|---|---|---|
+| 0 | 1,557 → 3,299 | 0.53 → 0.33 | 0.32 → 0.54 |
+| 1–3 | 16–75 → 27–81 | 1.06–1.50 → 1.17–1.27 | 0.00–0.02 → 0.08–0.11 |
+| 4 | 5,448 → 8,597 | 0.20 → 0.47 | 0.69 → 0.40 |
+| 5 | 142,830 → 272,815 | 0.01 → 0.02 | 0.99 → 0.96 |
+| 6 | 195,781 → 250,631 | 0.01 → 0.00 | 0.98 → 0.99 |
+| 7 | 66,191 → 101,361 | 0.01 → 0.09 | 0.99 → 0.74 |
+
+Attention in the later blocks had collapsed onto single years with logits far beyond what bfloat16
+represents precisely, and the projection weights kept growing (no weight decay). The embedding
+head was ruled out: its predicted spread (median 0.024 → 0.063) never reached the 1e-4 floor, and
+its standardised errors stayed near 0.7. Fix and rules: [amendment 2](../prereg/2027.01.amendment-2.md).
 
 ## The bar
 

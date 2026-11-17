@@ -21,6 +21,7 @@ The network is translation-equivariant in space, so it can be run on patches of 
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 
 import torch
@@ -39,6 +40,7 @@ class NetConfig:
     heads: int = 4
     dropout: float = 0.05
     spatial: bool = True  # False gives baseline B5
+    qk_norm: bool = False  # amendment 2: normalise queries and keys per head (False = amendment 1)
 
     @property
     def width(self) -> int:
@@ -57,11 +59,53 @@ def decode(stored: torch.Tensor) -> torch.Tensor:
     return x / x.norm(dim=-1, keepdim=True).clamp_min(1e-6)
 
 
+class QKNormAttention(nn.Module):
+    """Multi-head self-attention with layer-normalised queries and keys (amendment 2).
+
+    Normalising q and k per head bounds the attention logits, which grew to 1e5 and collapsed the
+    attention of amendment 1's network onto single years (Dehghani et al. 2023; Wortsman et al.
+    2023). With ``record`` set, the largest absolute logit and the mean attention entropy of the
+    last call are kept in ``last_stats`` for monitoring.
+    """
+
+    def __init__(self, d: int, heads: int, dropout: float):
+        super().__init__()
+        self.h, self.dh = heads, d // heads
+        self.qkv = nn.Linear(d, 3 * d)
+        self.q_norm = nn.LayerNorm(self.dh)
+        self.k_norm = nn.LayerNorm(self.dh)
+        self.out = nn.Linear(d, d)
+        self.dropout = dropout
+        self.record = False
+        self.last_stats: tuple[float, float] | None = None
+
+    def forward(self, x: torch.Tensor, absent: torch.Tensor) -> torch.Tensor:
+        n, t, d = x.shape
+        q, k, v = self.qkv(x).reshape(n, t, 3, self.h, self.dh).permute(2, 0, 3, 1, 4)
+        q, k = self.q_norm(q), self.k_norm(k)
+        keep = ~absent[:, None, None, :]  # [N, 1, 1, T]; the query position is never absent
+        if self.record:
+            with torch.no_grad():
+                logits = (q.float() @ k.float().transpose(-1, -2)) / math.sqrt(self.dh)
+                logits = logits.masked_fill(~keep, float("-inf"))
+                prob = logits.softmax(-1)
+                ent = -(prob * prob.clamp_min(1e-12).log()).sum(-1).mean()
+                self.last_stats = (float(logits[keep.expand_as(logits)].abs().max()), float(ent))
+        a = F.scaled_dot_product_attention(
+            q, k, v, attn_mask=keep, dropout_p=self.dropout if self.training else 0.0
+        )
+        return self.out(a.transpose(1, 2).reshape(n, t, d))
+
+
 class Block(nn.Module):
-    def __init__(self, d: int, heads: int, dropout: float, spatial: bool):
+    def __init__(self, d: int, heads: int, dropout: float, spatial: bool, qk_norm: bool = False):
         super().__init__()
         self.n1 = nn.LayerNorm(d)
-        self.attn = nn.MultiheadAttention(d, heads, dropout=dropout, batch_first=True)
+        self.qk_norm = qk_norm
+        if qk_norm:
+            self.attn = QKNormAttention(d, heads, dropout)
+        else:
+            self.attn = nn.MultiheadAttention(d, heads, dropout=dropout, batch_first=True)
         self.spatial = spatial
         if spatial:
             self.n2 = nn.LayerNorm(d)
@@ -74,7 +118,10 @@ class Block(nn.Module):
     def forward(self, x: torch.Tensor, absent: torch.Tensor, b: int, p: int) -> torch.Tensor:
         # x: [B*P*P, T, d]; absent: [B*P*P, T] True where the position is masked.
         h = self.n1(x)
-        a, _ = self.attn(h, h, h, key_padding_mask=absent, need_weights=False)
+        if self.qk_norm:
+            a = self.attn(h, absent)
+        else:
+            a, _ = self.attn(h, h, h, key_padding_mask=absent, need_weights=False)
         x = x + self.drop(a)
         if self.spatial:
             t, d = x.shape[1], x.shape[2]
@@ -97,7 +144,9 @@ class Forecaster(nn.Module):
         self.query = nn.Parameter(torch.zeros(d))
         for prm in (self.year, self.absent, self.query):
             nn.init.normal_(prm, std=0.02)
-        self.blocks = nn.ModuleList(Block(d, cfg.heads, cfg.dropout, cfg.spatial) for _ in range(cfg.blocks))
+        self.blocks = nn.ModuleList(
+            Block(d, cfg.heads, cfg.dropout, cfg.spatial, cfg.qk_norm) for _ in range(cfg.blocks)
+        )
         self.norm = nn.LayerNorm(d)
         self.head_forest = nn.Linear(d, 1)
         self.head_change = nn.Linear(d, 1)

@@ -83,10 +83,11 @@ def build(cfg: dict) -> tuple[DataConfig, NetConfig, LossWeights]:
 
 
 def lr_at(step: int, o: dict) -> float:
-    if o["schedule"] == "constant":
-        return o["lr"]
+    """Linear warm-up over ``warmup`` steps, then constant or cosine decay to zero."""
     if step < o["warmup"]:
         return o["lr"] * (step + 1) / o["warmup"]
+    if o["schedule"] == "constant":
+        return o["lr"]
     t = (step - o["warmup"]) / max(1, o["steps"] - o["warmup"])
     return o["lr"] * 0.5 * (1 + math.cos(math.pi * min(t, 1.0)))
 
@@ -109,6 +110,26 @@ def validate(net: Forecaster, tiles: list[str], dcfg: DataConfig, device: str) -
     return {
         f"val2024_ap_{task}": average_precision(np.concatenate(ys[task]), np.concatenate(zs[task]))
         for task in ys
+    }
+
+
+@torch.no_grad()
+def attention_stats(net: Forecaster, probe: dict, device: str) -> dict[str, float]:
+    """Largest attention logit and lowest mean entropy over blocks, on fixed training patches."""
+    was_training = net.training
+    net.eval()
+    blocks = list(net.blocks)
+    for blk in blocks:
+        blk.attn.record = True
+    with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=device == "cuda"):
+        net(probe)
+    stats = [blk.attn.last_stats for blk in blocks]
+    for blk in blocks:
+        blk.attn.record = False
+    net.train(was_training)
+    return {
+        "probe_max_logit": round(max(s[0] for s in stats), 2),
+        "probe_min_entropy": round(min(s[1] for s in stats), 4),
     }
 
 
@@ -212,7 +233,20 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int 
     ema = copy.deepcopy(net).eval()
     for p in ema.parameters():
         p.requires_grad_(False)
-    opt = torch.optim.AdamW(net.parameters(), lr=o["lr"], weight_decay=o["weight_decay"])
+    # Weight decay on weight matrices only; norms, biases and learned tokens are not decayed.
+    # With weight decay 0 (amendment 1) this is the same optimiser as a single group.
+    decay = [q for q in net.parameters() if q.ndim >= 2]
+    no_decay = [q for q in net.parameters() if q.ndim < 2]
+    opt = torch.optim.AdamW(
+        [{"params": decay, "weight_decay": o["weight_decay"]}, {"params": no_decay, "weight_decay": 0.0}],
+        lr=o["lr"],
+    )
+    probe = None
+    if ncfg.qk_norm:
+        # Fixed training patches for monitoring attention (never validation data).
+        pspecs = BalancedSampler(index, dcfg, cfg["seed"] + 1000).draw(16, 0)
+        pset = PatchSet(tiles, pspecs, dcfg)
+        probe = to_device(torch.utils.data.default_collate([pset[i] for i in range(16)]), device)
     step, epoch, best, elapsed = 0, 0, -1.0, 0.0
     if resuming:
         st = torch.load(state_path, map_location=device, weights_only=False)
@@ -263,6 +297,8 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int 
         n = max(1, step - epoch * o["eval_every"])
         rec = {"step": step, "minutes": round((time.time() - t0) / 60, 1), "lr": lr_at(step, o)}
         rec.update({f"train_{k}": round(v / n, 5) for k, v in acc.items()})
+        if probe is not None:
+            rec.update(attention_stats(net, probe, device))
         rec.update({k: round(v, 5) for k, v in validate(ema, val_tiles, dcfg, device).items()})
         log.write(json.dumps(rec) + "\n")
         log.flush()

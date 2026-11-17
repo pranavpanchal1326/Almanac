@@ -1,0 +1,47 @@
+{
+ "name": "stage_a2_m_b",
+ "split": "configs/splits/amazon_cerrado_v1.csv",
+ "train_targets": [
+  2019,
+  2020,
+  2021,
+  2022,
+  2023
+ ],
+ "seed": 1,
+ "workers": 6,
+ "data": {
+  "patch": 32,
+  "history": 5,
+  "grid_stride": 16,
+  "jitter": 8,
+  "positive_share": 0.5,
+  "truncate_prob": 0.5,
+  "mask_year_prob": 0.15,
+  "augment": true
+ },
+ "net": {
+  "size": "M",
+  "history": 5,
+  "heads": 4,
+  "dropout": 0.05,
+  "spatial": true,
+  "qk_norm": true
+ },
+ "loss": {
+  "forest": 1.0,
+  "change": 0.5,
+  "embedding": 0.1
+ },
+ "optim": {
+  "lr": 0.0003,
+  "schedule": "cosine",
+  "warmup": 2000,
+  "weight_decay": 0.05,
+  "clip": 0.5,
+  "ema": 0.999,
+  "batch": 8,
+  "steps": 100000,
+  "eval_every": 2000
+ }
+}

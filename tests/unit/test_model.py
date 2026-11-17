@@ -156,7 +156,7 @@ def test_b5_sees_no_neighbours_and_full_model_does() -> None:
         net = Forecaster(NetConfig(size="S", spatial=spatial)).eval()
         with torch.no_grad():
             a, b = net(batch)["forest"], net(changed)["forest"]
-        centre_moved = not torch.allclose(a[0, 4, 4], b[0, 4, 4])
+        centre_moved = not torch.equal(a[0, 4, 4], b[0, 4, 4])  # exact: the effect at init is tiny
         assert centre_moved == moves  # 6 blocks of 3x3 reach 4 cells away
         assert not torch.allclose(a[0, 0, 0], b[0, 0, 0])
 
@@ -183,3 +183,68 @@ def test_absent_years_do_not_change_the_output() -> None:
     other["year_scalars"][:, 0] = 5.0
     with torch.no_grad():
         torch.testing.assert_close(net(batch)["forest"], net(other)["forest"])
+
+
+@pytest.mark.parametrize("spatial", [True, False])
+def test_qk_norm_network_keeps_the_guarantees(spatial: bool) -> None:
+    torch.manual_seed(0)
+    net = Forecaster(NetConfig(size="S", spatial=spatial, qk_norm=True)).eval()
+    batch = _batch(b=1, p=9)
+    out = net(batch)
+    assert out["forest"].shape == (1, 9, 9)
+    assert all(torch.isfinite(v) for v in losses(out, batch, LossWeights()).values())
+    # Absent years still change nothing.
+    hidden = {k: v.clone() for k, v in batch.items()}
+    hidden["valid"][:, 0] = False
+    other = {k: v.clone() for k, v in hidden.items()}
+    other["emb"][:, 0] = torch.randint(-127, 128, other["emb"][:, 0].shape, dtype=torch.int8)
+    with torch.no_grad():
+        torch.testing.assert_close(net(hidden)["forest"], net(other)["forest"])
+    # Without spatial mixing a corner change cannot reach the centre.
+    moved = {k: v.clone() for k, v in batch.items()}
+    moved["emb"][0, :, :, 0, 0] = 0
+    with torch.no_grad():
+        # Exact comparison: without spatial mixing the effect is exactly zero; with it, small but nonzero.
+        centre_same = torch.equal(net(batch)["forest"][0, 4, 4], net(moved)["forest"][0, 4, 4])
+    assert centre_same == (not spatial)
+
+
+def test_qk_norm_bounds_the_attention_logits() -> None:
+    torch.manual_seed(0)
+    net = Forecaster(NetConfig(size="S", spatial=False, qk_norm=True)).eval()
+    with torch.no_grad():
+        for blk in net.blocks:
+            blk.attn.qkv.weight.mul_(1000.0)  # the kind of growth seen in amendment 1's run
+            blk.attn.record = True
+        net(_batch(b=1, p=4))
+    for blk in net.blocks:
+        max_logit, _ = blk.attn.last_stats
+        # |q.k| / sqrt(dh) <= |q||k| / sqrt(dh), and each normalised vector has length about sqrt(dh)
+        # times its gain (initially 1).
+        assert max_logit <= blk.attn.dh**0.5 * 1.01
+
+
+def test_warmup_applies_to_both_schedules() -> None:
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools" / "phase2"))
+    from train import lr_at
+
+    const = {"lr": 1e-4, "schedule": "constant", "warmup": 100, "steps": 1000}
+    assert lr_at(0, const) == pytest.approx(1e-6) and lr_at(500, const) == 1e-4
+    assert lr_at(50, {**const, "warmup": 0}) == 1e-4  # amendment 1 behaviour unchanged
+    cos = {**const, "schedule": "cosine"}
+    assert lr_at(99, cos) == pytest.approx(1e-4) and lr_at(1000, cos) == pytest.approx(0.0, abs=1e-12)
+
+
+def test_amendment_1_checkpoint_still_loads() -> None:
+    from pathlib import Path
+
+    path = Path("D:/almanac-data/runs/stage_a_b5_s1/best.pt")
+    if not path.exists():
+        pytest.skip("B5 checkpoint not on this machine")
+    ckpt = torch.load(path, map_location="cpu", weights_only=False)
+    net = Forecaster(NetConfig(**ckpt["config"]["net"]))
+    net.load_state_dict(ckpt["ema"])  # strict: every key matches the amendment 1 network
+    assert not net.cfg.qk_norm
