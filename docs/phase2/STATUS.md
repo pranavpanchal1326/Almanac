@@ -2,7 +2,7 @@
 
 Started 2026-11-16. Question: does a learned model beat the best simple method (B4) on places and
 years it has not seen? Rules: [pre-registration](../prereg/2027.01.md),
-[amendment 2](../prereg/2027.01.amendment-2.md) (stable recipe; FreeTSA 2026-11-17 07:00:36 UTC, DigiCert 07:00:39 UTC) and
+[amendment 2](../prereg/2027.01.amendment-2.md) (stable recipe; FreeTSA 2026-11-17 07:00:36 UTC, DigiCert 07:00:39 UTC, and Bitcoin block 976,246, mined 07:56:28 UTC; the proof's commitment matches that block's Merkle root) and
 [amendment 1](../prereg/2027.01.amendment-1.md) (the model specification, timestamped before any
 training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, and Bitcoin block 976,013, mined 20:43:06 UTC; the proof's commitment matches that block's Merkle root).
 
