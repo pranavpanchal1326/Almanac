@@ -1,9 +1,11 @@
 # Timestamp proofs for issue 2027.01
 
-Two documents are stamped: the pre-registration (`2027.01`) and its amendment 1, the model
-specification (`2027.01.amendment-1`). Each has its own bundle, commit file and proofs, named
-after it; the steps below are written for `2027.01` and work the same with the amendment's names.
-The amendment's bundle also lists the stamped pre-registration and its proofs.
+Three documents are stamped: the pre-registration (`2027.01`), amendment 1, the model
+specification (`2027.01.amendment-1`), and amendment 2, the stable training recipe
+(`2027.01.amendment-2`). Each has its own bundle, commit file and proofs, named after it; the
+steps below are written for `2027.01` and work the same with an amendment's names. Each
+amendment's bundle also lists the stamped pre-registration, every earlier amendment, and their
+proofs, so the stamps form a chain.
 
 What is timestamped is one file, `docs/prereg/2027.01.bundle.sha256`. It lists the SHA-256 of the
 pre-registration, the code commit id, every source, tool, test and configuration file, the

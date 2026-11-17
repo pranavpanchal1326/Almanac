@@ -1,0 +1,10 @@
+Verification: OK
+Using configuration from C:/Program Files/Git/mingw64/etc/ssl//openssl.cnf
+Warning: certificate from 'docs/prereg/proofs/2027.01.amendment-2.bundle.sha256.digicert.chain.pem' with subject '/C=US/O=DigiCert, Inc./CN=DigiCert SHA256 RSA4096 Timestamp Responder 2026 1' is not a CA cert
+Using configuration from C:/Program Files/Git/mingw64/etc/ssl//openssl.cnf
+Policy OID: 2.16.840.1.114412.7.1
+Hash Algorithm: sha256
+Message data:
+Serial number: 0x5F7BAC6F1A8F0A047247BA2D5595664B
+Time stamp: Nov 17 07:00:39 2026 GMT
+TSA: unspecified
