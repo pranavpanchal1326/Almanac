@@ -6,9 +6,9 @@ baseline forecasts and the package are prepared first.
 
 | ID | Task | Status | Evidence |
 |---|---|---|---|
-| 4.3 | Baseline forecasts for 2026, B0–B4, on the 499 exam tiles | Regenerating in float32 | `tools/phase4/forecast_baselines.py` |
+| 4.3 | Baseline forecasts for 2026, B0–B4, on the 499 exam tiles | Done | `D:/almanac-data/packages/2027.01/baselines/` (10 layers, float32) |
 | 4.5 | Package format: layers, canonical manifest, package digest | Done | `src/almanac/registry/package.py`, `tests/unit/test_package.py` |
-| — | Grader for the exam (win condition with the guard) | Tested; float32 rerun pending | `tools/phase5/grade.py` |
+| — | Grader for the exam (win condition with the guard) | Done, tested against the report | `tools/phase5/grade.py` |
 | 4.2 | Model forecast for 2026 | After Phase 2 | |
 | 4.4, 4.6–4.11 | Grader tag, independent rebuild, lock, site, release, announcement | Not started | |
 
@@ -29,7 +29,11 @@ the package digest is the SHA-256 of the manifest.
   and events as the report (forest loss 1,531,430 cells and 101,177 events; embedding change
   2,008,425 and 87,155), so eligibility and truth are graded identically. AP differed by at most
   4.7e-5: float16 merged nearly equal scores into ties (B0 and B2, which have no near-ties, matched
-  to the last digit). Layers are now float32, and the test is being repeated.
+  to the last digit). Layers are now float32.
+- **Second grader test (float32 layers).** Same cells and events again; 7 of the 10 AP values
+  equal the report's to the last digit and the other 3 differ by at most 6.7e-9, which is float32
+  rounding of probabilities the report kept in float64. The grader scores a package as the
+  baseline report scored the baselines.
 
 ## Checks built in
 
