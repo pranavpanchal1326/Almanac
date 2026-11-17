@@ -54,13 +54,22 @@ def main() -> None:
     # two timestamps form a chain.
     earlier = []
     if ".amendment-" in issue:
-        base = issue.split(".amendment-")[0]
+        base, num = issue.split(".amendment-")
+
+        def is_earlier(path: str) -> bool:
+            # The stamped issue and every lower-numbered amendment, with their proofs.
+            name = path.rsplit("/", 1)[-1]
+            if not name.startswith(f"{base}."):
+                return path == "docs/prereg/proofs/README.md"
+            if ".amendment-" not in name:
+                return True
+            other = name.split(".amendment-")[1].split(".")[0]
+            return other.isdigit() and int(other) < int(num)
+
         earlier = sorted(
             p
             for p in tracked
-            if p.startswith((f"docs/prereg/{base}.", "docs/prereg/proofs/"))
-            and p != prereg
-            and ".amendment-" not in p
+            if p.startswith(("docs/prereg/", "docs/prereg/proofs/")) and p != prereg and is_earlier(p)
         )
     evidence = [p for p in EVIDENCE if p in tracked]
     paths = [prereg, commit_file.relative_to(REPO).as_posix(), *earlier, *evidence, *code]
