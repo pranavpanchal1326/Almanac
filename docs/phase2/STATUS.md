@@ -62,7 +62,9 @@ so an oversized batch fails at once.
 |---|---|---|
 | B5, attempt 1 | 2026-11-15 20:31 | **Crashed** after step 6,000, before the next check (GPU out of memory). A test job started alongside it on the CPU created a CUDA context through pinned memory and took GPU memory B5 needed. Validation 2024 forest-loss AP at steps 2,000 / 4,000 / 6,000: 0.2414 / 0.2479 / 0.2394. Kept in `D:/almanac-data/runs/failed/`. |
 | B5, attempt 2 | 2026-11-15 21:29 | **Completed** 100,000 steps on 2026-11-17 10:27 UTC (536 minutes). Best validation 2024 forest-loss AP **0.2816 at step 30,000**, the kept checkpoint; then collapsed (0.08–0.20 from step 56,000; 0.1592 at step 100,000). Kept as a reference candidate (amendment 2, section 4). |
-| B5 under A2 | see below | Queued after the measurement. |
+| B5 under A2 | 2026-11-17 10:33 | **Completed** 100,000 steps on 2026-11-18 06:57 UTC (641 minutes of training; paused overnight at step 56,000 and resumed from its saved state). No collapse: largest probe attention logit 20.4, lowest mean entropy 0.47. Best validation 2024 forest-loss AP **0.3423 at step 86,000** (embedding task 0.5060), the kept checkpoint; 0.2967 at step 100,000. Reference candidate (amendment 2, section 4). |
+| Model M under A2, schedule (a) | 2026-11-18 06:57 | **Completed** 90,000 steps on 2026-11-18 17:47 UTC (647 minutes). No collapse: largest probe logit 13.2, lowest entropy 0.47. Best validation 2024 forest-loss AP **0.3202 at step 86,000** (embedding task 0.4716); 0.3031 at step 90,000. Below B5 under A2 at almost every check. |
+| Model M under A2, schedule (b) | 2026-11-18 17:48 | Stopped after 3 minutes, before its first check, for a shutdown; restarts from step 0. |
 
 Fixes after attempt 1: pinned memory only on GPU runs; training saves its full state at every
 check and resumes from it (tested: a stopped and resumed run matches an uninterrupted one exactly);
