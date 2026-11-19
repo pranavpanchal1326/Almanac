@@ -64,12 +64,18 @@ so an oversized batch fails at once.
 | B5, attempt 2 | 2026-11-15 21:29 | **Completed** 100,000 steps on 2026-11-17 10:27 UTC (536 minutes). Best validation 2024 forest-loss AP **0.2816 at step 30,000**, the kept checkpoint; then collapsed (0.08–0.20 from step 56,000; 0.1592 at step 100,000). Kept as a reference candidate (amendment 2, section 4). |
 | B5 under A2 | 2026-11-17 10:33 | **Completed** 100,000 steps on 2026-11-18 06:57 UTC (641 minutes of training; paused overnight at step 56,000 and resumed from its saved state). No collapse: largest probe attention logit 20.4, lowest mean entropy 0.47. Best validation 2024 forest-loss AP **0.3423 at step 86,000** (embedding task 0.5060), the kept checkpoint; 0.2967 at step 100,000. Reference candidate (amendment 2, section 4). |
 | Model M under A2, schedule (a) | 2026-11-18 06:57 | **Completed** 90,000 steps on 2026-11-18 17:47 UTC (647 minutes). No collapse: largest probe logit 13.2, lowest entropy 0.47. Best validation 2024 forest-loss AP **0.3202 at step 86,000** (embedding task 0.4716); 0.3031 at step 90,000. Below B5 under A2 at almost every check. |
-| Model M under A2, schedule (b) | 2026-11-19 01:56 | First start on 2026-11-18 17:48 was stopped after 3 minutes, before its first check, for a shutdown, and restarted from step 0. On 2026-11-19 about 09:45 UTC, after the check at step 64,000, a backward pass failed with CUDA out of memory and the process hung without exiting; a web browser was also using the GPU. Found at 11:55 UTC, stopped, and resumed from the saved state at step 64,000 (resume is exact; no configuration change). The same failure followed the check at step 66,000; stopped at 12:24 UTC and resumed from step 66,000 under the supervision described below. Running. |
+| Model M under A2, schedule (b) | 2026-11-19 01:56 | First start on 2026-11-18 17:48 was stopped after 3 minutes, before its first check, for a shutdown, and restarted from step 0. On 2026-11-19 about 09:45 UTC, after the check at step 64,000, a backward pass failed with CUDA out of memory and the process hung without exiting; a web browser was also using the GPU. Found at 11:55 UTC, stopped, and resumed from the saved state at step 64,000 (resume is exact; no configuration change). The same failure followed the check at step 66,000; stopped at 12:24 UTC and resumed from step 66,000 under the supervision described below. **Completed** 90,000 steps on 2026-11-19 15:16 UTC with no further failure. Best validation 2024 forest-loss AP **0.2784 at step 62,000** (embedding task 0.4424); 0.2618 at step 90,000. No collapse, but attention much sharper than schedule (a): largest probe logit 62.8. |
+| Model M under A2, schedule (a), seed 2 | 2026-11-19 15:17 | Running. |
+| Model M under A2, schedule (a), seed 3 | | Queued after seed 2. |
 
 Fixes after attempt 1: pinned memory only on GPU runs; training saves its full state at every
 check and resumes from it (tested: a stopped and resumed run matches an uninterrupted one exactly);
 `tools/phase2/run_stage_a.sh` runs B5 and then model M (schedules a and b) and can be rerun at any
 time; no other GPU or memory-heavy job runs during training.
+
+## Schedule choice for model M
+
+By the rule of amendment 1 (best validation 2024 forest-loss AP; a tie within 0.002 goes to schedule a): schedule (a) 0.3202, schedule (b) 0.2784. The difference, 0.0418, is far beyond the tie margin, so **schedule (a), constant learning rate 1.1e-4, is chosen**. Seeds 2 and 3 use `configs/model/stage_a2_m_a_s2.json` and `_s3.json`, identical to `stage_a2_m_a.json` except for the seed and the name, and run under the same supervision.
 
 ## Supervision of training runs
 
@@ -112,6 +118,8 @@ Configurations after the rules (SHA-256):
 | `configs/model/stage_a2_b5.json` | `424396210ba755a9b2e0ce1800bbcc1b5f18f07b2473e415ba56f335c98ba63c` |
 | `configs/model/stage_a2_m_a.json` | `cbc284d1cf9886bb314639b1b235aae7e778b082decb5ed3026c31e4481fb5a1` |
 | `configs/model/stage_a2_m_b.json` | `c12fa3e33be60326d52ee6b9735809dda1cecd2337e573891a528d670ad082ae` |
+| `configs/model/stage_a2_m_a_s2.json` | `3ee12de21f0db73e984f932fcfbcbf73748e55189e447fdafe7b2ea6c14e5fb6` |
+| `configs/model/stage_a2_m_a_s3.json` | `267abd3f6bb66010704b45c4d30e1ee05d393272d6a7e05e1c1e0e12b88a4267` |
 
 ## Diagnosis of the B5 collapse (amendment 1 run)
 
