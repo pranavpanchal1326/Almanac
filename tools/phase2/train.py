@@ -23,7 +23,10 @@ import csv
 import hashlib
 import json
 import math
+import os
+import sys
 import time
+import traceback
 from pathlib import Path
 
 import numpy as np
@@ -201,6 +204,15 @@ def smoke(cfg: dict, device: str) -> None:
     print(json.dumps(result, indent=2))
 
 
+HEARTBEAT = "heartbeat"
+EXIT_FAILED = 75  # the run failed and can be resumed from its last check
+
+
+def beat(out: Path) -> None:
+    """Touch the heartbeat file; ``run_stage_a.sh`` restarts a run whose heartbeat stops."""
+    (out / HEARTBEAT).write_text(f"{time.time():.0f}\n")
+
+
 def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int = 0) -> None:
     dcfg, ncfg, w = build(cfg)
     o = cfg["optim"]
@@ -214,6 +226,7 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int 
         cfg = dict(cfg, workers=2, optim=o)
         tiles, val_tiles = tiles[:60], tiles[:4]
     out.mkdir(parents=True, exist_ok=True)
+    beat(out)
     if (out / "last.pt").exists():
         print(f"{out} already finished; nothing to do", flush=True)
         return
@@ -263,6 +276,7 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int 
         (out / "log.jsonl").write_text("".join(ln + "\n" for ln in kept), newline="\n")
         print(f"resuming at step {step} (epoch {epoch}, best {best:.5f})", flush=True)
     log = (out / "log.jsonl").open("a", newline="\n")
+    beat(out)
     t0 = time.time() - elapsed
     checks_this_session = 0
     while step < o["steps"]:
@@ -292,6 +306,8 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int 
             for k, v in ls.items():
                 acc[k] = acc.get(k, 0.0) + float(v)
             step += 1
+            if step % 50 == 0:
+                beat(out)
             if step >= o["steps"]:
                 break
         n = max(1, step - epoch * o["eval_every"])
@@ -300,6 +316,7 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int 
         if probe is not None:
             rec.update(attention_stats(net, probe, device))
         rec.update({k: round(v, 5) for k, v in validate(ema, val_tiles, dcfg, device).items()})
+        beat(out)
         log.write(json.dumps(rec) + "\n")
         log.flush()
         print(json.dumps(rec), flush=True)
@@ -322,6 +339,11 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int 
         }
         torch.save(state, out / "state.pt.part")
         (out / "state.pt.part").replace(state_path)
+        if device == "cuda":
+            # Validation allocates tensors of other shapes; return them to the driver so the next
+            # training step finds contiguous memory. Two out-of-memory failures on 2026-11-19 came
+            # in the first backward pass after a check. No effect on any result.
+            torch.cuda.empty_cache()
         checks_this_session += 1
         if stop_after and checks_this_session >= stop_after and step < o["steps"]:
             print(
@@ -351,7 +373,16 @@ def main() -> None:
     else:
         if args.out is None:
             raise SystemExit("--out is required for training")
-        train(cfg, args.out, device, dry=args.dry, stop_after=args.stop_after)
+        try:
+            train(cfg, args.out, device, dry=args.dry, stop_after=args.stop_after)
+        except Exception:  # SystemExit (a deliberate refusal) and Ctrl+C pass through
+            # A CUDA error (out of memory, a lost device) leaves the context unusable, and a normal
+            # interpreter exit can then hang while data-loader workers shut down (seen on
+            # 2026-11-19). Report and leave at once; the run resumes from its last check.
+            traceback.print_exc()
+            sys.stdout.flush()
+            sys.stderr.flush()
+            os._exit(EXIT_FAILED)
 
 
 if __name__ == "__main__":

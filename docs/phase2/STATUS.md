@@ -64,12 +64,28 @@ so an oversized batch fails at once.
 | B5, attempt 2 | 2026-11-15 21:29 | **Completed** 100,000 steps on 2026-11-17 10:27 UTC (536 minutes). Best validation 2024 forest-loss AP **0.2816 at step 30,000**, the kept checkpoint; then collapsed (0.08–0.20 from step 56,000; 0.1592 at step 100,000). Kept as a reference candidate (amendment 2, section 4). |
 | B5 under A2 | 2026-11-17 10:33 | **Completed** 100,000 steps on 2026-11-18 06:57 UTC (641 minutes of training; paused overnight at step 56,000 and resumed from its saved state). No collapse: largest probe attention logit 20.4, lowest mean entropy 0.47. Best validation 2024 forest-loss AP **0.3423 at step 86,000** (embedding task 0.5060), the kept checkpoint; 0.2967 at step 100,000. Reference candidate (amendment 2, section 4). |
 | Model M under A2, schedule (a) | 2026-11-18 06:57 | **Completed** 90,000 steps on 2026-11-18 17:47 UTC (647 minutes). No collapse: largest probe logit 13.2, lowest entropy 0.47. Best validation 2024 forest-loss AP **0.3202 at step 86,000** (embedding task 0.4716); 0.3031 at step 90,000. Below B5 under A2 at almost every check. |
-| Model M under A2, schedule (b) | 2026-11-19 01:56 | First start on 2026-11-18 17:48 was stopped after 3 minutes, before its first check, for a shutdown, and restarted from step 0. On 2026-11-19 about 09:45 UTC, after the check at step 64,000, a backward pass failed with CUDA out of memory and the process hung without exiting; a web browser was also using the GPU. Found at 11:55 UTC, stopped, and resumed from the saved state at step 64,000 (resume is exact; no configuration change). Running. |
+| Model M under A2, schedule (b) | 2026-11-19 01:56 | First start on 2026-11-18 17:48 was stopped after 3 minutes, before its first check, for a shutdown, and restarted from step 0. On 2026-11-19 about 09:45 UTC, after the check at step 64,000, a backward pass failed with CUDA out of memory and the process hung without exiting; a web browser was also using the GPU. Found at 11:55 UTC, stopped, and resumed from the saved state at step 64,000 (resume is exact; no configuration change). The same failure followed the check at step 66,000; stopped at 12:24 UTC and resumed from step 66,000 under the supervision described below. Running. |
 
 Fixes after attempt 1: pinned memory only on GPU runs; training saves its full state at every
 check and resumes from it (tested: a stopped and resumed run matches an uninterrupted one exactly);
 `tools/phase2/run_stage_a.sh` runs B5 and then model M (schedules a and b) and can be rerun at any
 time; no other GPU or memory-heavy job runs during training.
+
+## Supervision of training runs
+
+Two out-of-memory failures in schedule (b), on 2026-11-19, came in the first backward pass after
+a validation check, on a card shared with other programs. Each time the process printed the error
+and then hung instead of exiting, so the queue could not notice it. Changes, none of which alters a
+result (resuming is exact):
+
+- `train.py` releases cached GPU memory after every check (`torch.cuda.empty_cache()`), so the
+  next training step finds contiguous memory.
+- `train.py` exits at once with status 75 on any error, instead of a normal interpreter exit that
+  can hang while data-loader workers shut down; it touches a `heartbeat` file every 50 steps.
+- `tools/phase2/run_stage_a.sh` supervises each run: on a failure, or no heartbeat for 15
+  minutes, it stops the process tree and resumes from the last check, up to 6 times, logging each
+  event to `D:/almanac-data/runs/queue.log`. Tested with stand-in runs that crash once, hang once
+  and always fail, an injected error in `train.py`, and a dry run on the CPU.
 
 ## Measurements for amendment 2 (A2 networks)
 
