@@ -13,7 +13,8 @@
 # because another program took GPU memory) or its heartbeat file stops changing for STALL seconds
 # (a hang), the process tree is stopped and the run resumes from its last check, up to
 # MAX_RESTARTS times. Resuming is exact, so a restart changes no result; it costs the steps since
-# the last check. Time the machine spends asleep is not counted as a stall. Every event is
+# the last check. A run that reports a failure (the `failed` marker) but does not exit is
+# stopped within one poll. Time the machine spends asleep is not counted as a stall. Every event is
 # appended to $RUNS/queue.log.
 set -uo pipefail
 RUNS=${RUNS:-D:/almanac-data/runs}
@@ -57,6 +58,7 @@ run_one() {
   while :; do
     if [ -f "$out/last.pt" ]; then say "$c: finished"; return 0; fi
     say "$c: running"
+    rm -f "$out/failed"
     started=$(date +%s)
     .venv/Scripts/python -u -W ignore "$TRAIN" "configs/model/$c.json" --out "$out" "${extra[@]}" \
       >> "$RUNS/$(basename "$out").out" 2>&1 &
@@ -73,6 +75,16 @@ run_one() {
         started=$now
       fi
       prev=$now
+      # train.py writes this marker when it fails; its own exit can still hang in the GPU driver.
+      if [ -f "$out/failed" ] && kill -0 "$pid" 2> /dev/null; then
+        sleep 10
+        if kill -0 "$pid" 2> /dev/null; then
+          say "$c: reported a failure but did not exit; stopping it"
+          stop_tree "$pid"
+          status=75
+        fi
+        continue
+      fi
       age=$(quiet_for "$out" "$started")
       if [ "$age" -gt "$STALL" ] && kill -0 "$pid" 2> /dev/null; then
         say "$c: no heartbeat for ${age} s; stopping the hung process"

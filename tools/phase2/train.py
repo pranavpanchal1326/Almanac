@@ -205,6 +205,7 @@ def smoke(cfg: dict, device: str) -> None:
 
 
 HEARTBEAT = "heartbeat"
+FAILED = "failed"  # written when the run fails; run_stage_a.sh then stops the process at once
 EXIT_FAILED = 75  # the run failed and can be resumed from its last check
 
 
@@ -444,6 +445,9 @@ def main() -> None:
             # interpreter exit can then hang while data-loader workers shut down (seen on
             # 2026-11-19). Report and leave at once; the run resumes from its last check.
             traceback.print_exc()
+            # Even TerminateProcess can wait on a driver call stuck in another thread (2026-11-21);
+            # this marker lets run_stage_a.sh stop the process from outside within one poll.
+            (args.out / FAILED).write_text(f"{time.time():.0f}\n")
             leave(EXIT_FAILED)
 
 
