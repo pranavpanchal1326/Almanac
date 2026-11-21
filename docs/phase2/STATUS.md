@@ -16,7 +16,7 @@ training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, and Bitcoin bl
 | 2.6 | Calibration on validation 2024 | Done: ensemble AP 0.3266 | [Calibration](#calibration-and-the-three-seed-ensemble-validation), `tools/phase2/ensemble.py` |
 | 2.7 | Stage B: one evaluation on 2025, logged | Done 2026-11-21: model +16.0% over the reference (95% interval +10.7% to +22.3%); **win condition not met** (needs 20%) | [Stage B result](#stage-b-result-2025-the-single-logged-touch), `docs/phase2/stage_b_report.md` |
 | 2.8 | Independent reproduction of stage B | Done 2026-11-21 by independent code: 64 of 64 checks within tolerance (largest difference 4.3e-16); a re-grade by a second person is still open | [Reproduction](#stage-b-reproduction-task-28), `docs/phase2/stage_b_reproduction.md` |
-| 2.9 | Gate 2 review | Prepared 2026-11-21 (ADR 0004, proposed): recommends locking the model as the headline, labelled as missing the 20% margin; **decision pending the owner** | [ADR 0004](../adr/0004-gate-2.md) |
+| 2.9 | Gate 2 review | Done 2026-11-21: outcome **Partial**; Option A accepted (model M A2 is the headline, labelled as missing the 20% margin; reference and B0–B4 locked beside it) | [ADR 0004](../adr/0004-gate-2.md), [label](../phase4/LABEL.md) |
 
 ## Training store (2.1)
 

@@ -1,15 +1,20 @@
 # Phase 4 — Lock: preparation
 
 Started 2026-11-16, alongside Phase 2 training. The lock is on 15 January 2027 and does not move.
-If no model clears the bar, the plan locks B4's forecast instead (blueprint 16.4, "Fail"), so the
-baseline forecasts and the package are prepared first.
+The baseline forecasts and the package were prepared first, so a baseline could be locked if no
+model cleared the bar.
+
+**Gate 2 decision (2026-11-21, [ADR 0004](../adr/0004-gate-2.md)):** outcome Partial. The headline
+of issue 2027.01 is model M (A2), locked with the reference B5 (A2) and B0–B4 in one package; the
+exam's win condition is unchanged. The public label is fixed in [LABEL.md](LABEL.md).
 
 | ID | Task | Status | Evidence |
 |---|---|---|---|
 | 4.3 | Baseline forecasts for 2026, B0–B4, on the 499 exam tiles | Done | `D:/almanac-data/packages/2027.01/baselines/` (10 layers, float32) |
 | 4.5 | Package format: layers, canonical manifest, package digest | Done | `src/almanac/registry/package.py`, `tests/unit/test_package.py` |
 | — | Grader for the exam (win condition with the guard) | Done, tested against the report; reference corrected to B5 under amendment 2 (2026-11-21) | `tools/phase5/grade.py` |
-| 4.2 | Model forecast for 2026 | After Phase 2 | |
+| 4.2 | Model forecast for 2026 (M A2) and the reference's (B5 A2) | Next: frozen weights, inputs up to 2025, no refit | |
+| — | Public label | Fixed 2026-11-21, before the forecast exists | [LABEL.md](LABEL.md) |
 | 4.4, 4.6–4.11 | Grader tag, independent rebuild, lock, site, release, announcement | Not started | |
 
 ## Format
