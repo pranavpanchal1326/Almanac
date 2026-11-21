@@ -66,7 +66,7 @@ so an oversized batch fails at once.
 | Model M under A2, schedule (a) | 2026-11-18 06:57 | **Completed** 90,000 steps on 2026-11-18 17:47 UTC (647 minutes). No collapse: largest probe logit 13.2, lowest entropy 0.47. Best validation 2024 forest-loss AP **0.3202 at step 86,000** (embedding task 0.4716); 0.3031 at step 90,000. Below B5 under A2 at almost every check. |
 | Model M under A2, schedule (b) | 2026-11-19 01:56 | First start on 2026-11-18 17:48 was stopped after 3 minutes, before its first check, for a shutdown, and restarted from step 0. On 2026-11-19 about 09:45 UTC, after the check at step 64,000, a backward pass failed with CUDA out of memory and the process hung without exiting; a web browser was also using the GPU. Found at 11:55 UTC, stopped, and resumed from the saved state at step 64,000 (resume is exact; no configuration change). The same failure followed the check at step 66,000; stopped at 12:24 UTC and resumed from step 66,000 under the supervision described below. **Completed** 90,000 steps on 2026-11-19 15:16 UTC with no further failure. Best validation 2024 forest-loss AP **0.2784 at step 62,000** (embedding task 0.4424); 0.2618 at step 90,000. No collapse, but attention much sharper than schedule (a): largest probe logit 62.8. |
 | Model M under A2, schedule (a), seed 2 | 2026-11-19 15:17 | **Completed** 90,000 steps on 2026-11-20 01:37 UTC (617 minutes), no restarts. No collapse: largest probe logit 16.5, lowest entropy 0.47. Best validation 2024 forest-loss AP **0.3332 at step 86,000** (embedding task 0.5256); 0.2748 at step 90,000. |
-| Model M under A2, schedule (a), seed 3 | 2026-11-20 01:37 | Stopped by hand at 02:58 UTC for a shutdown; resumed from step 10,000 at 11:02 UTC. At 16:07 UTC the laptop went into standby, which paused training; on waking at 16:27 the supervisor read the 20-minute gap as a hang and stopped the run, and the laptop then shut down. Resumed from the saved state at step 50,000 on 2026-11-21 (resume is exact). Running. |
+| Model M under A2, schedule (a), seed 3 | 2026-11-20 01:37 | Stopped by hand at 02:58 UTC for a shutdown; resumed from step 10,000 at 11:02 UTC. At 16:07 UTC the laptop went into standby, which paused training; on waking at 16:27 the supervisor read the 20-minute gap as a hang and stopped the run, and the laptop then shut down. Resumed from the saved state at step 50,000 on 2026-11-21 (resume is exact). After the check at step 58,000 (04:57 UTC) a backward pass failed with CUDA out of memory and the process hung on exit; the supervisor stopped it after 15 minutes and resumed from step 58,000. Stopped by hand right after the check at step 60,000 to load the retry described below, and resumed from step 60,000. Running. |
 
 Fixes after attempt 1: pinned memory only on GPU runs; training saves its full state at every
 check and resumes from it (tested: a stopped and resumed run matches an uninterrupted one exactly);
@@ -96,6 +96,14 @@ result (resuming is exact):
   held by the process, released when it exits; no power setting is changed), and the supervisor no
   longer counts time the machine was asleep as a stall: a poll that took far longer than its interval
   restarts the stall clock. Tested with a stand-in run and a simulated 131-second suspension.
+- Out of memory (2026-11-21, a third time, again in the first backward pass after a check): the
+  card is shared with a web browser and a desktop app whose GPU memory varies, and training needs
+  5.9 of its 8.2 GB (the data-loader workers hold none). A training step that runs out of GPU memory
+  is now retried on the same batch with the random state it started from, after freeing the cache
+  and waiting 20 s, up to 6 times; no weight has changed at that point, so the result is the same as
+  if nothing had failed (tested: identical gradients after two injected failures). If the retries run
+  out, the process ends through `TerminateProcess`, which cannot hang in the driver as a normal exit
+  did, so the supervisor restarts it within seconds.
 
 ## Measurements for amendment 2 (A2 networks)
 

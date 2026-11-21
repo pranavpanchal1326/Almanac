@@ -227,6 +227,58 @@ def stay_awake() -> None:
         ctypes.windll.kernel32.SetThreadExecutionState(es_continuous | es_system_required)
 
 
+OOM_RETRIES = 6
+OOM_WAIT = 20  # seconds; other programs sharing the card usually release memory within this
+
+
+def is_oom(err: BaseException) -> bool:
+    return isinstance(err, torch.OutOfMemoryError) or "out of memory" in str(err)
+
+
+def forward_backward(net, batch, w, opt, device: str, step: int) -> dict:
+    """Loss and gradients for one batch, waiting out a GPU memory shortage.
+
+    The card is shared with other programs, and on 2026-11-19 and 2026-11-21 their memory use left
+    no room for the first backward pass after a check. A failed attempt has not changed the weights
+    (the optimiser step comes later), so the step is retried on the same batch with the random
+    state it started from: the result is the same as if nothing had failed.
+    """
+    rng = torch.cuda.get_rng_state() if device == "cuda" else None
+    for attempt in range(OOM_RETRIES + 1):
+        try:
+            with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=device == "cuda"):
+                ls = losses(net(batch), batch, w)
+            opt.zero_grad(set_to_none=True)
+            ls["total"].backward()
+            return ls
+        except Exception as err:
+            if device != "cuda" or not is_oom(err) or attempt == OOM_RETRIES:
+                raise
+            ls = None
+            opt.zero_grad(set_to_none=True)
+            torch.cuda.empty_cache()
+            print(
+                f"step {step}: GPU out of memory (attempt {attempt + 1}); retrying in {OOM_WAIT} s",
+                flush=True,
+            )
+            time.sleep(OOM_WAIT)
+            torch.cuda.set_rng_state(rng)
+    raise AssertionError("unreachable")
+
+
+def leave(code: int) -> None:
+    """End the process at once. After a CUDA error a normal exit, even ``os._exit``, can hang in
+    the driver's shutdown (2026-11-19, 2026-11-21); TerminateProcess skips it."""
+    sys.stdout.flush()
+    sys.stderr.flush()
+    if sys.platform == "win32":
+        import ctypes
+
+        k = ctypes.windll.kernel32
+        k.TerminateProcess(k.GetCurrentProcess(), code)
+    os._exit(code)
+
+
 def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int = 0) -> None:
     stay_awake()
     dcfg, ncfg, w = build(cfg)
@@ -309,10 +361,7 @@ def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int 
             batch = to_device(batch, device)
             for g in opt.param_groups:
                 g["lr"] = lr_at(step, o)
-            with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=device == "cuda"):
-                ls = losses(net(batch), batch, w)
-            opt.zero_grad(set_to_none=True)
-            ls["total"].backward()
+            ls = forward_backward(net, batch, w, opt, device, step)
             torch.nn.utils.clip_grad_norm_(net.parameters(), o["clip"])
             opt.step()
             with torch.no_grad():
@@ -395,9 +444,7 @@ def main() -> None:
             # interpreter exit can then hang while data-loader workers shut down (seen on
             # 2026-11-19). Report and leave at once; the run resumes from its last check.
             traceback.print_exc()
-            sys.stdout.flush()
-            sys.stderr.flush()
-            os._exit(EXIT_FAILED)
+            leave(EXIT_FAILED)
 
 
 if __name__ == "__main__":
