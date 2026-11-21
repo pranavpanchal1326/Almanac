@@ -14,7 +14,7 @@ training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, and Bitcoin bl
 | 2.4 | Stage A: model M, two schedules, then three seeds | Done under [amendment 2](../prereg/2027.01.amendment-2.md): schedule (a) chosen; seeds 0.3202, 0.3332, 0.3040 | [Three seeds](#model-m-under-amendment-2-three-seeds) |
 | 2.5 | Ablations on validation | Not started | |
 | 2.6 | Calibration on validation 2024 | Done: ensemble AP 0.3266 | [Calibration](#calibration-and-the-three-seed-ensemble-validation), `tools/phase2/ensemble.py` |
-| 2.7 | Stage B: one evaluation on 2025, logged | Tool built and dry-run on validation (12 of 12 checks reproduce); **not run** | [Stage B](#stage-b-tool-and-dry-run), `tools/phase2/stage_b.py` |
+| 2.7 | Stage B: one evaluation on 2025, logged | Done 2026-11-21: model +16.0% over the reference (95% interval +10.7% to +22.3%); **win condition not met** (needs 20%) | [Stage B result](#stage-b-result-2025-the-single-logged-touch), `docs/phase2/stage_b_report.md` |
 | 2.8 | Independent reproduction of stage B | Not started | |
 | 2.9 | Gate 2 review | Not started | |
 
@@ -143,6 +143,51 @@ model leads: `M_A2` 0.5103, `B5_A2` 0.5060, B4 0.3471.
 Expected time for the real run: about 40 minutes to build and 2–3 hours to grade (3.2 times the
 validation cells).
 
+## Stage B result (2025, the single logged touch)
+
+Built 2026-11-21 from commit `fc0d158` in 41 minutes (package `D:/almanac-data/packages/stage_b_2025`,
+digest `5e995faff2132247f4534aff7bfe8b2587290d8774040d4d39b837114ccb029e`; every baseline reproduced
+validation 2024 before use); graded once in 2 h 28 min, the touch logged at 15:23 UTC in
+`docs/phase1/test_touch_log.jsonl` with the package digest and the report's SHA-256 (`a2bebf41…`,
+which matches the committed `stage_b_report.json`). The package verified unchanged after grading.
+Full tables: [stage_b_report.md](stage_b_report.md).
+
+**Win condition (forest loss, 499 exam tiles, against `B5_A2`):**
+
+| Condition | Result | Met |
+|---|---|---|
+| Improvement at least 20% | +16.0% | No |
+| Lower end of the 95% interval above 10% | +10.7% (interval +10.7% to +22.3%) | Yes |
+| Positive on the test tiles and on the held-out region | +14.4% and +15.7% | Yes |
+| **Win** | | **No** |
+
+| Forest-loss AP, 2025 | All (499) | Test (379) | Held-out (120) |
+|---|---|---|---|
+| `M_A2` (model, three-seed ensemble) | **0.4683** | **0.3605** | **0.6725** |
+| `B5_A2` (reference) | 0.4036 | 0.3152 | 0.5815 |
+| B4 (trees) | 0.3862 | 0.3151 | 0.5485 |
+
+What this says, without softening either way:
+
+- The model is the best forecast on the exam for forest loss, on both parts, and the gain over the
+  reference is clearly above zero; but it falls short of the 20% margin fixed before training, so by
+  the pre-registered rule it **does not win**.
+- The order flipped from validation: there the ensemble was 4.6% below the reference, on 2025 it is
+  16.0% above. Validation is 146 tiles and one year, so its estimate was noisy (the dry interval
+  ran from −12.6% to +11.0%); the reference was also chosen as the best of six on validation, which
+  favours it there.
+- Calibration is the model's weak point: ECE 0.0288 against B4's 0.0031, and B4 has the best Brier
+  score (0.02994 against 0.03046) and log loss. The isotonic maps fitted on 2024 do not carry over
+  to 2025 well; the ranking does.
+- Secondary task (embedding change): model 0.4951, reference 0.4708, B4 0.4896; a small lead,
+  positive on both parts.
+
+**What follows is not decided here.** Amendment 2, section 5 says the best baseline's forecast is
+locked if the A2 runs do not beat the reference. The model beats the reference but does not meet
+the win condition; which reading applies is for the Gate 2 review (task 2.9), against the
+amendment's text, with no new amendment (section 5 rules one out). Task 2.8, an independent
+reproduction of this grade from the package, comes first.
+
 ## Frozen weights
 
 The kept checkpoints (`best.pt`, averaged weights) that stage B and the forecast use. They live in
@@ -263,4 +308,5 @@ the 95% interval of that improvement above 10%, and a gain on the test tiles and
 region separately (pre-registration, section 4). On validation the model's ensemble, 0.3266, is
 4.6% below the reference. Amendment 2, section 5 fixes what follows if the A2 runs do not beat the
 reference: the result is reported as it is and the best baseline's forecast is locked (blueprint
-16.4). That decision belongs to the Gate 2 review, after stage B.
+16.4). That decision belongs to the Gate 2 review. Stage B (2025): the model is 16.0% above the
+reference, short of the 20% margin; see [Stage B result](#stage-b-result-2025-the-single-logged-touch).
