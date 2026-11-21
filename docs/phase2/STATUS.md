@@ -88,6 +88,23 @@ By the rule of amendment 1 (best validation 2024 forest-loss AP; a tie within 0.
 
 B5 under amendment 2, the best reference candidate on validation, reached 0.3423 with one seed. Every seed of model M is below it, the best by 0.0091 and the mean by 0.0232. On validation the spatial context of model M has not yet shown a gain over B5, which sees each place alone. This is a validation result only; the test comparison is the one the pre-registration grades.
 
+## Calibration and the three-seed ensemble (validation)
+
+`tools/phase2/ensemble.py` follows amendment 1, section 7. Each seed's kept weights predict all 146 validation tiles for 2024 (1,531,430 eligible cells, 101,177 forest-loss events, base rate 0.066); its AP is recomputed and checked against the value logged when the checkpoint was kept (all three match to five decimals); its probabilities are mapped by isotonic regression fitted on its own validation predictions; the forecast is the mean of the three mapped probabilities. The maps and scores are in `docs/phase2/ensemble_m_a/` (`calibration.json` SHA-256 `d74e01294c90ed5323674dab800c9175908b70650a4c09df636e94465046843e`). The test truth was not read.
+
+| Forecast | AP | Brier | Log loss | ECE |
+|---|---|---|---|---|
+| Seed 1, raw / calibrated | 0.3201 / 0.3177 | 0.0534 / 0.0512 | 0.1925 / 0.1776 | 0.0218 / 0.0002 |
+| Seed 2, raw / calibrated | 0.3332 / 0.3308 | 0.0524 / 0.0509 | 0.1925 / 0.1778 | 0.0238 / 0.0003 |
+| Seed 3, raw / calibrated | 0.3040 / 0.3015 | 0.0541 / 0.0520 | 0.1970 / 0.1809 | 0.0243 / 0.0008 |
+| **Ensemble (mean of calibrated)** | **0.3266** | 0.0512 | 0.1775 | 0.0015 |
+
+Findings:
+
+- The ensemble's validation AP, 0.3266, is above the mean of the single seeds (0.3191) and below B5 under amendment 2 (0.3423, one seed), the reference. On validation the model does not reach the reference, let alone the 20% margin the win condition requires on the exam.
+- Amendment 1 says AP is unchanged by the isotonic map. That is true of the ranking but not exactly of AP as scored: the map is a step function, so it merges nearby scores into ties, and tied scores count as one threshold. Calibration lowers each seed's AP by about 0.0024. The rule is not changed; the forecast stays as fixed, and this is reported.
+- The calibration scores are in-sample (each map is fitted on the cells it is scored on), so the low ECE here says little; stage B gives out-of-sample values.
+
 ## Supervision of training runs
 
 Two out-of-memory failures in schedule (b), on 2026-11-19, came in the first backward pass after
