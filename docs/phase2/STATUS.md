@@ -15,7 +15,7 @@ training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, and Bitcoin bl
 | 2.5 | Ablations on validation | Not started | |
 | 2.6 | Calibration on validation 2024 | Done: ensemble AP 0.3266 | [Calibration](#calibration-and-the-three-seed-ensemble-validation), `tools/phase2/ensemble.py` |
 | 2.7 | Stage B: one evaluation on 2025, logged | Done 2026-11-21: model +16.0% over the reference (95% interval +10.7% to +22.3%); **win condition not met** (needs 20%) | [Stage B result](#stage-b-result-2025-the-single-logged-touch), `docs/phase2/stage_b_report.md` |
-| 2.8 | Independent reproduction of stage B | Not started | |
+| 2.8 | Independent reproduction of stage B | Done 2026-11-21 by independent code: 64 of 64 checks within tolerance (largest difference 4.3e-16); a re-grade by a second person is still open | [Reproduction](#stage-b-reproduction-task-28), `docs/phase2/stage_b_reproduction.md` |
 | 2.9 | Gate 2 review | Not started | |
 
 ## Training store (2.1)
@@ -185,8 +185,37 @@ What this says, without softening either way:
 **What follows is not decided here.** Amendment 2, section 5 says the best baseline's forecast is
 locked if the A2 runs do not beat the reference. The model beats the reference but does not meet
 the win condition; which reading applies is for the Gate 2 review (task 2.9), against the
-amendment's text, with no new amendment (section 5 rules one out). Task 2.8, an independent
-reproduction of this grade from the package, comes first.
+amendment's text, with no new amendment (section 5 rules one out).
+
+## Stage B reproduction (task 2.8)
+
+`tools/phase2/reproduce_stage_b.py` re-grades the stage B package without any of the code that
+graded it: it imports nothing from `almanac`, `stage_b.py` or `grade.py`; it takes truth and
+eligibility from the source label stores and the stream summaries' validity bits (stage B read
+the training store, a copy of them), following the pre-registration's section 3 text; it scores
+AP with scikit-learn, and the bootstrap with its own weighted routine, checked against
+scikit-learn on weighted draws. It first checks the package against the logged digest and the
+stage B report against its logged SHA-256. Tolerances were fixed in the code before the run:
+counts exact, every value within 1e-9.
+
+Run once on 2026-11-21 (commit `c231ee9`, 7 minutes), logged in `docs/phase1/test_touch_log.jsonl`
+as a read of the 2025 test truth:
+
+| What was compared | Checks | Largest difference |
+|---|---|---|
+| Cells and events, all, test and held-out | 6 | 0 (exact) |
+| Forest-loss AP of all 7 forecasts, three parts | 21 | 5.6e-17 |
+| Brier score of all 7 forecasts, three parts | 21 | 0 (exact) |
+| Improvement over the reference, all and each part | 3 | 2.2e-16 |
+| Bootstrap intervals (improvement; AP of model and reference) | 6 | 4.3e-16 |
+| Weighted AP routine against scikit-learn, 3 draws × 2 forecasts | 6 | 5.6e-17 |
+| Win verdict | 1 | equal (no win) |
+
+The stage B result stands as graded: **+16.0% (95% interval +10.7% to +22.3%), no win.** Full
+table: [stage_b_reproduction.md](stage_b_reproduction.md). The blueprint (task 2.8) asks for a
+second person; this reproduction is by separate code from the same team, so a second person's
+re-grade is still open, and the tool is written so that anyone with the package and the label
+stores can run it.
 
 ## Frozen weights
 

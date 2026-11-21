@@ -1,0 +1,610 @@
+{
+ "what": "reproduction of stage B (task 2.8): forest loss, test_2025 and held_out_2025",
+ "package_digest": "5e995faff2132247f4534aff7bfe8b2587290d8774040d4d39b837114ccb029e",
+ "git_commit": "c231ee968d11d409262932b7b7312a24bd3750fe",
+ "stage_b_report_sha256": "a2bebf416365c38efd84fb58bd47d97902aa629e62f319c71690175e061ed766",
+ "tolerances_fixed_before_run": true,
+ "all_checks_pass": true,
+ "checks": [
+  {
+   "check": "all: cells",
+   "reproduced": 4814716,
+   "stage_b": 4814716,
+   "difference": 0,
+   "tolerance": 0,
+   "ok": true
+  },
+  {
+   "check": "all: events",
+   "reproduced": 192761,
+   "stage_b": 192761,
+   "difference": 0,
+   "tolerance": 0,
+   "ok": true
+  },
+  {
+   "check": "all: AP B0",
+   "reproduced": 0.04003579858085087,
+   "stage_b": 0.04003579858085087,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: Brier B0",
+   "reproduced": 0.03859633896988904,
+   "stage_b": 0.03859633896988904,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: AP B1",
+   "reproduced": 0.07967324098012112,
+   "stage_b": 0.07967324098012112,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: Brier B1",
+   "reproduced": 0.03780420720456997,
+   "stage_b": 0.03780420720456997,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: AP B2",
+   "reproduced": 0.0794617171470939,
+   "stage_b": 0.0794617171470939,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: Brier B2",
+   "reproduced": 0.03780390195182827,
+   "stage_b": 0.03780390195182827,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: AP B3",
+   "reproduced": 0.19873252891252835,
+   "stage_b": 0.19873252891252832,
+   "difference": 2.7755575615628914e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: Brier B3",
+   "reproduced": 0.034770665008338274,
+   "stage_b": 0.034770665008338274,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: AP B4",
+   "reproduced": 0.3861975553176802,
+   "stage_b": 0.38619755531768013,
+   "difference": 5.551115123125783e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: Brier B4",
+   "reproduced": 0.02994364614783351,
+   "stage_b": 0.02994364614783351,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: AP B5_A2",
+   "reproduced": 0.40361890644170867,
+   "stage_b": 0.4036189064417086,
+   "difference": 5.551115123125783e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: Brier B5_A2",
+   "reproduced": 0.031695370050049784,
+   "stage_b": 0.031695370050049784,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: AP M_A2",
+   "reproduced": 0.46830501744843883,
+   "stage_b": 0.4683050174484389,
+   "difference": 5.551115123125783e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: Brier M_A2",
+   "reproduced": 0.030455174365956954,
+   "stage_b": 0.030455174365956954,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: cells",
+   "reproduced": 3416518,
+   "stage_b": 3416518,
+   "difference": 0,
+   "tolerance": 0,
+   "ok": true
+  },
+  {
+   "check": "test: events",
+   "reproduced": 120878,
+   "stage_b": 120878,
+   "difference": 0,
+   "tolerance": 0,
+   "ok": true
+  },
+  {
+   "check": "test: AP B0",
+   "reproduced": 0.03538046631102192,
+   "stage_b": 0.03538046631102192,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: Brier B0",
+   "reproduced": 0.03419474819496018,
+   "stage_b": 0.03419474819496018,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: AP B1",
+   "reproduced": 0.06336874363435786,
+   "stage_b": 0.06336874363435786,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: Brier B1",
+   "reproduced": 0.03374774659112557,
+   "stage_b": 0.03374774659112557,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: AP B2",
+   "reproduced": 0.06322675796453613,
+   "stage_b": 0.06322675796453614,
+   "difference": 1.3877787807814457e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: Brier B2",
+   "reproduced": 0.03374683668153877,
+   "stage_b": 0.03374683668153877,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: AP B3",
+   "reproduced": 0.15993076157220226,
+   "stage_b": 0.15993076157220226,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: Brier B3",
+   "reproduced": 0.03159545107196323,
+   "stage_b": 0.03159545107196323,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: AP B4",
+   "reproduced": 0.31514076107353206,
+   "stage_b": 0.3151407610735321,
+   "difference": 5.551115123125783e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: Brier B4",
+   "reproduced": 0.028386413157766816,
+   "stage_b": 0.028386413157766816,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: AP B5_A2",
+   "reproduced": 0.3152370645871626,
+   "stage_b": 0.31523706458716255,
+   "difference": 5.551115123125783e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: Brier B5_A2",
+   "reproduced": 0.03054555144865242,
+   "stage_b": 0.03054555144865242,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: AP M_A2",
+   "reproduced": 0.36053963857514315,
+   "stage_b": 0.36053963857514315,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: Brier M_A2",
+   "reproduced": 0.029975779621685624,
+   "stage_b": 0.029975779621685624,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: cells",
+   "reproduced": 1398198,
+   "stage_b": 1398198,
+   "difference": 0,
+   "tolerance": 0,
+   "ok": true
+  },
+  {
+   "check": "held_out: events",
+   "reproduced": 71883,
+   "stage_b": 71883,
+   "difference": 0,
+   "tolerance": 0,
+   "ok": true
+  },
+  {
+   "check": "held_out: AP B0",
+   "reproduced": 0.05141117352477975,
+   "stage_b": 0.05141117352477975,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: Brier B0",
+   "reproduced": 0.04935169272606548,
+   "stage_b": 0.04935169272606548,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: AP B1",
+   "reproduced": 0.21513334672750614,
+   "stage_b": 0.21513334672750614,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: Brier B1",
+   "reproduced": 0.0477162301813757,
+   "stage_b": 0.0477162301813757,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: AP B2",
+   "reproduced": 0.21407355609628548,
+   "stage_b": 0.21407355609628548,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: Brier B2",
+   "reproduced": 0.04771740241679743,
+   "stage_b": 0.04771740241679743,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: AP B3",
+   "reproduced": 0.2830580168613713,
+   "stage_b": 0.28305801686137133,
+   "difference": 5.551115123125783e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: Brier B3",
+   "reproduced": 0.04252934837612752,
+   "stage_b": 0.04252934837612752,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: AP B4",
+   "reproduced": 0.5485495817707374,
+   "stage_b": 0.5485495817707374,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: Brier B4",
+   "reproduced": 0.033748768555930696,
+   "stage_b": 0.033748768555930696,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: AP B5_A2",
+   "reproduced": 0.5814877981322025,
+   "stage_b": 0.5814877981322025,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: Brier B5_A2",
+   "reproduced": 0.03450496922585245,
+   "stage_b": 0.03450496922585245,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: AP M_A2",
+   "reproduced": 0.6725168152678547,
+   "stage_b": 0.6725168152678547,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: Brier M_A2",
+   "reproduced": 0.031626582687888746,
+   "stage_b": 0.031626582687888746,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: improvement",
+   "reproduced": 0.16026531456863813,
+   "stage_b": 0.16026531456863835,
+   "difference": 2.220446049250313e-16,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "test: improvement",
+   "reproduced": 0.1437095414122993,
+   "stage_b": 0.14370954141229952,
+   "difference": 2.220446049250313e-16,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "held_out: improvement",
+   "reproduced": 0.15654501681384647,
+   "stage_b": 0.15654501681384647,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "weighted AP routine, draw 0, M_A2",
+   "reproduced": 0.5029674171311431,
+   "stage_b": 0.5029674171311431,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "weighted AP routine, draw 0, B5_A2",
+   "reproduced": 0.4413064893938759,
+   "stage_b": 0.44130648939387584,
+   "difference": 5.551115123125783e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "weighted AP routine, draw 1, M_A2",
+   "reproduced": 0.47350392754017945,
+   "stage_b": 0.47350392754017945,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "weighted AP routine, draw 1, B5_A2",
+   "reproduced": 0.40014658423661315,
+   "stage_b": 0.4001465842366131,
+   "difference": 5.551115123125783e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "weighted AP routine, draw 2, M_A2",
+   "reproduced": 0.48740570351974183,
+   "stage_b": 0.48740570351974183,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "weighted AP routine, draw 2, B5_A2",
+   "reproduced": 0.4103119573351583,
+   "stage_b": 0.41031195733515824,
+   "difference": 5.551115123125783e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: improvement interval, low",
+   "reproduced": 0.10664794733788661,
+   "stage_b": 0.10664794733788704,
+   "difference": 4.3021142204224816e-16,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: improvement interval, high",
+   "reproduced": 0.2228725127731165,
+   "stage_b": 0.2228725127731165,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: AP interval M_A2, low",
+   "reproduced": 0.4222151256864869,
+   "stage_b": 0.42221512568648684,
+   "difference": 5.551115123125783e-17,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: AP interval M_A2, high",
+   "reproduced": 0.5147944978058422,
+   "stage_b": 0.5147944978058422,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: AP interval B5_A2, low",
+   "reproduced": 0.3511805783533484,
+   "stage_b": 0.3511805783533484,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "all: AP interval B5_A2, high",
+   "reproduced": 0.45557596511292014,
+   "stage_b": 0.45557596511292014,
+   "difference": 0.0,
+   "tolerance": 1e-09,
+   "ok": true
+  },
+  {
+   "check": "win",
+   "reproduced": 0.0,
+   "stage_b": 0.0,
+   "difference": 0.0,
+   "tolerance": 0,
+   "ok": true
+  }
+ ],
+ "parts": {
+  "all": {
+   "tiles": 499,
+   "cells": 4814716,
+   "events": 192761,
+   "ap": {
+    "B0": 0.04003579858085087,
+    "B1": 0.07967324098012112,
+    "B2": 0.0794617171470939,
+    "B3": 0.19873252891252835,
+    "B4": 0.3861975553176802,
+    "B5_A2": 0.40361890644170867,
+    "M_A2": 0.46830501744843883
+   },
+   "brier": {
+    "B0": 0.03859633896988904,
+    "B1": 0.03780420720456997,
+    "B2": 0.03780390195182827,
+    "B3": 0.034770665008338274,
+    "B4": 0.02994364614783351,
+    "B5_A2": 0.031695370050049784,
+    "M_A2": 0.030455174365956954
+   },
+   "relative_improvement": 0.16026531456863813
+  },
+  "test": {
+   "tiles": 379,
+   "cells": 3416518,
+   "events": 120878,
+   "ap": {
+    "B0": 0.03538046631102192,
+    "B1": 0.06336874363435786,
+    "B2": 0.06322675796453613,
+    "B3": 0.15993076157220226,
+    "B4": 0.31514076107353206,
+    "B5_A2": 0.3152370645871626,
+    "M_A2": 0.36053963857514315
+   },
+   "brier": {
+    "B0": 0.03419474819496018,
+    "B1": 0.03374774659112557,
+    "B2": 0.03374683668153877,
+    "B3": 0.03159545107196323,
+    "B4": 0.028386413157766816,
+    "B5_A2": 0.03054555144865242,
+    "M_A2": 0.029975779621685624
+   },
+   "relative_improvement": 0.1437095414122993
+  },
+  "held_out": {
+   "tiles": 120,
+   "cells": 1398198,
+   "events": 71883,
+   "ap": {
+    "B0": 0.05141117352477975,
+    "B1": 0.21513334672750614,
+    "B2": 0.21407355609628548,
+    "B3": 0.2830580168613713,
+    "B4": 0.5485495817707374,
+    "B5_A2": 0.5814877981322025,
+    "M_A2": 0.6725168152678547
+   },
+   "brier": {
+    "B0": 0.04935169272606548,
+    "B1": 0.0477162301813757,
+    "B2": 0.04771740241679743,
+    "B3": 0.04252934837612752,
+    "B4": 0.033748768555930696,
+    "B5_A2": 0.03450496922585245,
+    "M_A2": 0.031626582687888746
+   },
+   "relative_improvement": 0.15654501681384647
+  }
+ },
+ "verdict": {
+  "model": "M_A2",
+  "reference": "B5_A2",
+  "relative_improvement": 0.16026531456863813,
+  "ci95": [
+   0.10664794733788661,
+   0.2228725127731165
+  ],
+  "condition_1_at_least_20pct": false,
+  "condition_2_lower_bound_above_10pct": true,
+  "condition_3_positive_on_each_part": true,
+  "win": false
+ },
+ "seconds": 437
+}
