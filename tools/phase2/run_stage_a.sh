@@ -13,7 +13,8 @@
 # because another program took GPU memory) or its heartbeat file stops changing for STALL seconds
 # (a hang), the process tree is stopped and the run resumes from its last check, up to
 # MAX_RESTARTS times. Resuming is exact, so a restart changes no result; it costs the steps since
-# the last check. Every event is appended to $RUNS/queue.log.
+# the last check. Time the machine spends asleep is not counted as a stall. Every event is
+# appended to $RUNS/queue.log.
 set -uo pipefail
 RUNS=${RUNS:-D:/almanac-data/runs}
 STALL=${STALL:-900}
@@ -52,7 +53,7 @@ quiet_for() {
 }
 
 run_one() {
-  local c=$1 out=$2 restarts=0 pid status code started age
+  local c=$1 out=$2 restarts=0 pid status code started age prev now
   while :; do
     if [ -f "$out/last.pt" ]; then say "$c: finished"; return 0; fi
     say "$c: running"
@@ -61,8 +62,17 @@ run_one() {
       >> "$RUNS/$(basename "$out").out" 2>&1 &
     pid=$!
     status=""
+    prev=$(date +%s)
     while kill -0 "$pid" 2> /dev/null; do
       sleep "$POLL"
+      # A poll that took far longer than POLL means the machine was asleep (standby), which pauses
+      # training too; that time is not a hang, so the stall clock starts again from now.
+      now=$(date +%s)
+      if [ $((now - prev)) -gt $((POLL + 120)) ]; then
+        say "$c: machine was suspended for about $((now - prev)) s; stall clock restarted"
+        started=$now
+      fi
+      prev=$now
       age=$(quiet_for "$out" "$started")
       if [ "$age" -gt "$STALL" ] && kill -0 "$pid" 2> /dev/null; then
         say "$c: no heartbeat for ${age} s; stopping the hung process"

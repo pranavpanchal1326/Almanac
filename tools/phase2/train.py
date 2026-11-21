@@ -213,7 +213,22 @@ def beat(out: Path) -> None:
     (out / HEARTBEAT).write_text(f"{time.time():.0f}\n")
 
 
+def stay_awake() -> None:
+    """Ask Windows not to idle-sleep while this process runs (released when it exits).
+
+    Standby pauses training, and on 2026-11-20 it also made the supervisor mistake the pause for a
+    hang. This is a request held by the process, not a change to any power setting; a closed lid
+    or a chosen sleep still sleeps.
+    """
+    if sys.platform == "win32":
+        import ctypes
+
+        es_continuous, es_system_required = 0x80000000, 0x00000001
+        ctypes.windll.kernel32.SetThreadExecutionState(es_continuous | es_system_required)
+
+
 def train(cfg: dict, out: Path, device: str, dry: bool = False, stop_after: int = 0) -> None:
+    stay_awake()
     dcfg, ncfg, w = build(cfg)
     o = cfg["optim"]
     if max(cfg["train_targets"]) > 2023:
