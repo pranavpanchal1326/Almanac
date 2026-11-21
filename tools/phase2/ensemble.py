@@ -157,8 +157,9 @@ def main() -> None:
         "torch": torch.__version__,
         "seconds": round(time.time() - t0),
     }
-    (args.out / "calibration.json").write_text(json.dumps(calib) + "\n")
-    (args.out / "validation.json").write_text(json.dumps(report, indent=1) + "\n")
+    # LF line ends on every platform, so the recorded SHA-256 matches the copy kept in git.
+    (args.out / "calibration.json").write_text(json.dumps(calib) + "\n", newline="\n")
+    (args.out / "validation.json").write_text(json.dumps(report, indent=1) + "\n", newline="\n")
     print(json.dumps({k: report["ensemble"][k] for k in ("ap", "brier", "log_loss", "ece")}), flush=True)
     print(f"ensemble of {len(probs)}: AP {report['ensemble']['ap']:.5f} on {len(tiles)} tiles", flush=True)
 

@@ -90,7 +90,7 @@ B5 under amendment 2, the best reference candidate on validation, reached 0.3423
 
 ## Calibration and the three-seed ensemble (validation)
 
-`tools/phase2/ensemble.py` follows amendment 1, section 7. Each seed's kept weights predict all 146 validation tiles for 2024 (1,531,430 eligible cells, 101,177 forest-loss events, base rate 0.066); its AP is recomputed and checked against the value logged when the checkpoint was kept (all three match to five decimals); its probabilities are mapped by isotonic regression fitted on its own validation predictions; the forecast is the mean of the three mapped probabilities. The maps and scores are in `docs/phase2/ensemble_m_a/` (`calibration.json` SHA-256 `d74e01294c90ed5323674dab800c9175908b70650a4c09df636e94465046843e`). The test truth was not read.
+`tools/phase2/ensemble.py` follows amendment 1, section 7. Each seed's kept weights predict all 146 validation tiles for 2024 (1,531,430 eligible cells, 101,177 forest-loss events, base rate 0.066); its AP is recomputed and checked against the value logged when the checkpoint was kept (all three match to five decimals); its probabilities are mapped by isotonic regression fitted on its own validation predictions; the forecast is the mean of the three mapped probabilities. The maps and scores are in `docs/phase2/ensemble_m_a/` (`calibration.json` SHA-256 `19e03140016e58b825030f4d94b06ece88159f462283827e560c07b18802f455`). The test truth was not read.
 
 | Forecast | AP | Brier | Log loss | ECE |
 |---|---|---|---|---|
