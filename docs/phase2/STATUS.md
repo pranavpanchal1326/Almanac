@@ -14,7 +14,7 @@ training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, and Bitcoin bl
 | 2.4 | Stage A: model M, two schedules, then three seeds | Done under [amendment 2](../prereg/2027.01.amendment-2.md): schedule (a) chosen; seeds 0.3202, 0.3332, 0.3040 | [Three seeds](#model-m-under-amendment-2-three-seeds) |
 | 2.5 | Ablations on validation | Not started | |
 | 2.6 | Calibration on validation 2024 | Done: ensemble AP 0.3266 | [Calibration](#calibration-and-the-three-seed-ensemble-validation), `tools/phase2/ensemble.py` |
-| 2.7 | Stage B: one evaluation on 2025, logged | Not started | |
+| 2.7 | Stage B: one evaluation on 2025, logged | Tool built and dry-run on validation (12 of 12 checks reproduce); **not run** | [Stage B](#stage-b-tool-and-dry-run), `tools/phase2/stage_b.py` |
 | 2.8 | Independent reproduction of stage B | Not started | |
 | 2.9 | Gate 2 review | Not started | |
 
@@ -105,6 +105,43 @@ Findings:
 - The ensemble's validation AP, 0.3266, is above the mean of the single seeds (0.3191) and below B5 under amendment 2 (0.3423, one seed), the reference. On validation the model does not reach the reference, let alone the 20% margin the win condition requires on the exam.
 - Amendment 1 says AP is unchanged by the isotonic map. That is true of the ranking but not exactly of AP as scored: the map is a step function, so it merges nearby scores into ties, and tied scores count as one threshold. Calibration lowers each seed's AP by about 0.0024. The rule is not changed; the forecast stays as fixed, and this is reported.
 - The calibration scores are in-sample (each map is fitted on the cells it is scored on), so the low ECE here says little; stage B gives out-of-sample values.
+
+## Stage B: tool and dry run
+
+`tools/phase2/stage_b.py` makes stage B a rehearsal of the exam one year early: the same package
+format as the locked forecast, the same grader (`tools/phase5/grade.py`) and win condition, target
+2025 on the 499 exam tiles.
+
+- `build` writes the package and reads no truth of the target year: baselines B0–B4 from the
+  saved phase 4 models, used only after they score validation 2024 exactly as the baseline report
+  does; the model `M_A2` (forest loss: the mean of the three seeds' isotonic-mapped probabilities,
+  as amendment 1 fixes; embedding change, secondary: the mean of the seeds' probabilities, since no
+  calibration is defined for it); and the reference `B5_A2`, with its probabilities as they were
+  when it was chosen (not recalibrated, so the comparison does not favour the model). The model's
+  inputs are built with `make_example(..., truth=False)`, which does not read the target year's
+  labels at all (tested: the inputs are identical).
+- `grade` is the single touch. It refuses without `--confirm-single-touch`, refuses if a stage B
+  touch is already logged, refuses a package that changed since it was built or was built for the
+  dry run, then scores both tasks on all exam tiles, the test tiles and the held-out region,
+  applies the win condition against `B5_A2`, writes `docs/phase2/stage_b_report.{json,md}` and
+  appends the touch to `docs/phase1/test_touch_log.jsonl`. Guards tested in
+  `tests/unit/test_stage_b.py`.
+
+**Dry run** (validation 2024, 146 tiles; no test data; nothing logged): built in 14 minutes, graded
+in 45. Every known value is reproduced:
+
+| Check | Dry run | Known value |
+|---|---|---|
+| B0–B4, both tasks (10 values) | equal to 7–8 decimals | baseline report, validation 2024 |
+| `M_A2`, forest loss | 0.32660007 | 0.32660007 (`ensemble.py`) |
+| `B5_A2`, forest loss | 0.34226808 | 0.34227 (training log) |
+
+Dry verdict, for the record (validation, so it grades nothing): `M_A2` against `B5_A2`, −4.6%
+(95% interval −12.6% to +11.0%); no condition met. On the secondary embedding-change task the
+model leads: `M_A2` 0.5103, `B5_A2` 0.5060, B4 0.3471.
+
+Expected time for the real run: about 40 minutes to build and 2–3 hours to grade (3.2 times the
+validation cells).
 
 ## Frozen weights
 

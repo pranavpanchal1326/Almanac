@@ -1,18 +1,23 @@
 """Grade a forecast package against the truth (pre-registration sections 4 and 8).
 
 Usage: python tools/phase5/grade.py PACKAGE_DIR YEAR [--task forest|embedding] [--model NAME]
+                                    [--reference NAME]
 
 Reads the package's ``tiles.csv`` and layers (``baselines/<B>_<task>.npy`` and, if present,
-``forecast/<NAME>_<task>.npy``), takes truth and eligibility from the training store for YEAR,
+``forecast/<NAME>_<task>.npy`` for the model and, when it is not a baseline, the reference), takes truth and eligibility from the training store for YEAR,
 scores every layer with the same function as the baseline report, and applies the win condition:
 
-1. the model's AP is at least 20% above the reference's (B4) on all package tiles;
+1. the model's AP is at least 20% above the reference's on all package tiles;
 2. the lower end of the 95% paired tile-bootstrap interval of that improvement is above 10%;
 3. the improvement is positive on the test tiles alone and on the held-out region alone.
 
 Truth for 2026 needs the first Global Forest Change release with 2026 loss, built into the store
 with the same sampling and forest definition; until then this grades past years only (used to
 test the grader against the baseline report).
+
+The reference is the best validation 2024 forest-loss AP among B1-B4, B5 under amendment 1 and
+B5 under amendment 2 (amendment 2, section 4): B5 under amendment 2, layer name ``B5_A2``. Pass
+``--reference B4`` to grade as the pre-registration did before the amendments.
 """
 
 from __future__ import annotations
@@ -34,7 +39,7 @@ from almanac.evaluate.bootstrap import DRAWS, WIN_LOWER, WIN_RELATIVE, bootstrap
 from almanac.evaluate.metrics import rank
 from almanac.model.store import AUX, TileStore, embedding_eligible, forest_eligible, forest_event
 
-REFERENCE = "B4"
+REFERENCE = "B5_A2"  # amendment 2, section 4
 SEED = 20261115
 
 
@@ -45,17 +50,18 @@ def truth(store: TileStore, year: int, task: str) -> tuple[np.ndarray, np.ndarra
     return embedding_eligible(aux, year), aux[AUX[f"emb_event_{year}"]] > 0
 
 
-def load_layers(root: Path, task: str, model: str | None) -> dict[str, np.ndarray]:
+def load_layers(root: Path, task: str, forecasts: list[str]) -> dict[str, np.ndarray]:
     layers = {
         p.stem.rsplit("_", 1)[0]: np.load(p) for p in sorted((root / "baselines").glob(f"*_{task}.npy"))
     }
-    if model:
-        layers[model] = np.load(root / "forecast" / f"{model}_{task}.npy")
+    for name in forecasts:
+        if name not in layers:
+            layers[name] = np.load(root / "forecast" / f"{name}_{task}.npy")
     return layers
 
 
-def collect(root: Path, year: int, task: str, model: str | None, tiles: list[str]):
-    layers = load_layers(root, task, model)
+def collect(root: Path, year: int, task: str, forecasts: list[str], tiles: list[str]):
+    layers = load_layers(root, task, forecasts)
     ys, tix, rows = [], [], []
     probs: dict[str, list[np.ndarray]] = {k: [] for k in layers}
     for t, tid in enumerate(tiles):
@@ -96,29 +102,32 @@ def main() -> None:
     ap.add_argument("year", type=int)
     ap.add_argument("--task", default="forest", choices=["forest", "embedding"])
     ap.add_argument("--model")
+    ap.add_argument("--reference", default=REFERENCE)
     ap.add_argument("--split", type=Path, default=REPO / "configs" / "splits" / "amazon_cerrado_v1.csv")
     args = ap.parse_args()
     with (args.package / "tiles.csv").open() as f:
         tiles = [r["tile_id"] for r in csv.DictReader(f)]
     with args.split.open() as f:
         side = {r["tile_id"]: r["split"] for r in csv.DictReader(f)}
-    y, tix, rows, probs = collect(args.package, args.year, args.task, args.model, tiles)
+    ref = args.reference
+    forecasts = [n for n in (args.model, ref) if n]
+    y, tix, rows, probs = collect(args.package, args.year, args.task, forecasts, tiles)
     result: dict = {"package": args.package.as_posix(), "year": args.year, "task": args.task}
-    result["scores"] = evaluate(y, tix, rows, probs, len(tiles), SEED, REFERENCE)
+    result["scores"] = evaluate(y, tix, rows, probs, len(tiles), SEED, ref)
     if args.model:
         m = args.model
-        point, draws = relative_draws(y, tix, probs, m, REFERENCE, len(tiles))
+        point, draws = relative_draws(y, tix, probs, m, ref, len(tiles))
         lo, hi = interval(draws)
         parts = {}
         for name in ("test", "held_out"):
             subset = np.array([i for i, t in enumerate(tiles) if side.get(t) == name])
             if subset.size:
-                p, _ = relative_draws(y, tix, probs, m, REFERENCE, len(tiles), subset)
+                p, _ = relative_draws(y, tix, probs, m, ref, len(tiles), subset)
                 parts[name] = p
         guard = bool(parts) and all(v > 0 for v in parts.values())
         result["verdict"] = {
             "model": m,
-            "reference": REFERENCE,
+            "reference": ref,
             "relative_improvement": point,
             "ci95": [lo, hi],
             "condition_1_at_least_20pct": point >= WIN_RELATIVE,

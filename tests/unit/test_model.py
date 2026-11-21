@@ -54,6 +54,17 @@ def test_example_uses_nothing_from_the_target_year() -> None:
     assert not np.array_equal(a["y_forest"], b["y_forest"]) or not np.array_equal(a["y_emb"], b["y_emb"])
 
 
+def test_inputs_only_example_matches_and_reads_no_labels() -> None:
+    store = _fake_store(np.random.default_rng(2))
+    cfg = DataConfig()
+    spec = PatchSpec(tile=0, target=2023, row=10, col=20, rot=3, flip=True, hide_first=0, hide_one=-1)
+    full = make_example(store, spec, cfg)
+    inputs = make_example(store, spec, cfg, truth=False)
+    assert set(inputs) == {"emb", "valid", "year_scalars", "static", "present"}
+    for key in inputs:
+        np.testing.assert_array_equal(full[key], inputs[key])
+
+
 def test_example_shapes_and_hidden_years() -> None:
     store = _fake_store(np.random.default_rng(1))
     cfg = DataConfig()

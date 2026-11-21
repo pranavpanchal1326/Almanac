@@ -143,9 +143,12 @@ def history_years(target: int, k: int) -> list[int]:
     return list(range(target - k, target))
 
 
-def make_example(store: TileStore, spec: PatchSpec, cfg: DataConfig) -> dict[str, np.ndarray]:
+def make_example(
+    store: TileStore, spec: PatchSpec, cfg: DataConfig, truth: bool = True
+) -> dict[str, np.ndarray]:
     """Arrays for one patch. Spatial arrays end in ``[P, P]``; nothing from ``spec.target`` or later
-    enters an input."""
+    enters an input. With ``truth=False`` the target year's labels are not read at all (forecasts
+    and stage B), and only the inputs are returned."""
     p, k = cfg.patch, cfg.history
     rs, cs = slice(spec.row, spec.row + p), slice(spec.col, spec.col + p)
     aux = np.asarray(store.aux[:, rs, cs], dtype=np.float32)
@@ -172,6 +175,13 @@ def make_example(store: TileStore, spec: PatchSpec, cfg: DataConfig) -> dict[str
     static = np.stack(
         [aux[AUX[f"forest_start_{spec.target}"]], aux[AUX["land"]], aux[AUX["loss_before_2018"]], cum]
     ).astype(np.float32)
+
+    if not truth:
+        ex = {"emb": emb, "valid": valid, "year_scalars": scal, "static": static}
+        if spec.rot or spec.flip:
+            ex = {key: _orient(val, spec.rot, spec.flip) for key, val in ex.items()}
+        ex["present"] = present
+        return ex
 
     full_aux = aux  # already cropped
     y_forest = forest_event(full_aux, spec.target).astype(np.float32)

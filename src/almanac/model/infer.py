@@ -45,7 +45,7 @@ def predict_tile(
     cent = _centrality(p)
     for i in range(0, len(specs), batch):
         chunk = specs[i : i + batch]
-        exs = [make_example(store, s, cfg) for s in chunk]
+        exs = [make_example(store, s, cfg, truth=False) for s in chunk]  # inputs only
         b = {k: torch.from_numpy(np.stack([e[k] for e in exs])).to(device) for k in KEYS}
         with torch.autocast(device_type="cuda", dtype=torch.bfloat16, enabled=device == "cuda"):
             res = net(b)

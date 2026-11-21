@@ -8,7 +8,7 @@ baseline forecasts and the package are prepared first.
 |---|---|---|---|
 | 4.3 | Baseline forecasts for 2026, B0–B4, on the 499 exam tiles | Done | `D:/almanac-data/packages/2027.01/baselines/` (10 layers, float32) |
 | 4.5 | Package format: layers, canonical manifest, package digest | Done | `src/almanac/registry/package.py`, `tests/unit/test_package.py` |
-| — | Grader for the exam (win condition with the guard) | Done, tested against the report | `tools/phase5/grade.py` |
+| — | Grader for the exam (win condition with the guard) | Done, tested against the report; reference corrected to B5 under amendment 2 (2026-11-21) | `tools/phase5/grade.py` |
 | 4.2 | Model forecast for 2026 | After Phase 2 | |
 | 4.4, 4.6–4.11 | Grader tag, independent rebuild, lock, site, release, announcement | Not started | |
 
@@ -34,6 +34,13 @@ the package digest is the SHA-256 of the manifest.
   equal the report's to the last digit and the other 3 differ by at most 6.7e-9, which is float32
   rounding of probabilities the report kept in float64. The grader scores a package as the
   baseline report scored the baselines.
+
+- **Reference corrected (2026-11-21).** The grader compared the model with B4, the reference
+  under the original pre-registration. Amendment 2, section 4 made the reference the best on
+  validation among B1–B4 and both B5 runs, which is B5 under amendment 2. The reference is now a
+  parameter (`--reference`), defaulting to `B5_A2`, whose layer sits in `forecast/` beside the
+  model's; `--reference B4` grades as before. The exam package must therefore carry the reference's
+  2026 forecast as well as the model's.
 
 ## Checks built in
 
