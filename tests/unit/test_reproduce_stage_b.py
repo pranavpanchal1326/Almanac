@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -37,4 +38,13 @@ def test_draws_follow_the_preregistered_seed() -> None:
 def test_refuses_without_confirmation(monkeypatch) -> None:
     monkeypatch.setattr(sys, "argv", ["reproduce_stage_b.py", "somewhere"])
     with pytest.raises(SystemExit, match="confirm-reproduction"):
+        r.main()
+
+
+def test_refuses_a_second_read_of_the_test_truth(tmp_path: Path, monkeypatch) -> None:
+    log = tmp_path / "touch.jsonl"
+    log.write_text(json.dumps({"what": r.WHAT}) + "\n")
+    monkeypatch.setattr(r, "TOUCH_LOG", log)
+    monkeypatch.setattr(sys, "argv", ["reproduce_stage_b.py", "x", "--confirm-reproduction"])
+    with pytest.raises(SystemExit, match="already logged"):
         r.main()

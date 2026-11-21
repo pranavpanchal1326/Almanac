@@ -74,6 +74,12 @@ def stage_b_entry() -> dict:
     return found[0]
 
 
+def reproduction_logged() -> bool:
+    if not TOUCH_LOG.exists():
+        return False
+    return any(json.loads(x).get("what") == WHAT for x in TOUCH_LOG.read_text().splitlines() if x.strip())
+
+
 def check_package(root: Path, digest: str) -> None:
     manifest = root / "manifest.json"
     if sha256(manifest) != digest:
@@ -162,6 +168,9 @@ def main() -> None:
     args = ap.parse_args()
     if not args.confirm_reproduction:
         raise SystemExit("this reads the 2025 test truth; pass --confirm-reproduction")
+    if reproduction_logged():
+        raise SystemExit("a reproduction is already logged; amendment 1, section 8 allows no "
+                         "further read of the 2025 test truth (see docs/adr/0004-gate-2.md)")
     started = time.time()
     entry = stage_b_entry()
     if sha256(REPORT) != entry["report_sha256"]:

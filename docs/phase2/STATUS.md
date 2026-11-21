@@ -16,7 +16,7 @@ training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, and Bitcoin bl
 | 2.6 | Calibration on validation 2024 | Done: ensemble AP 0.3266 | [Calibration](#calibration-and-the-three-seed-ensemble-validation), `tools/phase2/ensemble.py` |
 | 2.7 | Stage B: one evaluation on 2025, logged | Done 2026-11-21: model +16.0% over the reference (95% interval +10.7% to +22.3%); **win condition not met** (needs 20%) | [Stage B result](#stage-b-result-2025-the-single-logged-touch), `docs/phase2/stage_b_report.md` |
 | 2.8 | Independent reproduction of stage B | Done 2026-11-21 by independent code: 64 of 64 checks within tolerance (largest difference 4.3e-16); a re-grade by a second person is still open | [Reproduction](#stage-b-reproduction-task-28), `docs/phase2/stage_b_reproduction.md` |
-| 2.9 | Gate 2 review | Not started | |
+| 2.9 | Gate 2 review | Prepared 2026-11-21 (ADR 0004, proposed): recommends locking the model as the headline, labelled as missing the 20% margin; **decision pending the owner** | [ADR 0004](../adr/0004-gate-2.md) |
 
 ## Training store (2.1)
 
@@ -210,6 +210,12 @@ as a read of the 2025 test truth:
 | Bootstrap intervals (improvement; AP of model and reference) | 6 | 4.3e-16 |
 | Weighted AP routine against scikit-learn, 3 draws × 2 forecasts | 6 | 5.6e-17 |
 | Win verdict | 1 | equal (no win) |
+
+**Deviation.** Amendment 1, section 8 forbids any run that reads the 2025 test truth other than
+the single stage B evaluation; this reproduction read it a second time. It scored the same frozen
+package (digest checked first), changed nothing and found nothing new, and it is logged; it is
+disclosed in [ADR 0004](../adr/0004-gate-2.md). No further run reads the 2025 test truth for issue
+2027.01; the second person's check will rebuild the package instead.
 
 The stage B result stands as graded: **+16.0% (95% interval +10.7% to +22.3%), no win.** Full
 table: [stage_b_reproduction.md](stage_b_reproduction.md). The blueprint (task 2.8) asks for a
