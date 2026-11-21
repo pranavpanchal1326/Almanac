@@ -21,6 +21,7 @@ RUNS=${RUNS:-D:/almanac-data/runs}
 STALL=${STALL:-900}
 MAX_RESTARTS=${MAX_RESTARTS:-6}
 POLL=${POLL:-30}
+SUSPEND=${SUSPEND:-120}  # a poll this much longer than POLL means the machine was asleep
 TRAIN=${TRAIN:-tools/phase2/train.py}
 family=${1:-a2}
 case "$family" in
@@ -70,7 +71,7 @@ run_one() {
       # A poll that took far longer than POLL means the machine was asleep (standby), which pauses
       # training too; that time is not a hang, so the stall clock starts again from now.
       now=$(date +%s)
-      if [ $((now - prev)) -gt $((POLL + 120)) ]; then
+      if [ $((now - prev)) -gt $((POLL + SUSPEND)) ]; then
         say "$c: machine was suspended for about $((now - prev)) s; stall clock restarted"
         started=$now
       fi

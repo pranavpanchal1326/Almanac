@@ -1,7 +1,7 @@
 # Phase 2 — Model: status
 
-Started 2026-11-16. Question: does a learned model beat the best simple method (B4) on places and
-years it has not seen? Rules: [pre-registration](../prereg/2027.01.md),
+Started 2026-11-16. Question: does a learned model beat the reference (the best simple method on
+validation; see [The bar](#the-bar)) on places and years it has not seen? Rules: [pre-registration](../prereg/2027.01.md),
 [amendment 2](../prereg/2027.01.amendment-2.md) (stable recipe; FreeTSA 2026-11-17 07:00:36 UTC, DigiCert 07:00:39 UTC, and Bitcoin block 976,246, mined 07:56:28 UTC; the proof's commitment matches that block's Merkle root) and
 [amendment 1](../prereg/2027.01.amendment-1.md) (the model specification, timestamped before any
 training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, and Bitcoin block 976,013, mined 20:43:06 UTC; the proof's commitment matches that block's Merkle root).
@@ -10,10 +10,10 @@ training: FreeTSA 2026-11-15 20:12:41 UTC, DigiCert 20:12:43 UTC, and Bitcoin bl
 |---|---|---|---|
 | 2.1 | Training store, dataset and balanced sampler | Done | `src/almanac/model/`, `tests/unit/test_model.py` |
 | 2.2 | Smoke test; memory and speed; batch and steps by the amendment's rules | Done | Below |
-| 2.3 | B5 (no neighbours), scored on validation first | Amendment 1 run: peaked at 0.2816, then collapsed; finishing its steps. A2 run next | `D:/almanac-data/runs/stage_a_b5_s1` |
-| 2.4 | Stage A: model M, two schedules, then three seeds | Held: recipe fixed by [amendment 2](../prereg/2027.01.amendment-2.md) | |
+| 2.3 | B5 (no neighbours), scored on validation first | Done: amendment 1 run 0.2816 (then collapsed); amendment 2 run **0.3423**, the reference | [Run log](#run-log) |
+| 2.4 | Stage A: model M, two schedules, then three seeds | Done under [amendment 2](../prereg/2027.01.amendment-2.md): schedule (a) chosen; seeds 0.3202, 0.3332, 0.3040 | [Three seeds](#model-m-under-amendment-2-three-seeds) |
 | 2.5 | Ablations on validation | Not started | |
-| 2.6 | Calibration on validation 2024 | Not started | |
+| 2.6 | Calibration on validation 2024 | Done: ensemble AP 0.3266 | [Calibration](#calibration-and-the-three-seed-ensemble-validation), `tools/phase2/ensemble.py` |
 | 2.7 | Stage B: one evaluation on 2025, logged | Not started | |
 | 2.8 | Independent reproduction of stage B | Not started | |
 | 2.9 | Gate 2 review | Not started | |
@@ -71,7 +71,8 @@ so an oversized batch fails at once.
 Fixes after attempt 1: pinned memory only on GPU runs; training saves its full state at every
 check and resumes from it (tested: a stopped and resumed run matches an uninterrupted one exactly);
 `tools/phase2/run_stage_a.sh` runs B5 and then model M (schedules a and b) and can be rerun at any
-time; no other GPU or memory-heavy job runs during training.
+time; no other training or test job runs during training. (Everyday programs that use the GPU,
+such as a web browser, did share the card later; see the supervision section.)
 
 ## Schedule choice for model M
 
@@ -104,6 +105,18 @@ Findings:
 - The ensemble's validation AP, 0.3266, is above the mean of the single seeds (0.3191) and below B5 under amendment 2 (0.3423, one seed), the reference. On validation the model does not reach the reference, let alone the 20% margin the win condition requires on the exam.
 - Amendment 1 says AP is unchanged by the isotonic map. That is true of the ranking but not exactly of AP as scored: the map is a step function, so it merges nearby scores into ties, and tied scores count as one threshold. Calibration lowers each seed's AP by about 0.0024. The rule is not changed; the forecast stays as fixed, and this is reported.
 - The calibration scores are in-sample (each map is fitted on the cells it is scored on), so the low ECE here says little; stage B gives out-of-sample values.
+
+## Frozen weights
+
+The kept checkpoints (`best.pt`, averaged weights) that stage B and the forecast use. They live in
+`D:/almanac-data/runs/<run>/`, with a second, hash-checked copy on another drive.
+
+| Run | Role | Step | SHA-256 |
+|---|---|---|---|
+| `stage_a2_b5_s1` | Reference (B5 under amendment 2) | 86,000 | `bcfd6cd4b72077e968576cea19eb0e62e3d31383386a3ea3104f74deb109cdb6` |
+| `stage_a2_m_a_s1` | Model M, seed 1 | 86,000 | `0aced0fdfdf8b8cf091f636d49f448ff8897d6967866048be2a0a7388b769117` |
+| `stage_a2_m_a_s2` | Model M, seed 2 | 86,000 | `7c7e5bd345c811ab3a9aa8d3dbc14297bd175ddb2aae55139ff307a2b78e0bad` |
+| `stage_a2_m_a_s3` | Model M, seed 3 | 80,000 | `3437866de8705e0b18f800cdaae6a6e353596c9f99a7d67f436cc74bc4ca834d` |
 
 ## Supervision of training runs
 
@@ -139,6 +152,11 @@ result (resuming is exact):
   with a stand-in run that reports a failure and hangs: stopped in 14 s and resumed to completion.
   Errors other than running out of memory are not retried in the process, since they can leave the
   GPU context unusable; they restart from the last check.
+
+These recovery paths are covered by `tests/unit/test_training_robustness.py`: the step retry
+(identical gradients, GPU), the exit code, and the supervisor with stand-in runs that crash once,
+always fail, report a failure and hang, stop beating, or are suspended together with the
+supervisor (the supervisor tests are marked `slow`).
 
 ## Measurements for amendment 2 (A2 networks)
 
@@ -194,5 +212,18 @@ its standardised errors stayed near 0.7. Fix and rules: [amendment 2](../prereg/
 
 ## The bar
 
-B4 on validation 2024: forest-loss AP 0.2459. The win needs at least 20% more on the exam, plus the
-lower interval bound above 10% and a gain on test tiles and held-out region separately.
+The reference is the best validation 2024 forest-loss AP among B1–B4, B5 under amendment 1 and B5
+under amendment 2 ([amendment 2, section 4](../prereg/2027.01.amendment-2.md)):
+
+| Candidate | Validation 2024 forest-loss AP |
+|---|---|
+| B4 (gradient-boosted trees) | 0.2459 |
+| B5 under amendment 1 (kept checkpoint) | 0.2816 |
+| **B5 under amendment 2** | **0.3423**, the reference |
+
+The win needs the model's AP on the exam to be at least 20% above the reference's, the lower end of
+the 95% interval of that improvement above 10%, and a gain on the test tiles and on the held-out
+region separately (pre-registration, section 4). On validation the model's ensemble, 0.3266, is
+4.6% below the reference. Amendment 2, section 5 fixes what follows if the A2 runs do not beat the
+reference: the result is reported as it is and the best baseline's forecast is locked (blueprint
+16.4). That decision belongs to the Gate 2 review, after stage B.
