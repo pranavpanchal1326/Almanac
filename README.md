@@ -144,7 +144,8 @@ python tools/verify_issue.py almanac-2027.01 \
 
 It checks every file's SHA-256, the digest, each layer's type, shape and range, and that the
 headline and reference cover every cell the baselines forecast. It prints `VERIFIED` or the checks
-that failed. The rules themselves are timestamped by FreeTSA and DigiCert and anchored in Bitcoin:
+that failed. The digest itself is timestamped by FreeTSA and DigiCert (22 Nov 2026, 08:24 UTC)
+and in Bitcoin: [package proofs](docs/phase4/proofs/README.md). The rules themselves are timestamped by FreeTSA and DigiCert and anchored in Bitcoin:
 [how to verify the timestamps](docs/prereg/proofs/README.md). Every read of the test truth is
 logged in [test_touch_log.jsonl](docs/phase1/test_touch_log.jsonl).
 
@@ -160,6 +161,9 @@ logged in [test_touch_log.jsonl](docs/phase1/test_touch_log.jsonl).
   for an independent re-grade of the same frozen forecasts. Nothing changed; both reads are logged
   and disclosed in [ADR 0004](docs/adr/0004-gate-2.md).
 - **Narrow by design.** One region, one kind of event, one year ahead.
+- **One maintainer.** Built and locked by one person; the plan's second-person checks are replaced
+  by public, external ones, and an independent leakage review is still being sought
+  ([ADR 0005](docs/adr/0005-single-maintainer.md)).
 
 <br>
 

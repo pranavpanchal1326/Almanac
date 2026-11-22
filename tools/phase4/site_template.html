@@ -419,6 +419,7 @@ footer .sig strong { font-weight: 500; color: var(--sky); }
             <li>On the 2024 validation year the model was 4.6% <i>below</i> the reference; a small check of 146 tiles, but on the record.</li>
             <li>The 2025 test data were read twice, once against the protocol, for an independent re-grade of the same frozen forecasts. Nothing changed; both reads are logged.</li>
             <li>One region, one kind of event, one year ahead.</li>
+            <li>Built and locked by one maintainer; the plan’s second-person checks are replaced by public, external ones, and an independent leakage review is still being sought (<a href="%%GITHUB%%/blob/main/docs/adr/0005-single-maintainer.md">ADR 0005</a>).</li>
           </ol>
         </div>
       </div>
@@ -494,6 +495,7 @@ footer .sig strong { font-weight: 500; color: var(--sky); }
 python tools/verify_issue.py almanac-2027.01 --digest %%DIGEST%%</pre><button type="button" data-copy="cmd">Copy</button></div>
         <p data-reveal>The backtest was re-graded by separate code that shares nothing with the grader and reads the truth from
         the source label files: <b>%%N_OK%% of %%N_CHECKS%%</b> values matched, the largest difference <span style="white-space:nowrap">%%LARGEST%%</span>.</p>
+        <p data-reveal>The digest itself was timestamped on 22 November 2026 by two independent authorities, FreeTSA (08:24:35 UTC) and DigiCert (08:24:37 UTC), and anchored in Bitcoin through OpenTimestamps. <a href="%%GITHUB%%/blob/main/docs/phase4/proofs/README.md">Check the timestamp proofs</a>.</p>
       </div>
     </div>
     <div class="duo">

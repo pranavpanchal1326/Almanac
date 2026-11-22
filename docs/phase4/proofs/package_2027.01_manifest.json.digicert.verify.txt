@@ -1,0 +1,10 @@
+Verification: OK
+Using configuration from C:/Program Files/Git/mingw64/etc/ssl//openssl.cnf
+Warning: certificate from 'docs/phase4/proofs/package_2027.01_manifest.json.digicert.chain.pem' with subject '/C=US/O=DigiCert, Inc./CN=DigiCert SHA256 RSA4096 Timestamp Responder 2026 1' is not a CA cert
+Using configuration from C:/Program Files/Git/mingw64/etc/ssl//openssl.cnf
+Policy OID: 2.16.840.1.114412.7.1
+Hash Algorithm: sha256
+Message data:
+Serial number: 0xF1B96B8CD674E5E14C3A9CDE15A66558
+Time stamp: Nov 22 08:24:37 2026 GMT
+TSA: unspecified

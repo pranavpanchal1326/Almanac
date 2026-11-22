@@ -18,7 +18,12 @@ exam's win condition is unchanged. The public label is fixed in [LABEL.md](LABEL
 | — | Package sealed; stand-alone verifier | Done 2026-11-22: digest `bc834b26…7949`, `VERIFIED` | [manifest](package_2027.01_manifest.json), `tools/verify_issue.py` |
 | 4.8 | Scorecard page, first version | Live 2026-11-22 at https://pranavpanchal1326.github.io/Almanac/ (GitHub Pages; the served files equal the repository's byte for byte). Fifth version the same day, "Blue Marble": the Earth from orbit with its blue limb, descending on the Amazon; risk in one validated blue ramp brightening to ice-white on slate land with near-black water, so blue means risk alone; IBM Plex Sans, Sans Condensed and Mono; a product layout with clear actions and a key-figures strip, numbered section headers, the framed map with coordinate margins, the backtest ruler, ruled tables, method cards and the seal; all motion stops for reduced motion | `site/index.html`, `tools/phase4/build_site.py`, `.github/workflows/pages.yml` |
 | 4.9 | Public release of the sealed package | Published 2026-11-22 as a pre-release, tag `issue-2027.01-sealed`, asset `almanac-2027.01.tar` (SHA-256 `a6164cda…`); the public copy downloaded back and verified against digest `bc834b26` | [release](https://github.com/pranavpanchal1326/Almanac/releases/tag/issue-2027.01-sealed), `tools/phase4/archive_package.py`, [notes](RELEASE_2027.01.md) |
-| 4.4, 4.6, 4.7, 4.10, 4.11 | Grader tag, independent rebuild, lock, announcement, retrospective | Not started | |
+| — | Package digest timestamped | Done 2026-11-22: FreeTSA 08:24:35 and DigiCert 08:24:37 UTC (RFC 3161, both verified), OpenTimestamps pending Bitcoin | [proofs](proofs/README.md) |
+| — | One maintainer: second-person rules replaced | Decided 2026-11-22 | [ADR 0005](../adr/0005-single-maintainer.md) |
+| 4.6 | Rebuild (per ADR 0005: clean-environment rebuild by the maintainer) | Not started | |
+| 4.7 | Lock (per ADR 0005: single maintainer, external witnesses) | 15 January 2027 | |
+| 3.10 | Leakage review by an outsider | Open: a reviewer is being sought | ADR 0005 |
+| 4.4, 4.10, 4.11 | Grader tag, announcement, retrospective | Not started | |
 
 ## The 2026 forecasts (task 4.2)
 
