@@ -41,7 +41,7 @@ the margin for the 2026 exam was not changed.
 - One region, one event type, one year ahead. Nothing here says the method works elsewhere.
 - Built and locked by one maintainer. The second-person checks of the original plan are replaced by public, external ones: the digest has been public since 22 November 2026 and is timestamped by two independent authorities and in Bitcoin. An independent leakage review is still being sought ([ADR 0005](../adr/0005-single-maintainer.md)).
 
-**Verify it yourself.** Package digest: `bc834b2691f0f1c9fdee05a0c0fbae87958efe3a8d3e670aeff113f9b02b7949` (sealed 2026-11-22; check it with `python tools/verify_issue.py PACKAGE --digest <digest>`). Timestamps of the digest: FreeTSA 2026-11-22 08:24:35 UTC and DigiCert 2026-11-22 08:24:37 UTC (RFC 3161), and OpenTimestamps in Bitcoin ([proofs](proofs/README.md)). Lock timestamps: `<filled in at lock>`.
+**Verify it yourself.** Package digest: `bc834b2691f0f1c9fdee05a0c0fbae87958efe3a8d3e670aeff113f9b02b7949` (sealed 2026-11-22; check it with `python tools/verify_issue.py PACKAGE --digest <digest>`). Timestamps of the digest: FreeTSA 2026-11-22 08:24:35 UTC and DigiCert 2026-11-22 08:24:37 UTC (RFC 3161), and OpenTimestamps in Bitcoin block 977,029 ([proofs](proofs/README.md)). Lock timestamps: `<filled in at lock>`.
 Code, rules, every run (including failed ones) and the test-touch log:
 https://github.com/pranavpanchal1326/Almanac.
 

@@ -41,7 +41,7 @@ hash left the machine.
 |---|---|---|
 | `docs/phase4/proofs/package_2027.01_manifest.json.freetsa.tsr` | FreeTSA, RFC 3161 | 2026-11-22 08:24:35 |
 | `docs/phase4/proofs/package_2027.01_manifest.json.digicert.tsr` | DigiCert, RFC 3161 | 2026-11-22 08:24:37 |
-| `docs/phase4/proofs/package_2027.01_manifest.json.ots` | OpenTimestamps (Bitcoin) | pending until a block confirms it; upgraded in a later commit |
+| `docs/phase4/proofs/package_2027.01_manifest.json.ots` | OpenTimestamps (Bitcoin) | block 977,029, mined 2026-11-22 09:03:53 (merkle root checked against two block explorers) |
 
 Both RFC 3161 tokens verified (`Verification: OK`) at stamping time and again independently.
 How to check them: [docs/phase4/proofs/README.md](../phase4/proofs/README.md).
@@ -50,7 +50,7 @@ How to check them: [docs/phase4/proofs/README.md](../phase4/proofs/README.md).
 
 - Task 4.6 becomes a recorded clean-environment rebuild by the maintainer.
 - Task 4.7 becomes a single-maintainer lock on 15 January 2027: confirm the digest still matches,
-  upgrade the Bitcoin proof, deposit the archive with a permanent identifier, publish the frozen
+  deposit the archive with a permanent identifier, publish the frozen
   weights, sign the lock commit, and fill in the label. The checklist in Appendix D.3 is ticked by
   one person, and says so.
 - Task 3.10 stays open until an outside reviewer is found; the lock does not wait for it, and the

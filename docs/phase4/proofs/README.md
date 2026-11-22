@@ -14,7 +14,7 @@ manifest is a timestamp on every layer of the forecast. Only the hash was sent t
 |---|---|---|---|
 | `package_2027.01_manifest.json.freetsa.tsr` | FreeTSA (freetsa.org) | RFC 3161 | 2026-11-22 08:24:35 |
 | `package_2027.01_manifest.json.digicert.tsr` | DigiCert (timestamp.digicert.com) | RFC 3161 | 2026-11-22 08:24:37 |
-| `package_2027.01_manifest.json.ots` | OpenTimestamps calendars, anchored in Bitcoin | OpenTimestamps | pending, then upgraded |
+| `package_2027.01_manifest.json.ots` | OpenTimestamps calendars, anchored in Bitcoin | OpenTimestamps | Bitcoin block 977,029, mined 2026-11-22 09:03:53 |
 
 Each `.tsq` is the query sent; each `.chain.pem` holds the certificates carried in the token;
 `freetsa.ca.pem` is FreeTSA's published root; `*.verify.txt` is the verification output at
@@ -42,7 +42,8 @@ python tools/verify_issue.py almanac-2027.01 --digest bc834b2691f0f1c9fdee05a0c0
 
 The OpenTimestamps proof needs the `ots` client: `ots verify -f
 docs/phase4/package_2027.01_manifest.json docs/phase4/proofs/package_2027.01_manifest.json.ots`.
-Right after stamping it is pending; `ots upgrade` fetches the completed proof once a Bitcoin block
-includes it, and the upgraded file replaces this one in a later commit.
+The proof is complete: it commits the digest to the merkle root of Bitcoin block 977,029,
+`141ca87affadf3b43e17e005215840a478fd20f1a237220226710f9eab01c4d1`. Without a Bitcoin node, run
+`ots --no-bitcoin verify ...` and compare that root with any block explorer.
 
 Why one maintainer and these proofs: [ADR 0005](../../adr/0005-single-maintainer.md).
