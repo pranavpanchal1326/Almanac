@@ -16,7 +16,7 @@ exam's win condition is unchanged. The public label is fixed in [LABEL.md](LABEL
 | 4.2 | Model forecast for 2026 (M A2) and the reference's (B5 A2) | Done 2026-11-22: frozen weights, inputs up to 2025, no refit; bit-exact on a repeat | [2026 forecasts](#the-2026-forecasts-task-42), `tools/phase4/forecast_exam.py` |
 | — | Public label | Fixed 2026-11-21, before the forecast existed | [LABEL.md](LABEL.md) |
 | — | Package sealed; stand-alone verifier | Done 2026-11-22: digest `bc834b26…7949`, `VERIFIED` | [manifest](package_2027.01_manifest.json), `tools/verify_issue.py` |
-| 4.8 | Scorecard page, first version | Built 2026-11-22 from the records; not yet hosted | `site/index.html`, `tools/phase4/build_site.py` |
+| 4.8 | Scorecard page, first version | Live 2026-11-22 at https://pranavpanchal1326.github.io/Almanac/ (GitHub Pages; the served files equal the repository's byte for byte) | `site/index.html`, `tools/phase4/build_site.py`, `.github/workflows/pages.yml` |
 | 4.4, 4.6, 4.7, 4.9–4.11 | Grader tag, independent rebuild, lock, release, announcement | Not started | |
 
 ## The 2026 forecasts (task 4.2)

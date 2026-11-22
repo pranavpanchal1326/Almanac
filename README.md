@@ -2,6 +2,8 @@
 
 Forecasts of Earth-surface change, locked before the truth exists, then graded in public.
 
+**Scorecard of the first issue: https://pranavpanchal1326.github.io/Almanac/**
+
 The first exam is regional: for every 640 m cell of forest in the Brazilian Amazon and Cerrado,
 the probability of forest loss in **2026**, made from data up to 2025 and fixed before the 2026
 loss maps are published. The rules of that exam, including what counts as a win, were written
@@ -66,7 +68,7 @@ ones that collapsed: [Phase 2 status](docs/phase2/STATUS.md).
 
 ## Scorecard page
 
-`site/index.html` is the issue's public page: the claim, the 2026 map, the backtest, the win
+**Live: https://pranavpanchal1326.github.io/Almanac/** — `site/index.html`, the issue's public page: the claim, the 2026 map, the backtest, the win
 condition, the weaknesses, the digest and every read of the test truth. It is generated from the
 committed records by `python tools/phase4/build_site.py`; no number on it is typed by hand.
 
