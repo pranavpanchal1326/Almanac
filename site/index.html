@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Almanac issue 2027.01</title>
+<meta name="description" content="A forecast of forest loss in the Amazon and Cerrado for 2026, locked before the truth exists, with its rules, backtest and proofs.">
+<style>
+:root {
+  --surface: #fcfcfb; --surface-2: #f3f2ef; --ink: #1d1d1b; --ink-2: #4a4a46; --muted: #6f6f69;
+  --rule: #dcdbd6; --accent: #256abf; --bar: #3987e5; --bar-head: #184f95;
+  --yes-bg: #e3f1e6; --yes-ink: #1f6b33; --no-bg: #f8e4e1; --no-ink: #9c2b1f;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface: #1a1a19; --surface-2: #232322; --ink: #ecebe7; --ink-2: #c4c3be; --muted: #9a9993;
+    --rule: #383835; --accent: #86b6ef; --bar: #3987e5; --bar-head: #9ec5f4;
+    --yes-bg: #1e3524; --yes-ink: #9fd8ae; --no-bg: #3d211d; --no-ink: #f0a99f;
+  }
+}
+:root[data-theme="dark"] {
+  --surface: #1a1a19; --surface-2: #232322; --ink: #ecebe7; --ink-2: #c4c3be; --muted: #9a9993;
+  --rule: #383835; --accent: #86b6ef; --bar: #3987e5; --bar-head: #9ec5f4;
+  --yes-bg: #1e3524; --yes-ink: #9fd8ae; --no-bg: #3d211d; --no-ink: #f0a99f;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--surface); color: var(--ink);
+  font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 960px; margin: 0 auto; padding: 32px 16px 64px; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.01em; }
+h2 { font-size: 1.25rem; margin: 48px 0 12px; }
+p { margin: 0 0 12px; color: var(--ink-2); max-width: 68ch; }
+a { color: var(--accent); }
+.eyebrow { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+.lede { font-size: 1.1rem; color: var(--ink); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 28px 0 8px; }
+.stat { background: var(--surface-2); border-radius: 10px; padding: 14px 16px; }
+.stat b { display: block; font-size: 1.6rem; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.stat span { font-size: .85rem; color: var(--muted); }
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+thead th { font-size: .8rem; color: var(--muted); font-weight: 600; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+tbody th { font-weight: 500; }
+tr.head th, tr.head td.num { font-weight: 700; }
+td.bar { width: 28%; min-width: 90px; }
+td.bar span { display: block; height: 10px; border-radius: 0 4px 4px 0; background: var(--bar); }
+tr.head td.bar span { background: var(--bar-head); }
+.tag { display: inline-block; font-size: .8rem; font-weight: 600; padding: 2px 9px; border-radius: 999px; }
+.tag.yes { background: var(--yes-bg); color: var(--yes-ink); }
+.tag.yes::before { content: "✓ "; }
+.tag.no { background: var(--no-bg); color: var(--no-ink); }
+.tag.no::before { content: "✕ "; }
+figure { margin: 16px 0 0; }
+figure img { display: block; width: 100%; height: auto; background: var(--surface-2); border-radius: 10px; }
+figcaption { font-size: .85rem; color: var(--muted); margin-top: 8px; max-width: 68ch; }
+.legend { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 0; margin: 12px 0 0; font-size: .85rem; color: var(--ink-2); }
+.legend li { display: flex; align-items: center; gap: 6px; }
+.sw { width: 14px; height: 14px; border-radius: 3px; background: var(--l); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sw { background: var(--d); } }
+:root[data-theme="dark"] .sw { background: var(--d); }
+code, pre { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .88rem; }
+pre { background: var(--surface-2); padding: 12px 14px; border-radius: 8px; overflow-x: auto; margin: 8px 0 12px; }
+.digest { word-break: break-all; }
+ul.plain { padding-left: 20px; color: var(--ink-2); max-width: 68ch; }
+ul.plain li { margin-bottom: 6px; }
+footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: .85rem; color: var(--muted); }
+footer p { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+<p class="eyebrow">Almanac · issue 2027.01 · forest loss, Amazon and Cerrado</p>
+<h1>Where will forest be lost in 2026? A forecast made before anyone can know.</h1>
+<p class="lede">For every 640 m cell of forest on 499 exam tiles, the probability that at least
+2.5% of it (about 1 hectare) is lost in 2026. The forecast and the rules that grade it were fixed
+before the 2026 loss maps exist. When they are published, it is graded here, in public, misses included.</p>
+
+<div class="stats">
+  <div class="stat"><b>+16.0%</b><span>backtest on 2025, against the reference (needs +20%)</span></div>
+  <div class="stat"><b>+10.7% to +22.3%</b><span>95% interval of that improvement</span></div>
+  <div class="stat"><b>bc834b26…</b><span>package digest, sealed 22 November 2026</span></div>
+  <div class="stat"><b>15 Jan 2027</b><span>formal lock; the exam follows the 2026 data</span></div>
+</div>
+
+<h2>The 2026 forecast</h2>
+<p>The headline forecast, model M (A2): 4,795,484 cells, mean probability 6.4%. Each
+pixel is the average of the 640 m cells inside it. Blank cells are not forecast: no forest, too
+little land, or no valid 2025 satellite embedding.</p>
+<figure>
+  <picture>
+    <source srcset="map-dark.png" media="(prefers-color-scheme: dark)">
+    <img src="map-light.png" width="2851" height="2385" alt="Map of the forecast probability of forest loss in 2026 on the 499 exam tiles of the Amazon and Cerrado, shaded from light (under 1%) to dark (40% or more), with the held-out region outlined.">
+  </picture>
+  <figcaption>Probability of forest loss in 2026. Faint squares: the 499 exam tiles (82 km each).
+  Dashed box: the held-out region (68°W–60°W, 13°S–7°S), never used in training. The
+  probabilities ran high in the backtest, so read the map as a ranking of risk first.</figcaption>
+</figure>
+<ul class="legend" aria-label="Probability bands"><li><span class="sw" style="--l:#cde2fb;--d:#0d366b"></span>under 1%</li><li><span class="sw" style="--l:#9ec5f4;--d:#184f95"></span>1–2%</li><li><span class="sw" style="--l:#6da7ec;--d:#256abf"></span>2–5%</li><li><span class="sw" style="--l:#3987e5;--d:#3987e5"></span>5–10%</li><li><span class="sw" style="--l:#256abf;--d:#6da7ec"></span>10–20%</li><li><span class="sw" style="--l:#184f95;--d:#9ec5f4"></span>20–40%</li><li><span class="sw" style="--l:#0d366b;--d:#cde2fb"></span>40% or more</li></ul>
+
+<h2>The backtest: graded once, on 2025</h2>
+<p>Before the forecast was made, the frozen model was scored once on 2025, on the same 499
+tiles: 4,814,716 forest cells, 192,761 of them lost. Average precision (AP) rewards putting the
+cells that were lost at the top of the ranking; a forecast with no skill scores the base rate,
+0.040.</p>
+<div class="scroll"><table>
+<thead><tr><th>Forecast</th><th>AP, all tiles</th><th class="num">All</th><th class="num">Test tiles</th><th class="num">Held-out region</th></tr></thead>
+<tbody><tr class="head"><th scope="row">Model M (A2), headline</th><td class="bar"><span style="width:100.0%" title="AP 0.468 (95% interval 0.422 to 0.515)"></span></td><td class="num">0.468</td><td class="num">0.361</td><td class="num">0.673</td></tr><tr><th scope="row">Reference: network without neighbours (B5)</th><td class="bar"><span style="width:86.2%" title="AP 0.404 (95% interval 0.351 to 0.456)"></span></td><td class="num">0.404</td><td class="num">0.315</td><td class="num">0.581</td></tr><tr><th scope="row">Gradient-boosted trees (B4)</th><td class="bar"><span style="width:82.5%" title="AP 0.386 (95% interval 0.353 to 0.420)"></span></td><td class="num">0.386</td><td class="num">0.315</td><td class="num">0.549</td></tr><tr><th scope="row">Proximity to past loss (B3)</th><td class="bar"><span style="width:42.4%" title="AP 0.199 (95% interval 0.172 to 0.228)"></span></td><td class="num">0.199</td><td class="num">0.160</td><td class="num">0.283</td></tr><tr><th scope="row">Last year’s change (B2)</th><td class="bar"><span style="width:17.0%" title="AP 0.079 (95% interval 0.064 to 0.101)"></span></td><td class="num">0.079</td><td class="num">0.063</td><td class="num">0.214</td></tr><tr><th scope="row">Constant base rate (B0)</th><td class="bar"><span style="width:8.5%" title="AP 0.040 (95% interval 0.035 to 0.046)"></span></td><td class="num">0.040</td><td class="num">0.035</td><td class="num">0.051</td></tr></tbody>
+</table></div>
+
+<h2>The win condition, applied to the backtest</h2>
+<p>Fixed and timestamped before any model was trained. All three must hold.</p>
+<div class="scroll"><table>
+<thead><tr><th>Condition</th><th class="num">Result</th><th>Status</th></tr></thead>
+<tbody><tr><th scope="row">At least 20% above the reference</th><td class="num">+16.0%</td><td><span class="tag no">Not met</span></td></tr><tr><th scope="row">Lower end of the 95% interval above 10%</th><td class="num">+10.7%</td><td><span class="tag yes">Met</span></td></tr><tr><th scope="row">Better on the test tiles and on the held-out region</th><td class="num">+14.4% and +15.7%</td><td><span class="tag yes">Met</span></td></tr></tbody>
+</table></div>
+<p style="margin-top:12px">So the backtest is <b>not a win</b>. The model was still chosen as the
+headline because it was the best forecast on every part of the test; the 20% bar for 2026 was not
+moved, and the reference and every baseline are locked beside it and graded on the same truth.
+<a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/adr/0004-gate-2.md">The decision and the case against it</a>.</p>
+
+<h2>What is weak, said plainly</h2>
+<ul class="plain">
+  <li>The probabilities ran high on 2025: more loss was forecast than happened in every tenth of the forecasts.</li>
+  <li>On the 2024 validation year the model was 4.6% <i>below</i> the reference. That check was small (146 tiles), but it is part of the record.</li>
+  <li>The 2025 test data were read twice: once for the graded backtest and once, against the protocol, for an independent re-grade of the same frozen forecasts. Nothing changed; it is logged below.</li>
+  <li>One region, one kind of event, one year ahead.</li>
+</ul>
+
+<h2>Check it yourself</h2>
+<p>The package is plain <code>.npy</code> layers, a tile list and a canonical manifest. Its digest is
+the SHA-256 of the manifest:</p>
+<pre class="digest">bc834b2691f0f1c9fdee05a0c0fbae87958efe3a8d3e670aeff113f9b02b7949</pre>
+<p>The verifier needs only Python and NumPy and imports nothing from the project:</p>
+<pre>python tools/verify_issue.py PACKAGE_DIR --digest bc834b2691f0f1c9fdee05a0c0fbae87958efe3a8d3e670aeff113f9b02b7949</pre>
+<p>The backtest was re-graded by separate code that shares nothing with the grader, reading the
+truth from the source label files: 64 of 64 values matched, the largest difference
+4.3e-16.</p>
+
+<h2>Every read of the test truth</h2>
+<div class="scroll"><table>
+<thead><tr><th>When</th><th>What</th></tr></thead>
+<tbody><tr><td>2026-11-15 16:32 UTC</td><td>baselines B0-B4, test_2025 and held_out_2025</td></tr><tr><td>2026-11-15 18:12 UTC</td><td>baselines B0-B4, test_2025 and held_out_2025</td></tr><tr><td>2026-11-21 15:23 UTC</td><td>stage B: model M (A2) ensemble, reference B5 (A2) and B0-B4, test_2025 and held_out_2025</td></tr><tr><td>2026-11-21 15:42 UTC</td><td>reproduction of stage B (task 2.8): forest loss, test_2025 and held_out_2025</td></tr></tbody>
+</table></div>
+
+<h2>The rules and their proofs</h2>
+<ul class="plain">
+  <li><a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/prereg/2027.01.md">Pre-registration 2027.01</a>, timestamped 15 November 2026 by FreeTSA and DigiCert and anchored in Bitcoin.</li>
+  <li><a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/prereg/2027.01.amendment-1.md">Amendment 1</a> (the model) and <a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/prereg/2027.01.amendment-2.md">amendment 2</a> (the stable recipe and the reference), each timestamped before the runs it governs.</li>
+  <li><a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/prereg/proofs/README.md">How to verify the timestamps</a>.</li>
+  <li><a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/phase2/STATUS.md">Every training run</a>, including the ones that collapsed.</li>
+</ul>
+
+<footer>
+<p>Generated from the project's records by <code>tools/phase4/build_site.py</code>; forecast built at commit <code>63f66f9</code>.
+Code: <a href="https://github.com/pranavpanchal1326/Almanac">github.com/pranavpanchal1326/Almanac</a> (Apache 2.0).</p>
+<p>Input data: AlphaEarth Foundations Satellite Embedding dataset, produced by Google and Google
+DeepMind, used under CC-BY 4.0. Forest labels: Hansen, M. C. et al. 2013, Science 342: 850–853;
+Global Forest Change 2000–2025 v1.13, University of Maryland, under CC-BY 4.0.</p>
+</footer>
+</main>
+</body>
+</html>
