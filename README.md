@@ -16,32 +16,67 @@ The full plan is in [BLUEPRINT.md](BLUEPRINT.md); the regional plan to the first
 |---|---|---|
 | 0 — Look: is yearly change in the embeddings real? | Passed | [REPORT](docs/phase0/REPORT.md), [ADR 0001](docs/adr/0001-gate-0.md) |
 | 1 — Scoreboard: a fair exam and simple competitors | Passed | [STATUS](docs/phase1/STATUS.md), [ADR 0003](docs/adr/0003-gate-1.md) |
-| 2 — Model | Next | |
-| Lock of the 2026 forecast | 15 January 2027 | |
+| 2 — Model, backtested once on 2025 | **Partial**: best forecast on every part, short of the 20% margin | [STATUS](docs/phase2/STATUS.md), [ADR 0004](docs/adr/0004-gate-2.md) |
+| 4 — Lock of the 2026 forecast | 15 January 2027 (does not move) | [STATUS](docs/phase4/STATUS.md), [label](docs/phase4/LABEL.md) |
+| Exam | When the 2026 forest-loss maps are published (2027) | |
+
+## The result so far, stated plainly
+
+The model is a transformer over five years of AlphaEarth annual embeddings per 640 m cell, with
+its neighbourhood; the forecast is the mean of three seeds. It was frozen, then scored **once** on
+2025 (the backtest), on 499 tiles it never trained on: a test set and a held-out region in the
+south-west Amazon.
+
+| Forest-loss average precision, 2025 | All 499 tiles | Test (379) | Held-out region (120) |
+|---|---|---|---|
+| **Model M (A2)** | **0.468** | **0.361** | **0.673** |
+| Reference: same network without neighbours (B5, A2) | 0.404 | 0.315 | 0.582 |
+| Gradient-boosted trees (B4) | 0.386 | 0.315 | 0.549 |
+| Proximity to past loss (B3) | 0.199 | 0.160 | 0.283 |
+| Base rate | 0.040 | 0.035 | 0.051 |
+
+- **Against the reference: +16.0%** (95% paired tile-bootstrap interval +10.7% to +22.3%), better on
+  the test tiles (+14.4%) and the held-out region (+15.7%) separately.
+- **Not a win.** The pre-registered win needs at least +20%. The bar was fixed before training and
+  is not moved; the 2026 exam is graded against the same three conditions.
+- **Weaknesses, published:** the probabilities ran high on 2025 (read the map as a ranking of
+  risk); on validation 2024 the model was 4.6% *below* the reference; the 2025 test data were read
+  twice, once by mistake, with no effect on any forecast ([ADR 0004](docs/adr/0004-gate-2.md)).
+- **Reproduced** by separate code that shares nothing with the grader: 64 of 64 values within
+  tolerance ([reproduction](docs/phase2/stage_b_reproduction.md)).
+
+Full tables: [stage B report](docs/phase2/stage_b_report.md); every training run, including the
+ones that collapsed: [Phase 2 status](docs/phase2/STATUS.md).
 
 ## The exam (pre-registration 2027.01)
 
 - **Task:** forest loss of at least 2.5% of a cell (about 1 ha) in 2026, among cells with forest.
   Truth: Global Forest Change, an independent yearly map.
 - **Exam tiles:** a test set and a held-out region (south-west Amazon) never used in training.
-- **Reference:** the best simple baseline on validation, which is gradient-boosted trees (B4).
+- **Reference:** the best on validation 2024 among the simple baselines and the no-neighbour
+  network B5 ([amendment 2](docs/prereg/2027.01.amendment-2.md), section 4): B5 (A2).
 - **Win:** average precision at least 20% above the reference, the lower end of a 95% tile-bootstrap
   interval above 10%, and better than the reference on the test tiles and on the held-out region
   separately.
 - **Text and proofs:** [docs/prereg/2027.01.md](docs/prereg/2027.01.md), timestamped on
-  2026-11-15 by FreeTSA and DigiCert (RFC 3161) and OpenTimestamps.
+  2026-11-15 by FreeTSA and DigiCert (RFC 3161) and OpenTimestamps; amendments 1 and 2 timestamped
+  before the runs they govern and anchored in Bitcoin blocks 976,013 and 976,246.
   [How to verify](docs/prereg/proofs/README.md).
+- **Every read of the test truth** is logged: [test_touch_log.jsonl](docs/phase1/test_touch_log.jsonl).
 
-Baselines to beat, average precision on forest loss (base rate in brackets):
+## Verify a forecast package
 
-| | Last change (B2) | Proximity (B3) | Trees (B4) |
-|---|---|---|---|
-| Validation 2024 (0.066) | 0.089 | 0.200 | **0.246** |
-| Test 2025 (0.035) | 0.063 | 0.160 | **0.315** |
-| Held-out region 2025 (0.051) | 0.214 | 0.283 | **0.549** |
+The locked package is plain `.npy` layers, `tiles.csv` and a canonical manifest; its digest is the
+SHA-256 of the manifest. The verifier needs only Python and NumPy and imports nothing from this
+repository:
 
-Full report: [docs/phase1/baseline_report.md](docs/phase1/baseline_report.md). If no model clears
-the bar, the baseline's forecast is locked instead and the negative result is published.
+```bash
+python tools/verify_issue.py PACKAGE_DIR --digest <published digest>
+```
+
+It checks every file's SHA-256, the digest, each layer's type, shape and range, and that the
+headline and reference cover every cell the baselines forecast; it prints `VERIFIED` or the
+checks that failed.
 
 ## Set up
 
@@ -104,8 +139,11 @@ rasters for the region in `D:/almanac-data/labels/gfc`.
 | `src/almanac/data` | Streaming pass, labels, split, change rules, per-tile data cube |
 | `src/almanac/baselines` | Features available at issue time; baselines B0–B4 |
 | `src/almanac/evaluate` | Metrics and the paired tile bootstrap |
+| `src/almanac/model` | Training store, sampler, network, inference |
+| `src/almanac/registry` | Forecast packages: layers, canonical manifest, digest |
 | `src/almanac/cli` | The `almanac` command |
-| `tools/phase0`, `tools/phase1` | Scripts that produce the evidence; nothing in `src` imports them |
+| `tools/phase0` … `tools/phase5` | Scripts that produce the evidence (training, stage B, its reproduction, the 2026 forecasts, the grader); nothing in `src` imports them |
+| `tools/verify_issue.py` | Stand-alone package verifier (Python and NumPy only) |
 | `tools/prereg` | Bundle and timestamp tools for pre-registrations |
 | `configs` | Region, split, threshold, baseline and data-manifest files |
 | `tests` | Unit, property, golden and live-read tests |
