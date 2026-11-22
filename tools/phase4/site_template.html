@@ -4,280 +4,290 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Almanac issue 2027.01</title>
-<meta name="description" content="The forest, foretold: where the Amazon and the Cerrado will lose forest in 2026, forecast and sealed before anyone can know, and graded in public.">
-<meta name="theme-color" content="#0a110e">
+<meta name="description" content="Where forest will be lost in the Amazon and Cerrado in 2026: a forecast sealed before the truth exists, graded in public, with its rules, backtest and verification.">
+<meta name="theme-color" content="#050b16">
 <meta property="og:type" content="website">
-<meta property="og:title" content="The forest, foretold · Almanac 2027.01">
-<meta property="og:description" content="Where the Amazon and the Cerrado will lose forest in 2026: a forecast sealed before the truth exists. Backtest %%IMPROVEMENT%% over the reference, short of the +20% bar.">
+<meta property="og:title" content="Where forest will be lost in 2026 · Almanac 2027.01">
+<meta property="og:description" content="A forecast for the Amazon and Cerrado, sealed before the truth exists. Backtest %%IMPROVEMENT%% over the reference, short of the +20% bar. Verify it yourself.">
 <meta property="og:url" content="%%SITE_URL%%">
 <meta property="og:image" content="%%SITE_URL%%og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a110e'/%3E%3Ccircle cx='16' cy='16' r='10.5' fill='none' stroke='%23d9b14f' stroke-width='1.4'/%3E%3Cpath d='M5.5 16h21M16 5.5c-4 3-4 18 0 21M16 5.5c4 3 4 18 0 21' fill='none' stroke='%23d9b14f' stroke-width='.9'/%3E%3Ccircle cx='19' cy='18' r='2.4' fill='%23faecb4'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3CradialGradient id='g' cx='.36' cy='.34' r='.75'%3E%3Cstop offset='0' stop-color='%237cc0e8'/%3E%3Cstop offset='.55' stop-color='%231c4775'/%3E%3Cstop offset='1' stop-color='%23050b16'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7' fill='%23050b16'/%3E%3Ccircle cx='16' cy='16' r='11' fill='url(%23g)'/%3E%3Ccircle cx='16' cy='16' r='11.5' fill='none' stroke='%236cc4f0' stroke-opacity='.5'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Barlow+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
 :root {
   color-scheme: dark;
-  --ground: #0a110e; --ground-2: #0f1813; --ground-3: #142019;
-  --paper: #ece5d3; --ink-2: #c6bfac; --muted: #8d9584; --dim: #616a5e;
-  --rule: rgba(236,229,211,.13); --rule-2: rgba(236,229,211,.26);
-  --gold: #d9b14f; --gold-2: #b8892a; --gold-hot: #faecb4; --river: #86aec6;
-  --s1: #b8892a; --s2: #3b89c9;
-  --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --label: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --space: #050b16; --deep: #0a1628; --panel: #0d1b30; --panel-2: #11223b;
+  --ink: #e8eef7; --ink-2: #b4c2d6; --muted: #7f90a8; --dim: #55657c;
+  --rule: rgba(180,194,214,.14); --rule-2: rgba(180,194,214,.26);
+  --sky: #6cc4f0; --sky-2: #3a90c6; --ice: #e3f4ff; --amber: #b8892a;
+  --s1: #3b89c9; --s2: #b8892a;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cond: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
   --ease: cubic-bezier(.22,.7,.12,1);
 }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; background: var(--ground); }
-body { margin: 0; background: var(--ground); color: var(--paper); font: 360 1.125rem/1.62 var(--serif); font-optical-sizing: auto; overflow-x: hidden;
-  font-variant-numeric: lining-nums; -webkit-font-smoothing: antialiased; }
-body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 90; opacity: .045; mix-blend-mode: soft-light;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-::selection { background: var(--gold-2); color: var(--ground); }
-a { color: inherit; text-decoration: underline; text-decoration-color: var(--gold-2); text-decoration-thickness: 1px; text-underline-offset: .18em; transition: color .2s, text-decoration-color .2s; }
-a:hover { color: var(--gold); text-decoration-color: var(--gold); }
-:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
-code, pre { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .82em; }
-.lbl { font: 500 .74rem/1.3 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.lbl.gold { color: var(--gold); }
-.wrap { width: min(1180px, 100% - 40px); margin: 0 auto; }
+html { -webkit-text-size-adjust: 100%; background: var(--space); }
+body { margin: 0; background: var(--space); color: var(--ink); font: 400 1.0625rem/1.62 var(--sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+::selection { background: var(--sky-2); color: #fff; }
+a { color: var(--sky); text-decoration: underline; text-decoration-color: rgba(108,196,240,.4); text-underline-offset: .2em; text-decoration-thickness: 1px; transition: color .2s, text-decoration-color .2s; }
+a:hover { color: var(--ice); text-decoration-color: var(--ice); }
+:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; border-radius: 2px; }
+code, pre { font-family: var(--mono); font-size: .86em; }
+.lbl { font: 600 .72rem/1.3 var(--cond); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.lbl.sky { color: var(--sky); }
+.wrap { width: min(1200px, 100% - 48px); margin: 0 auto; }
+@media (max-width: 600px) { .wrap { width: calc(100% - 32px); } }
 
-/* ---------- masthead ---------- */
-.mast { position: fixed; inset: 0 0 auto; z-index: 50; transition: background .4s, border-color .4s; border-bottom: 1px solid transparent; }
-.mast.solid { background: rgba(10,17,14,.92); border-bottom-color: var(--rule); backdrop-filter: blur(6px); }
-.mast .wrap { display: flex; align-items: baseline; gap: 22px; height: 58px; padding-top: 18px; }
-.mast .word { font: italic 400 1.35rem/1 var(--serif); color: var(--paper); text-decoration: none; letter-spacing: -.005em; }
-.mast .word small { font: 500 .66rem/1 var(--label); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); font-style: normal; margin-left: 10px; vertical-align: .25em; }
-.mast nav { margin-left: auto; display: flex; gap: 22px; overflow-x: auto; scrollbar-width: none; }
-.mast nav::-webkit-scrollbar { display: none; }
-.mast nav a { font: 500 .74rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2); text-decoration: none; white-space: nowrap; padding-bottom: 4px; border-bottom: 1px solid transparent; }
-.mast nav a:hover, .mast nav a.on { color: var(--gold); border-bottom-color: var(--gold); }
-@media (max-width: 640px) { .mast .word small { display: none; } .mast nav { gap: 14px; } }
+/* ---------- header ---------- */
+.masthead { position: fixed; inset: 0 0 auto; z-index: 50; border-bottom: 1px solid transparent; transition: background .35s, border-color .35s; }
+.masthead.solid { background: rgba(5,11,22,.9); backdrop-filter: blur(10px); border-bottom-color: var(--rule); }
+.masthead .wrap { display: flex; align-items: center; gap: 24px; height: 60px; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font: 600 1rem/1 var(--sans); letter-spacing: -.01em; }
+.brand svg { width: 22px; height: 22px; }
+.brand .tag { font: 500 .7rem/1 var(--mono); color: var(--muted); padding: 4px 7px; border: 1px solid var(--rule-2); border-radius: 4px; letter-spacing: .02em; }
+.masthead nav { margin-left: auto; display: flex; gap: 26px; overflow-x: auto; scrollbar-width: none; }
+.masthead nav::-webkit-scrollbar { display: none; }
+.masthead nav a { font: 500 .86rem/1 var(--sans); color: var(--ink-2); text-decoration: none; white-space: nowrap; padding: 6px 0; border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
+.masthead nav a:hover, .masthead nav a.on { color: var(--ink); border-bottom-color: var(--sky); }
+@media (max-width: 640px) { .brand .tag { display: none; } .masthead nav { gap: 16px; } .masthead nav a { font-size: .8rem; } }
 
-/* ---------- the globe ---------- */
-.orbit { position: relative; height: 260vh; }
+/* ---------- hero: the planet ---------- */
+.orbit { position: relative; height: 230vh; }
 .orbit .stick { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 #globe { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.orbit .fallback { position: absolute; inset: 0; transition: opacity 1.4s; background: radial-gradient(38% 52% at 72% 54%, #15211a, var(--ground) 70%); }
-.orbit .veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(10,17,14,.92) 0%, rgba(10,17,14,.55) 36%, transparent 62%); }
-.orbit .stick::after { content: ""; position: absolute; inset: auto 0 0; height: 34vh; pointer-events: none; background: linear-gradient(180deg, transparent, var(--ground)); }
-.title { position: absolute; inset: 0; display: flex; align-items: center; z-index: 2; will-change: opacity, transform; }
-.title .wrap { display: grid; grid-template-columns: minmax(0, 620px); }
-.title .lbl { color: var(--gold); display: flex; gap: 14px; align-items: center; }
-.title .lbl::after { content: ""; flex: 0 0 64px; height: 1px; background: var(--gold-2); }
-h1 { font: 300 clamp(3.6rem, 9.4vw, 8.4rem)/.9 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.028em; margin: 26px 0 30px; }
-h1 i { font-weight: 300; color: var(--gold); }
-.deck { font: 340 clamp(1.08rem, 1.7vw, 1.32rem)/1.5 var(--serif); color: var(--ink-2); margin: 0; max-width: 34em; }
-.deck b { font-weight: 500; color: var(--paper); }
-.byline { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 8px 28px; }
-.byline span { font: 500 .72rem/1.4 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.byline span b { color: var(--paper); font-weight: 600; }
-.descend { position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%); z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.descend i { width: 1px; height: 44px; background: linear-gradient(var(--gold), transparent); animation: sink 2.6s var(--ease) infinite; transform-origin: top; }
-@keyframes sink { 0% { transform: scaleY(0); opacity: 1; } 70% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
-.arrive { position: absolute; inset: auto 0 12vh; z-index: 3; text-align: center; opacity: 0; pointer-events: none; padding: 0 20px; }
-.arrive p { margin: 0; font: italic 300 clamp(1.9rem, 4vw, 3.2rem)/1.1 var(--serif); color: var(--paper); }
-.arrive .lbl { margin-top: 14px; display: block; }
-.coords { position: absolute; right: 24px; bottom: 26px; z-index: 3; text-align: right; font: 500 .68rem/1.7 var(--label); letter-spacing: .16em; color: var(--dim); }
-@media (max-width: 700px) { .coords { display: none; } .orbit .veil { background: linear-gradient(180deg, rgba(10,17,14,.9) 0%, rgba(10,17,14,.5) 55%, transparent 80%); } .title { align-items: flex-start; padding-top: 18vh; } }
+.orbit .fallback { position: absolute; inset: 0; transition: opacity 1.4s; background: radial-gradient(34% 48% at 72% 52%, #102a4d, var(--space) 72%); }
+.orbit .veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(5,11,22,.94) 0%, rgba(5,11,22,.6) 38%, transparent 64%); }
+.orbit .stick::after { content: ""; position: absolute; inset: auto 0 0; height: 30vh; pointer-events: none; background: linear-gradient(180deg, transparent, var(--space)); }
+.hero { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: center; will-change: opacity, transform; padding-top: 40px; }
+.hero .inner { max-width: 600px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 10px; font: 500 .78rem/1 var(--mono); color: var(--sky); letter-spacing: .02em; }
+.eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: var(--sky); box-shadow: 0 0 0 3px rgba(108,196,240,.2); }
+h1 { font: 300 clamp(2.9rem, 6.2vw, 5.4rem)/1.02 var(--sans); letter-spacing: -.035em; margin: 22px 0 22px; color: var(--ink); }
+h1 strong { font-weight: 500; color: var(--ice); }
+.deck { font: 400 clamp(1.02rem, 1.4vw, 1.18rem)/1.6 var(--sans); color: var(--ink-2); margin: 0; max-width: 33em; }
+.deck b { color: var(--ink); font-weight: 500; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.btn { display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 20px; border-radius: 6px; font: 500 .92rem/1 var(--sans); text-decoration: none; color: var(--ink); border: 1px solid var(--rule-2); background: rgba(13,27,48,.6); transition: background .25s, border-color .25s, color .25s; }
+.btn:hover { color: var(--ink); border-color: var(--sky); background: rgba(58,144,198,.12); }
+.btn.primary { background: var(--sky); border-color: var(--sky); color: #04101f; }
+.btn.primary:hover { background: var(--ice); border-color: var(--ice); color: #04101f; }
+.btn span { transition: transform .25s var(--ease); } .btn:hover span { transform: translateX(3px); }
+.facts { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; border-top: 1px solid var(--rule); background: linear-gradient(180deg, rgba(5,11,22,.4), rgba(5,11,22,.85)); backdrop-filter: blur(4px); will-change: opacity; }
+.facts .wrap { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.fact { padding: 18px 20px 20px 0; }
+.fact + .fact { padding-left: 20px; border-left: 1px solid var(--rule); }
+.fact b { display: block; font: 400 1.5rem/1.15 var(--sans); letter-spacing: -.02em; color: var(--ink); }
+.fact b small { font-size: .62em; color: var(--muted); margin-left: 4px; letter-spacing: 0; }
+.fact .lbl { display: block; margin-top: 6px; }
+@media (max-width: 860px) { .facts .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fact:nth-child(3) { padding-left: 0; border-left: 0; } .fact:nth-child(n+3) { border-top: 1px solid var(--rule); } .fact { padding: 12px 14px 14px 0; } .fact + .fact { padding-left: 14px; } .fact b { font-size: 1.15rem; } }
+.arrive { position: absolute; inset: auto 0 15vh; z-index: 3; text-align: center; opacity: 0; pointer-events: none; padding: 0 20px; }
+.arrive p { margin: 0; font: 300 clamp(1.7rem, 3.4vw, 2.6rem)/1.15 var(--sans); letter-spacing: -.02em; color: var(--ink); text-shadow: 0 2px 24px rgba(0,0,0,.7); }
+.arrive .lbl { display: block; margin-top: 10px; color: var(--sky); }
+.coords { position: absolute; right: 24px; top: 84px; z-index: 3; text-align: right; font: 400 .7rem/1.7 var(--mono); color: var(--dim); }
+@media (max-width: 700px) {
+  .coords { display: none; }
+  .orbit .veil { background: linear-gradient(180deg, rgba(5,11,22,.92) 0%, rgba(5,11,22,.55) 55%, transparent 80%); }
+  .hero { justify-content: flex-start; padding-top: 104px; }
+  .cta .btn { height: 42px; padding: 0 16px; font-size: .86rem; }
+}
 
-/* ---------- chapters ---------- */
-.chapter { position: relative; padding: 16vh 0 4vh; }
-.chapter + .chapter { border-top: 1px solid var(--rule); }
-.grid { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 40px; }
-.margin { position: relative; }
-.numeral { font: 200 4.6rem/.85 var(--serif); font-variation-settings: "opsz" 72; color: var(--gold); letter-spacing: -.02em; }
-.margin .lbl { margin-top: 18px; display: block; }
-.margin .note-m { margin-top: 18px; font: italic 360 .92rem/1.5 var(--serif); color: var(--muted); }
-h2 { font: 300 clamp(2.4rem, 5vw, 4.2rem)/1.02 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.022em; margin: -6px 0 22px; max-width: 16em; }
-h3 { font: 400 1.65rem/1.15 var(--serif); font-variation-settings: "opsz" 48; letter-spacing: -.01em; margin: 0 0 12px; }
-.chapter p { margin: 0 0 16px; color: var(--ink-2); max-width: 36em; }
-.chapter p b { color: var(--paper); font-weight: 500; }
-.dropcap::first-letter { float: left; font: 300 4.3em/.8 var(--serif); font-variation-settings: "opsz" 72; color: var(--gold); padding: .06em .08em 0 0; }
-@media (max-width: 860px) { .grid { grid-template-columns: 1fr; gap: 14px; } .numeral { font-size: 3rem; } .margin .note-m { display: none; } }
-[data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 1.2s var(--ease), transform 1.2s var(--ease); transition-delay: var(--d, 0s); }
+/* ---------- sections ---------- */
+.section { padding: 112px 0 24px; }
+.sec-head { display: flex; align-items: baseline; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--rule-2); margin-bottom: 34px; }
+.sec-head .idx { font: 500 .8rem/1 var(--mono); color: var(--sky); }
+.intro { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 48px; align-items: end; margin-bottom: 40px; }
+h2 { font: 300 clamp(2rem, 3.6vw, 3.1rem)/1.1 var(--sans); letter-spacing: -.03em; margin: 0; color: var(--ink); max-width: 17em; }
+h2 strong { font-weight: 500; color: var(--ice); }
+h3 { font: 500 1.3rem/1.3 var(--sans); letter-spacing: -.015em; margin: 0 0 10px; color: var(--ink); }
+.section p { margin: 0 0 14px; color: var(--ink-2); max-width: 38em; }
+.section p b { color: var(--ink); font-weight: 500; }
+.intro p { margin: 0; }
+@media (max-width: 900px) { .intro { grid-template-columns: 1fr; gap: 16px; } .section { padding-top: 84px; } }
+[data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity 1s var(--ease), transform 1s var(--ease); transition-delay: var(--d, 0s); }
 [data-reveal].in { opacity: 1; transform: none; }
 
-/* ---------- plate I: the map ---------- */
-.plate { margin: 44px 0 0; }
-.plate-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--rule-2); }
-.plate-head h3 { margin: 0; font-style: italic; font-weight: 300; }
-.frame { position: relative; margin: 26px auto 0; padding: 26px; width: min(100%, calc(80vh * 1.1335 + 52px)); border: 1px solid var(--rule-2); }
-.frame::before { content: ""; position: absolute; inset: 5px; border: 1px solid var(--rule); pointer-events: none; }
-.ticks span { position: absolute; font: 500 .62rem/1 var(--label); letter-spacing: .08em; color: var(--muted); white-space: nowrap; transition: opacity .3s; }
+/* ---------- plate: the map ---------- */
+.plate { margin: 0; }
+.plate-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+.plate-head h3 { margin: 0; font-weight: 500; }
+.frame { position: relative; margin: 0 auto; padding: 26px; width: min(100%, calc(78vh * 1.1335 + 52px)); border: 1px solid var(--rule-2); background: var(--deep); border-radius: 4px; }
+.ticks span { position: absolute; font: 400 .62rem/1 var(--mono); color: var(--muted); white-space: nowrap; transition: opacity .3s; }
 .ticks .top, .ticks .bot { transform: translateX(-50%); }
-.ticks .top { top: 9px; } .ticks .bot { bottom: 9px; }
+.ticks .top { top: 8px; } .ticks .bot { bottom: 8px; }
 .ticks .lft, .ticks .rgt { transform: translateY(-50%) rotate(-90deg); }
-.ticks .lft { left: -3px; } .ticks .rgt { right: -3px; }
+.ticks .lft { left: -6px; } .ticks .rgt { right: -6px; }
 .frame.zoomed .ticks span { opacity: 0; }
-.viewport { position: relative; aspect-ratio: 2267 / 2000; overflow: hidden; touch-action: none; cursor: crosshair; background: var(--ground); }
+.viewport { position: relative; aspect-ratio: 2267 / 2000; overflow: hidden; touch-action: none; cursor: crosshair; background: var(--space); }
 .viewport.zoomed { cursor: grab; } .viewport.drag { cursor: grabbing; }
 .stage { position: absolute; inset: 0; transform-origin: 0 0; --k: 1; --u: 3; }
 .stage canvas, .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .stage svg { pointer-events: none; }
 #glow { mix-blend-mode: screen; animation: breathe 7s ease-in-out infinite; }
-@keyframes breathe { 0%,100% { opacity: .35; } 50% { opacity: .85; } }
-.stage svg .grid { stroke: rgba(236,229,211,.07); stroke-width: calc(1px / var(--k)); vector-effect: non-scaling-stroke; fill: none; }
-.stage svg .tile { stroke: rgba(236,229,211,.06); fill: none; stroke-width: calc(.7px / var(--k)); vector-effect: non-scaling-stroke; }
-.stage svg .held { stroke: var(--river); fill: none; stroke-width: calc(1.1px / var(--k)); stroke-dasharray: calc(6px / var(--k)) calc(4px / var(--k)); vector-effect: non-scaling-stroke; }
-.stage svg text { fill: var(--river); font-family: var(--label); font-weight: 500; letter-spacing: .14em; font-size: calc(10.5px * var(--u) / var(--k)); }
+@keyframes breathe { 0%,100% { opacity: .35; } 50% { opacity: .9; } }
+.stage svg .grid { stroke: rgba(180,194,214,.08); stroke-width: calc(1px / var(--k)); vector-effect: non-scaling-stroke; fill: none; }
+.stage svg .tile { stroke: rgba(180,194,214,.07); fill: none; stroke-width: calc(.7px / var(--k)); vector-effect: non-scaling-stroke; }
+.stage svg .held { stroke: var(--amber); fill: none; stroke-width: calc(1.2px / var(--k)); stroke-dasharray: calc(6px / var(--k)) calc(4px / var(--k)); vector-effect: non-scaling-stroke; }
+.stage svg text { fill: var(--amber); font-family: var(--cond); font-weight: 600; letter-spacing: .1em; font-size: calc(10.5px * var(--u) / var(--k)); }
 .stage svg .scale { stroke: var(--ink-2); stroke-width: calc(1.2px / var(--k)); vector-effect: non-scaling-stroke; }
 .stage svg text.scale-t { fill: var(--ink-2); }
-.stage svg .hover { stroke: var(--paper); stroke-width: calc(1.2px / var(--k)); fill: none; vector-effect: non-scaling-stroke; }
-.north { position: absolute; right: 40px; top: 40px; width: 34px; height: 54px; pointer-events: none; z-index: 2; }
-.tools { position: absolute; left: 38px; top: 38px; z-index: 3; display: flex; flex-direction: column; border: 1px solid var(--rule-2); background: rgba(10,17,14,.85); }
-.tools button { all: unset; cursor: pointer; width: 32px; height: 32px; display: grid; place-items: center; color: var(--paper); font: 400 1.05rem/1 var(--serif); transition: color .2s, background .2s; }
+.stage svg .hover { stroke: #fff; stroke-width: calc(1.2px / var(--k)); fill: none; vector-effect: non-scaling-stroke; }
+.north { position: absolute; right: 40px; top: 40px; width: 30px; height: 48px; pointer-events: none; z-index: 2; }
+.tools { position: absolute; left: 38px; top: 38px; z-index: 3; display: flex; flex-direction: column; border: 1px solid var(--rule-2); border-radius: 4px; background: rgba(5,11,22,.88); overflow: hidden; }
+.tools button { all: unset; cursor: pointer; width: 32px; height: 32px; display: grid; place-items: center; color: var(--ink); font: 400 1rem/1 var(--sans); transition: color .2s, background .2s; }
 .tools button + button { border-top: 1px solid var(--rule); }
-.tools button:hover { color: var(--gold); background: rgba(217,177,79,.08); }
-.tools button:focus-visible { outline: 1px solid var(--gold); outline-offset: -2px; }
-.tip { position: absolute; z-index: 4; pointer-events: none; padding: 9px 12px 10px 14px; background: rgba(10,17,14,.94); border-left: 2px solid var(--gold); opacity: 0; transform: translate(16px, 16px); transition: opacity .15s; min-width: 200px; }
-.tip .lbl { font-size: .64rem; }
-.tip b { display: block; font: italic 400 1.2rem/1.2 var(--serif); color: var(--paper); margin: 3px 0 2px; }
-.tip span { font: 400 .9rem/1.35 var(--serif); color: var(--ink-2); }
-.readout { min-height: 1.4em; margin-top: 14px; text-align: center; }
-.key { display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: start; margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--rule); }
-.key h4 { margin: 0; font: italic 400 1.15rem/1.3 var(--serif); color: var(--paper); }
-.key h4 + .lbl { display: block; margin-top: 8px; }
+.tools button:hover { color: var(--sky); background: rgba(108,196,240,.1); }
+.tools button:focus-visible { outline: 2px solid var(--sky); outline-offset: -2px; }
+.tip { position: absolute; z-index: 4; pointer-events: none; padding: 9px 12px 10px; background: rgba(5,11,22,.95); border: 1px solid var(--rule-2); border-left: 2px solid var(--sky); border-radius: 4px; opacity: 0; transform: translate(16px, 16px); transition: opacity .15s; min-width: 210px; }
+.tip .lbl { font-size: .62rem; }
+.tip b { display: block; font: 500 1rem/1.3 var(--sans); color: var(--ink); margin: 3px 0 2px; }
+.tip span { font: 400 .86rem/1.35 var(--sans); color: var(--ink-2); }
+.readout { min-height: 1.4em; margin-top: 12px; text-align: center; font: 400 .74rem/1.4 var(--mono); color: var(--muted); }
+.key { display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: start; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--rule); }
+.key h4 { margin: 0; font: 500 .98rem/1.35 var(--sans); color: var(--ink); }
+.key h4 + .lbl { display: block; margin-top: 6px; }
 .steps { display: grid; grid-template-columns: repeat(6, 1fr); list-style: none; margin: 0; padding: 0; }
-.steps li { padding: 0 8px 0 0; }
-.steps li::before { content: ""; display: block; height: 14px; background: var(--c); margin-bottom: 10px; }
-.steps li:first-child::before { box-shadow: inset 0 0 0 1px var(--rule-2); }
-.steps b { display: block; font: 500 .72rem/1.3 var(--label); letter-spacing: .12em; text-transform: uppercase; color: var(--paper); }
-.steps span { display: block; font: 400 .86rem/1.35 var(--serif); color: var(--muted); margin-top: 2px; }
-@media (max-width: 760px) { .key { grid-template-columns: 1fr; gap: 14px; } .steps { grid-template-columns: repeat(3, 1fr); row-gap: 16px; } .frame { padding: 16px; } .ticks { display: none; } .north { right: 26px; top: 26px; width: 26px; height: 42px; } .tools { left: 24px; top: 24px; } }
-.figcap { margin-top: 18px; font: italic 360 .95rem/1.55 var(--serif); color: var(--muted); max-width: 54em; }
-.figcap b { font-style: normal; font: 500 .72rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-right: 10px; }
-.links { display: flex; flex-wrap: wrap; gap: 14px 34px; margin-top: 30px; }
-.go { display: inline-flex; align-items: baseline; gap: 12px; font: 500 .8rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--paper); text-decoration: none; padding: 15px 0 13px; border-bottom: 1px solid var(--gold-2); transition: color .25s, border-color .25s, gap .3s var(--ease); }
-.go:hover { color: var(--gold); border-color: var(--gold); gap: 18px; }
-.go.prime { color: var(--ground); background: var(--gold); border: 0; padding: 15px 22px 13px; }
-.go.prime:hover { background: var(--gold-hot); color: var(--ground); }
+.steps li { padding-right: 6px; }
+.steps li::before { content: ""; display: block; height: 12px; background: var(--c); margin-bottom: 10px; }
+.steps li:first-child::before { box-shadow: inset 0 0 0 1px var(--rule-2); border-radius: 2px 0 0 2px; }
+.steps li:last-child::before { border-radius: 0 2px 2px 0; }
+.steps b { display: block; font: 600 .72rem/1.3 var(--cond); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+.steps span { display: block; font: 400 .8rem/1.35 var(--mono); color: var(--muted); margin-top: 3px; }
+@media (max-width: 760px) { .key { grid-template-columns: 1fr; gap: 14px; } .steps { grid-template-columns: repeat(3, 1fr); row-gap: 14px; } .frame { padding: 14px; } .ticks { display: none; } .north { right: 24px; top: 24px; width: 24px; height: 38px; } .tools { left: 22px; top: 22px; } }
+.figcap { margin-top: 16px; font: 400 .9rem/1.55 var(--sans); color: var(--muted); max-width: 60em; }
+.figcap b { font: 600 .72rem/1 var(--cond); letter-spacing: .12em; text-transform: uppercase; color: var(--sky); margin-right: 8px; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
 
 /* ---------- the verdict ---------- */
-.verdict { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: start; margin-top: 46px; }
-@media (max-width: 960px) { .verdict { grid-template-columns: 1fr; gap: 40px; } }
-.figure { font: 200 clamp(4.4rem, 7.6vw, 7.8rem)/.86 var(--serif); white-space: nowrap; font-variation-settings: "opsz" 72; letter-spacing: -.05em; color: var(--paper); font-variant-numeric: lining-nums tabular-nums; }
-.figure sup { font-size: .32em; vertical-align: .95em; letter-spacing: 0; color: var(--gold); margin-left: .05em; }
-.figure-cap { margin-top: 18px; }
-.ruler { margin-top: 52px; }
+.verdict { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: start; }
+@media (max-width: 960px) { .verdict { grid-template-columns: 1fr; gap: 36px; } }
+.card { border: 1px solid var(--rule); border-radius: 6px; background: var(--deep); padding: 28px 28px 22px; }
+.figure { font: 300 clamp(4rem, 7vw, 6.4rem)/.95 var(--sans); letter-spacing: -.045em; color: var(--ice); white-space: nowrap; }
+.figure-cap { margin-top: 12px; display: block; }
+.ruler { margin-top: 40px; }
 .ruler svg { width: 100%; height: auto; display: block; overflow: visible; }
-.ruler text { font: 500 11px var(--label); letter-spacing: .1em; fill: var(--muted); }
+.ruler text { font: 400 11px var(--mono); fill: var(--muted); }
 .ruler .t1 { stroke: var(--rule-2); } .ruler .t5 { stroke: var(--ink-2); }
 .ruler .base { stroke: var(--ink-2); }
-.ruler .bar20 { stroke: var(--paper); stroke-width: 1.5; }
+.ruler .bar20 { stroke: var(--ink); stroke-width: 1.5; }
 .ruler .bar10 { stroke: var(--muted); stroke-dasharray: 3 3; }
-.ruler .ci { fill: none; stroke: var(--gold); stroke-width: 1.2; }
-.ruler .needle { fill: var(--gold-hot); stroke: var(--ground); stroke-width: 1.5; }
-.ruler text.gold { fill: var(--gold); } .ruler text.paper { fill: var(--paper); }
-.tests { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule-2); }
-.gate { display: grid; grid-template-columns: 34px 1fr auto; gap: 6px 16px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--rule); }
-.gate-n { font: 300 1.4rem/1 var(--serif); color: var(--dim); }
-.gate-what { font: 400 1.05rem/1.4 var(--serif); color: var(--paper); }
-.gate-val { grid-column: 2; font: 500 .74rem/1 var(--label); letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
-.gate-state { grid-column: 3; grid-row: 1 / span 2; align-self: center; font: 500 .72rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; padding: 8px 0 8px 12px; border-left: 1px solid var(--rule); white-space: nowrap; }
-.gate.open .gate-state { color: var(--ink-2); } .gate.open .gate-state::before { content: "✓  "; color: var(--gold); }
-.gate.shut .gate-what { color: var(--gold-hot); }
-.gate.shut .gate-state { color: var(--gold); } .gate.shut .gate-state::before { content: "✕  "; }
-.verdict-line { margin-top: 30px !important; font: italic 300 1.7rem/1.32 var(--serif) !important; color: var(--paper) !important; max-width: 20em !important; }
-.verdict-line i { font-style: normal; color: var(--gold); }
+.ruler .ci { fill: none; stroke: var(--sky); stroke-width: 1.3; }
+.ruler .needle { fill: var(--ice); stroke: var(--space); stroke-width: 1.5; }
+.ruler text.sky { fill: var(--sky); } .ruler text.ink { fill: var(--ink); }
+.tests { list-style: none; margin: 0; padding: 0; }
+.gate { display: grid; grid-template-columns: 32px 1fr auto; gap: 4px 14px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.gate:first-child { border-top: 1px solid var(--rule-2); }
+.gate-n { font: 500 .78rem/1 var(--mono); color: var(--dim); }
+.gate-what { font: 400 1rem/1.4 var(--sans); color: var(--ink); }
+.gate-val { grid-column: 2; font: 400 .8rem/1 var(--mono); color: var(--muted); }
+.gate-state { grid-column: 3; grid-row: 1 / span 2; align-self: center; font: 600 .7rem/1 var(--cond); letter-spacing: .12em; text-transform: uppercase; padding: 7px 10px; border-radius: 4px; white-space: nowrap; }
+.gate.open .gate-state { color: var(--sky); background: rgba(108,196,240,.1); }
+.gate.open .gate-state::before { content: "✓ "; }
+.gate.shut .gate-state { color: #f0c470; background: rgba(184,137,42,.14); }
+.gate.shut .gate-state::before { content: "✕ "; }
+.verdict-line { margin-top: 26px !important; font: 300 1.45rem/1.4 var(--sans) !important; letter-spacing: -.015em; color: var(--ink) !important; max-width: 24em !important; }
+.verdict-line strong { font-weight: 500; color: #f0c470; }
 
 /* ---------- the field ---------- */
-.field { margin-top: 15vh; }
-.race { list-style: none; margin: 26px 0 0; padding: 0; border-top: 1px solid var(--rule-2); }
-.race li { display: grid; grid-template-columns: minmax(210px, 1.15fr) 2fr repeat(3, 80px); align-items: center; gap: 18px; padding: 17px 0; border-bottom: 1px solid var(--rule); }
-.race li.head-row { padding: 12px 0; }
-.race li.head-row span { font: 500 .66rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.field { margin-top: 88px; }
+.race { list-style: none; margin: 18px 0 0; padding: 0; }
+.race li { display: grid; grid-template-columns: minmax(220px, 1.2fr) 2fr repeat(3, 82px); align-items: center; gap: 18px; padding: 15px 0; border-bottom: 1px solid var(--rule); }
+.race li.head-row { padding: 10px 0; border-top: 1px solid var(--rule-2); border-bottom-color: var(--rule-2); }
+.race li.head-row span { font: 600 .68rem/1 var(--cond); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .race li.head-row .n { text-align: right; }
-.race .who b { display: block; font: 450 1.02rem/1.3 var(--serif); color: var(--paper); }
-.race .who span { display: block; font: italic 360 .86rem/1.4 var(--serif); color: var(--muted); margin-top: 2px; }
+.race .who b { display: block; font: 500 .98rem/1.3 var(--sans); color: var(--ink); }
+.race .who span { display: block; font: 400 .84rem/1.4 var(--sans); color: var(--muted); margin-top: 2px; }
 .race .lane { position: relative; height: 14px; }
-.race .run { position: absolute; left: 0; top: 6px; height: 2px; background: var(--dim); width: 0; transition: width 2s var(--ease); transition-delay: var(--d, 0s); }
-.race .run::after { content: ""; position: absolute; right: -4px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--ink-2); }
-.race .ci { position: absolute; top: 2px; height: 10px; border-left: 1px solid var(--muted); border-right: 1px solid var(--muted); opacity: 0; transition: opacity .8s ease 1.6s; }
-.race li.in .ci { opacity: .7; }
-.race li.me .run { background: var(--gold); height: 3px; top: 5px; } .race li.me .run::after { background: var(--gold-hot); box-shadow: 0 0 12px var(--gold); }
-.race li.me .who b { color: var(--gold); }
-.race .n { text-align: right; font: 400 1.02rem/1 var(--serif); font-variant-numeric: lining-nums tabular-nums; color: var(--ink-2); }
-.race li.me .n { color: var(--paper); font-weight: 500; }
+.race .run { position: absolute; left: 0; top: 4px; height: 6px; border-radius: 3px; background: #2a3a52; width: 0; transition: width 1.8s var(--ease); transition-delay: var(--d, 0s); }
+.race .ci { position: absolute; top: 1px; height: 12px; border-left: 1px solid var(--ink-2); border-right: 1px solid var(--ink-2); opacity: 0; transition: opacity .8s ease 1.4s; }
+.race .ci::before { content: ""; position: absolute; left: 0; right: 0; top: 5px; border-top: 1px solid var(--ink-2); }
+.race li.in .ci { opacity: .55; }
+.race li.me .run { background: linear-gradient(90deg, var(--sky-2), var(--sky)); }
+.race li.ref .run { background: #4b5d78; }
+.race li.me .who b { color: var(--sky); }
+.race .n { text-align: right; font: 400 .96rem/1 var(--mono); color: var(--ink-2); }
+.race li.me .n { color: var(--ink); font-weight: 500; }
 @media (max-width: 760px) { .race li { grid-template-columns: 1fr 64px; } .race .lane { grid-column: 1 / -1; order: 3; } .race .n.t, .race .n.h, .race li.head-row .lane-h { display: none; } }
 
 /* ---------- calibration ---------- */
-.duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: 64px; align-items: start; margin-top: 15vh; }
-@media (max-width: 960px) { .duo { grid-template-columns: 1fr; gap: 34px; } }
+.duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 56px; align-items: start; margin-top: 88px; }
+@media (max-width: 960px) { .duo { grid-template-columns: 1fr; gap: 30px; } }
 .chart { position: relative; }
 .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
-.chart text { fill: var(--muted); font: 500 11px var(--label); letter-spacing: .08em; }
-.chart .gl { stroke: rgba(236,229,211,.06); }
+.chart text { fill: var(--muted); font: 400 11px var(--mono); }
+.chart .gl { stroke: rgba(180,194,214,.07); }
 .chart .axis line { stroke: var(--rule-2); }
 .chart .diag { stroke: var(--ink-2); stroke-dasharray: 2 5; }
-.chart .s { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.chart .s { fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .chart .s1 { stroke: var(--s1); } .chart .s2 { stroke: var(--s2); }
-.chart .d1 { fill: var(--s1); stroke: var(--ground); stroke-width: 2; } .chart .d2 { fill: var(--s2); stroke: var(--ground); stroke-width: 2; }
-.chart .lab { font: italic 400 14px var(--serif); fill: var(--paper); letter-spacing: 0; }
+.chart .d1 { fill: var(--s1); stroke: var(--deep); stroke-width: 2; } .chart .d2 { fill: var(--s2); stroke: var(--deep); stroke-width: 2; }
+.chart .lab { font: 500 13px var(--sans); fill: var(--ink); }
 .chart .hit { fill: transparent; cursor: pointer; }
-@media (max-width: 520px) { .chart text { font-size: 14px; } .chart .lab { font-size: 17px; } }
-.keys { display: flex; flex-wrap: wrap; gap: 22px; margin: 0 0 14px; }
-.keys span { display: inline-flex; align-items: center; gap: 9px; font: 500 .7rem/1 var(--label); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
-.keys i { width: 20px; height: 2px; display: inline-block; }
-.keys i.dash { background: repeating-linear-gradient(90deg, var(--ink-2) 0 2px, transparent 2px 6px); }
-.ctip { position: absolute; pointer-events: none; padding: 7px 10px 7px 12px; background: rgba(10,17,14,.95); border-left: 2px solid var(--gold); font: 400 .88rem/1.35 var(--serif); color: var(--paper); white-space: nowrap; transform: translate(-50%, calc(-100% - 12px)); opacity: 0; transition: opacity .12s; }
-.caveats { margin: 26px 0 0; padding: 22px 0 0; border-top: 1px solid var(--rule-2); }
-.caveats ol { margin: 12px 0 0; padding: 0; list-style: none; counter-reset: c; }
-.caveats li { counter-increment: c; position: relative; padding-left: 34px; margin: 0 0 12px; font: 360 .98rem/1.5 var(--serif); color: var(--ink-2); }
-.caveats li::before { content: counter(c, lower-roman) "."; position: absolute; left: 0; top: 0; font-style: italic; color: var(--gold); }
+@media (max-width: 520px) { .chart text { font-size: 14px; } .chart .lab { font-size: 16px; } }
+.keys { display: flex; flex-wrap: wrap; gap: 20px; margin: 0 0 14px; }
+.keys span { display: inline-flex; align-items: center; gap: 8px; font: 600 .7rem/1 var(--cond); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.keys i { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
+.keys i.dash { height: 2px; background: repeating-linear-gradient(90deg, var(--ink-2) 0 2px, transparent 2px 6px); }
+.ctip { position: absolute; pointer-events: none; padding: 7px 10px; background: rgba(5,11,22,.95); border: 1px solid var(--rule-2); border-radius: 4px; font: 400 .8rem/1.35 var(--mono); color: var(--ink); white-space: nowrap; transform: translate(-50%, calc(-100% - 12px)); opacity: 0; transition: opacity .12s; }
+.caveats { margin-top: 24px; padding: 20px 22px 8px; border: 1px solid rgba(184,137,42,.35); border-radius: 6px; background: rgba(184,137,42,.05); }
+.caveats .lbl { color: #f0c470; }
+.caveats ol { margin: 12px 0 0; padding-left: 20px; }
+.caveats li { margin: 0 0 10px; font: 400 .95rem/1.5 var(--sans); color: var(--ink-2); }
+.caveats li::marker { color: #f0c470; font-family: var(--mono); font-size: .85em; }
 
 /* ---------- method ---------- */
-.flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 46px; border-top: 1px solid var(--rule-2); }
-.flow .step { padding: 26px 28px 8px 0; }
-.flow .step + .step { padding-left: 28px; border-left: 1px solid var(--rule); }
-.flow .no { font: 200 3.4rem/1 var(--serif); font-variation-settings: "opsz" 72; color: var(--gold); }
-.flow h3 { margin-top: 14px; }
-.flow p { font-size: 1rem; }
-.flow svg { display: block; width: 100%; height: 58px; margin: 16px 0 8px; overflow: visible; }
+.flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.flow .step { border: 1px solid var(--rule); border-radius: 6px; background: var(--deep); padding: 22px 24px 18px; }
+.flow .no { font: 500 .8rem/1 var(--mono); color: var(--sky); }
+.flow svg { display: block; width: 100%; height: 56px; margin: 16px 0 14px; overflow: visible; }
 .flow svg .ln { stroke: var(--rule-2); fill: none; }
-.flow svg .gd { fill: var(--gold); } .flow svg .gl2 { stroke: var(--gold); fill: none; }
+.flow svg .gd { fill: var(--sky); } .flow svg .gl2 { stroke: var(--sky); fill: none; }
 .flow svg .pulse { animation: pulse 3.2s ease-in-out infinite; }
-@keyframes pulse { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
-@media (max-width: 860px) { .flow { grid-template-columns: 1fr; } .flow .step + .step { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); } }
-.aside { margin-top: 30px !important; font-style: italic; color: var(--muted) !important; max-width: 44em !important; }
+@keyframes pulse { 0%,100% { opacity: .4; } 50% { opacity: 1; } }
+.flow p { font-size: .96rem; margin: 0; }
+@media (max-width: 860px) { .flow { grid-template-columns: 1fr; } }
+.aside { margin-top: 26px !important; color: var(--muted) !important; max-width: 52em !important; font-size: .96rem; }
 
 /* ---------- the seal ---------- */
-.seal { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 64px; align-items: center; margin-top: 46px; }
+.seal { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 56px; align-items: center; }
 @media (max-width: 860px) { .seal { grid-template-columns: 1fr; justify-items: center; } .seal > div:last-child { width: 100%; } }
-.stamp { width: 300px; height: 300px; }
+.stamp { width: 290px; height: 290px; }
 .stamp svg { width: 100%; height: 100%; overflow: visible; }
 .stamp .ring { transform-origin: 150px 150px; animation: turn 240s linear infinite; }
 @keyframes turn { to { transform: rotate(360deg); } }
-.stamp text { font: 500 9.4px var(--label); letter-spacing: 1.6px; fill: var(--gold); }
-.stamp .c { fill: none; stroke: var(--gold-2); }
-.stamp .big { font: italic 300 34px var(--serif); letter-spacing: 0; fill: var(--paper); }
-.stamp .sm { font: 500 9px var(--label); letter-spacing: 2.6px; fill: var(--gold); }
-.code { position: relative; margin: 10px 0 20px; padding: 16px 96px 16px 18px; background: var(--ground-2); border: 1px solid var(--rule); }
-.code pre { margin: 0; line-height: 1.75; color: var(--paper); white-space: pre-wrap; word-break: break-all; }
-.code button { all: unset; cursor: pointer; position: absolute; top: 12px; right: 12px; padding: 8px 12px 7px; border: 1px solid var(--rule-2); font: 500 .66rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2); transition: border-color .2s, color .2s; }
-.code button:hover { border-color: var(--gold); color: var(--gold); }
-.code button:focus-visible { outline: 1px solid var(--gold); }
-.ledger { list-style: none; margin: 18px 0 0; padding: 0; border-top: 1px solid var(--rule-2); }
-.ledger li { display: grid; grid-template-columns: 110px 1fr; gap: 18px; padding: 13px 0; border-bottom: 1px solid var(--rule); }
-.ledger time { font: 500 .74rem/1.6 var(--label); letter-spacing: .12em; color: var(--gold); }
-.ledger span { font: 360 .98rem/1.5 var(--serif); color: var(--ink-2); }
-.rules { list-style: none; margin: 18px 0 0; padding: 0; border-top: 1px solid var(--rule-2); }
-.rules a { display: block; padding: 16px 0; border-bottom: 1px solid var(--rule); text-decoration: none; transition: padding .3s var(--ease); }
-.rules a:hover { padding-left: 10px; color: var(--paper); }
-.rules b { display: block; font: italic 400 1.25rem/1.25 var(--serif); color: var(--paper); }
-.rules a:hover b { color: var(--gold); }
-.rules span { display: block; font: 360 .94rem/1.45 var(--serif); color: var(--muted); margin-top: 2px; }
+.stamp text { font: 400 8.6px var(--mono); letter-spacing: 1px; fill: var(--sky); }
+.stamp .c { fill: none; stroke: var(--sky-2); }
+.stamp .big { font: 300 30px var(--sans); letter-spacing: -.5px; fill: var(--ink); }
+.stamp .sm { font: 600 9px var(--cond); letter-spacing: 2.4px; fill: var(--sky); }
+.code { position: relative; margin: 10px 0 20px; padding: 15px 92px 15px 16px; background: var(--deep); border: 1px solid var(--rule); border-radius: 6px; }
+.code pre { margin: 0; line-height: 1.75; color: var(--ink); white-space: pre-wrap; word-break: break-all; }
+.code button { all: unset; cursor: pointer; position: absolute; top: 10px; right: 10px; padding: 8px 12px; border: 1px solid var(--rule-2); border-radius: 4px; font: 600 .68rem/1 var(--cond); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); transition: border-color .2s, color .2s; }
+.code button:hover { border-color: var(--sky); color: var(--sky); }
+.code button:focus-visible { outline: 2px solid var(--sky); }
+.ledger { list-style: none; margin: 14px 0 0; padding: 0; border-top: 1px solid var(--rule-2); }
+.ledger li { display: grid; grid-template-columns: 104px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+.ledger time { font: 400 .8rem/1.6 var(--mono); color: var(--sky); }
+.ledger span { font: 400 .93rem/1.5 var(--sans); color: var(--ink-2); }
+.rules { list-style: none; margin: 14px 0 0; padding: 0; border-top: 1px solid var(--rule-2); }
+.rules a { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 14px 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink); }
+.rules a::after { content: "→"; grid-column: 2; grid-row: 1 / span 2; align-self: center; color: var(--muted); transition: transform .25s var(--ease), color .25s; }
+.rules a:hover::after { transform: translateX(4px); color: var(--sky); }
+.rules b { font: 500 1rem/1.3 var(--sans); color: var(--ink); }
+.rules a:hover b { color: var(--sky); }
+.rules span { font: 400 .9rem/1.45 var(--sans); color: var(--muted); }
 
-/* ---------- colophon ---------- */
-footer { margin-top: 18vh; border-top: 1px solid var(--rule-2); padding: 56px 0 72px; }
-footer .sig { font: italic 300 clamp(2.2rem, 5vw, 3.8rem)/1.05 var(--serif); font-variation-settings: "opsz" 72; margin: 0 0 38px; color: var(--paper); }
-footer .sig i { font-style: normal; color: var(--gold); }
+/* ---------- footer ---------- */
+footer { margin-top: 120px; border-top: 1px solid var(--rule-2); padding: 48px 0 64px; background: linear-gradient(180deg, var(--deep), var(--space)); }
+footer .sig { font: 300 clamp(1.8rem, 3.6vw, 2.8rem)/1.15 var(--sans); letter-spacing: -.03em; margin: 0 0 36px; color: var(--ink); }
+footer .sig strong { font-weight: 500; color: var(--sky); }
 .colophon { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px; }
-.colophon p { margin: 8px 0 0; font: 360 .9rem/1.55 var(--serif); color: var(--muted); }
+.colophon p { margin: 8px 0 0; font: 400 .88rem/1.55 var(--sans); color: var(--muted); }
 .colophon a { color: var(--ink-2); }
 @media (max-width: 860px) { .colophon { grid-template-columns: 1fr; gap: 22px; } }
 
@@ -288,10 +298,10 @@ footer .sig i { font-style: normal; color: var(--gold); }
 </style>
 </head>
 <body>
-<header class="mast" id="mast">
+<header class="masthead" id="top-bar">
   <div class="wrap">
-    <a class="word" href="#top">Almanac<small>Issue 2027.01</small></a>
-    <nav aria-label="Sections"><a href="#forecast">Forecast</a><a href="#verdict">Verdict</a><a href="#method">Method</a><a href="#verify">Verify</a><a href="%%GITHUB%%">Source</a></nav>
+    <a class="brand" href="#top"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="9.5" fill="none" stroke="#6cc4f0" stroke-opacity=".6"/><path d="M1.5 11h19M11 1.5c-3.4 2.6-3.4 16.4 0 19M11 1.5c3.4 2.6 3.4 16.4 0 19" fill="none" stroke="#6cc4f0" stroke-opacity=".6" stroke-width=".8"/><circle cx="13.5" cy="12.5" r="2.4" fill="#e3f4ff"/></svg>Almanac<span class="tag">2027.01</span></a>
+    <nav aria-label="Sections"><a href="#forecast">Forecast</a><a href="#verdict">Backtest</a><a href="#method">Method</a><a href="#verify">Verify</a><a href="%%GITHUB%%">GitHub</a></nav>
   </div>
 </header>
 
@@ -300,123 +310,120 @@ footer .sig i { font-style: normal; color: var(--gold); }
     <div class="fallback" aria-hidden="true"></div>
     <canvas id="globe" aria-hidden="true"></canvas>
     <div class="veil" aria-hidden="true"></div>
-    <div class="title" id="title">
+    <div class="hero" id="hero">
+      <div class="wrap"><div class="inner">
+        <span class="eyebrow"><i aria-hidden="true"></i>Issue 2027.01 · Amazon &amp; Cerrado · forest loss</span>
+        <h1>Where forest will be lost in <strong>2026</strong></h1>
+        <p class="deck">A forecast for every 640&nbsp;m cell of forest across the Amazon and Cerrado, made from satellite
+        data up to 2025 and sealed before anyone can know. When the 2026 maps arrive, it is graded here, in public, misses included.</p>
+        <div class="cta"><a class="btn primary" href="#forecast">Explore the forecast <span aria-hidden="true">→</span></a><a class="btn" href="#verify">Verify the seal</a></div>
+      </div></div>
+    </div>
+    <div class="facts" id="facts">
       <div class="wrap">
-        <div>
-          <span class="lbl">A forecast of forest loss · Amazon &amp; Cerrado</span>
-          <h1>The forest, <i>foretold.</i></h1>
-          <p class="deck">Where the Amazon and the Cerrado will lose forest in 2026: a forecast for <b>%%HEAD_CELLS%% cells</b>
-          of forest, each 640&nbsp;metres across, sealed before anyone can know, and graded in public when the truth arrives.</p>
-          <div class="byline"><span>Sealed <b>22 Nov 2026</b></span><span>Locked <b>15 Jan 2027</b></span><span>Backtest <b>%%IMPROVEMENT%%</b></span></div>
-        </div>
+        <div class="fact"><b>%%HEAD_CELLS%%</b><span class="lbl">Forest cells forecast</span></div>
+        <div class="fact"><b>%%IMPROVEMENT%%<small>/ +20% bar</small></b><span class="lbl">2025 backtest vs reference</span></div>
+        <div class="fact"><b>22 Nov 2026</b><span class="lbl">Sealed · digest %%SHORT%%</span></div>
+        <div class="fact"><b>15 Jan 2027</b><span class="lbl">Formal lock · graded 2027</span></div>
       </div>
     </div>
-    <div class="descend lbl" id="descend" aria-hidden="true"><i></i>Descend</div>
-    <div class="arrive" id="arrive"><p>The Amazon and the Cerrado</p><span class="lbl gold">%%TILES%% exam tiles · forecast for 2026</span></div>
+    <div class="arrive" id="arrive"><p>The Amazon and the Cerrado</p><span class="lbl">%%TILES%% exam tiles · forecast for 2026</span></div>
     <div class="coords" id="coords" aria-hidden="true"></div>
   </div>
 </section>
 
 <main>
-<section class="chapter" id="forecast">
-  <div class="wrap grid">
-    <div class="margin" data-reveal><div class="numeral">I</div><span class="lbl gold">The forecast</span>
-      <p class="note-m">Plate I is the headline forecast exactly as sealed: no smoothing, no recolouring after the fact.</p></div>
-    <div>
-      <h2 data-reveal>Gold marks where the forest is most at risk.</h2>
-      <p class="dropcap" data-reveal>Every cell of forest is ranked against every other. The brighter the gold, the higher its risk of loss
-      in 2026; the faintest is the safest half, the brightest the top one per cent, a forecast probability of
-      <b>%%TOP1%%</b> or more. In its backtest the model’s probabilities ran high, so read the light as a ranking first.</p>
-    </div>
-  </div>
+<section class="section" id="forecast">
   <div class="wrap">
+    <div class="sec-head" data-reveal><span class="idx">01</span><span class="lbl">The forecast</span></div>
+    <div class="intro" data-reveal>
+      <h2>The brighter the blue, the <strong>higher the risk</strong> of forest loss in 2026.</h2>
+      <p>Every cell of forest is ranked against every other. The faintest blue is the safest half; the brightest, near
+      white, is the top one per cent, a forecast probability of <b>%%TOP1%%</b> or more. The model’s probabilities ran
+      high in its backtest, so read the map as a ranking first.</p>
+    </div>
     <figure class="plate" data-reveal>
-      <div class="plate-head"><h3>Plate I. Risk of forest loss in 2026</h3><span class="lbl">Model M (A2) · %%TILES%% tiles · 640 m cells</span></div>
+      <div class="plate-head"><h3>Map 1 · Risk of forest loss in 2026</h3><span class="lbl">Model M (A2) · %%TILES%% exam tiles · 640 m cells</span></div>
       <div class="frame" id="frame">
         <div class="ticks" id="ticks" aria-hidden="true"></div>
         <div class="viewport" id="viewport">
           <div class="stage" id="stage">
-            <canvas id="map" role="img" aria-label="Map of the forecast risk of forest loss in 2026 on the %%TILES%% exam tiles of the Amazon and Cerrado. Brighter gold means a higher risk rank, from the lowest half to the top one per cent. Rivers and the coast show in deep blue; the held-out region is outlined."></canvas>
+            <canvas id="map" role="img" aria-label="Map of the forecast risk of forest loss in 2026 on the %%TILES%% exam tiles of the Amazon and Cerrado. Brighter blue means a higher risk rank, from the lowest half to the top one per cent, on slate-grey land; the held-out region is outlined in amber."></canvas>
             <canvas id="glow" aria-hidden="true"></canvas>
             <svg id="overlay" aria-hidden="true"></svg>
           </div>
           <div class="tip" id="tip"></div>
         </div>
-        <div class="tools"><button id="zin" type="button" aria-label="Zoom in">+</button><button id="zout" type="button" aria-label="Zoom out">−</button><button id="zreset" type="button" aria-label="Reset zoom">○</button></div>
-        <svg class="north" viewBox="0 0 34 54" aria-hidden="true"><path d="M17 4 L24 30 L17 25 L10 30 Z" fill="#d9b14f"/><path d="M17 25 L24 30 L17 34 Z" fill="none" stroke="#d9b14f" stroke-width=".8"/><text x="17" y="50" text-anchor="middle" fill="#ece5d3" style="font:600 11px 'Barlow Semi Condensed',sans-serif;letter-spacing:.1em">N</text></svg>
+        <div class="tools"><button id="zin" type="button" aria-label="Zoom in">+</button><button id="zout" type="button" aria-label="Zoom out">−</button><button id="zreset" type="button" aria-label="Reset zoom">⤢</button></div>
+        <svg class="north" viewBox="0 0 30 48" aria-hidden="true"><path d="M15 3 L21 26 L15 22 L9 26 Z" fill="#6cc4f0"/><text x="15" y="44" text-anchor="middle" fill="#e8eef7" style="font:600 11px 'IBM Plex Sans Condensed',sans-serif">N</text></svg>
       </div>
-      <div class="readout lbl" id="status" aria-live="polite">Hover or tap the plate · zoom with + and −, then drag</div>
+      <div class="readout" id="status" aria-live="polite">Hover or tap the map · zoom with + and −, then drag</div>
       <div class="key">
-        <div><h4>Risk, ranked among all forecast forest cells</h4><span class="lbl">Forecast probability for each band</span></div>
+        <div><h4>Risk rank among all forecast forest cells</h4><span class="lbl">Forecast probability in each band</span></div>
         <ul class="steps" aria-label="Risk bands from lowest to highest">%%BANDS%%</ul>
       </div>
-      <figcaption class="figcap"><b>Plate I</b>Each pixel, about 1.7&nbsp;km, averages the 640&nbsp;m cells within it. Dark land carries no forecast:
-      beyond the exam tiles, without forest, with too little land, or without a valid 2025 satellite embedding. Faint
-      squares are the %%TILES%% exam tiles, 82&nbsp;km a side; the dashed outline is the held-out region, never seen in training.</figcaption>
+      <figcaption class="figcap"><b>Map 1</b>Each pixel, about 1.7&nbsp;km, averages the 640&nbsp;m cells within it. Slate land carries no
+      forecast: beyond the exam tiles, without forest, with too little land, or without a valid 2025 satellite embedding.
+      Faint squares are the %%TILES%% exam tiles, 82&nbsp;km a side; the amber outline is the held-out region, never seen in training.</figcaption>
     </figure>
-    <div class="links" data-reveal>
-      <a class="go prime" href="%%RELEASE%%">Download the sealed package <span aria-hidden="true">→</span></a>
-      <a class="go" href="%%GITHUB%%/blob/main/docs/phase4/LABEL.md">Read the forecast label <span aria-hidden="true">→</span></a>
+    <div class="actions" data-reveal>
+      <a class="btn primary" href="%%RELEASE%%">Download the sealed package <span aria-hidden="true">→</span></a>
+      <a class="btn" href="%%GITHUB%%/blob/main/docs/phase4/LABEL.md">Read the forecast label</a>
     </div>
   </div>
 </section>
 
-<section class="chapter" id="verdict">
-  <div class="wrap grid">
-    <div class="margin" data-reveal><div class="numeral">II</div><span class="lbl gold">The verdict</span>
-      <p class="note-m">The bar was written down and timestamped before a single model was trained.</p></div>
-    <div>
-      <h2 data-reveal>It has already sat one exam, and fell short of the bar it set itself.</h2>
-      <p data-reveal>Before the 2026 forecast was made, the frozen model was graded once on 2025, on the same %%TILES%% tiles:
-      %%CELLS%% forest cells, %%EVENTS%% of them lost. To count as a win it had to beat the reference by at least
-      twenty per cent.</p>
-      <div class="verdict">
-        <div data-reveal>
-          <div class="figure" id="figure">%%IMPROVEMENT%%</div>
-          <div class="lbl figure-cap">Average precision above the reference · 2025 backtest</div>
-          <div class="ruler" id="ruler" role="img" aria-label="Improvement %%IMPROVEMENT%%, 95% interval %%LO%% to %%HI%%, against the 10% and 20% marks"><svg id="rulersvg" viewBox="0 0 520 96"></svg></div>
-        </div>
-        <div>
-          <ol class="tests">%%COND_ROWS%%</ol>
-          <p class="verdict-line" data-reveal>So the backtest is <i>%%WIN%%</i>, and the bar for 2026 stands unchanged.</p>
-          <p data-reveal style="margin-top:14px">The model was still put forward because it was the best forecast on every part of the test;
-          the reference and every baseline are sealed beside it and graded on the same truth.
-          <a href="%%GITHUB%%/blob/main/docs/adr/0004-gate-2.md">The decision, and the case against it.</a></p>
-        </div>
+<section class="section" id="verdict">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="idx">02</span><span class="lbl">The backtest</span></div>
+    <div class="intro" data-reveal>
+      <h2>Graded once on 2025: the best forecast, but <strong>short of its own bar</strong>.</h2>
+      <p>Before the 2026 forecast was made, the frozen model was scored once on 2025, on the same %%TILES%% tiles:
+      %%CELLS%% forest cells, %%EVENTS%% of them lost. To count as a win it had to beat the reference by at least 20%,
+      a bar written down and timestamped before any model was trained.</p>
+    </div>
+    <div class="verdict">
+      <div class="card" data-reveal>
+        <div class="figure" id="figure">%%IMPROVEMENT%%</div>
+        <span class="lbl figure-cap">Average precision above the reference · 2025</span>
+        <div class="ruler" id="ruler" role="img" aria-label="Improvement %%IMPROVEMENT%%, 95% interval %%LO%% to %%HI%%, against the 10% and 20% marks"><svg id="rulersvg" viewBox="0 0 520 96"></svg></div>
+      </div>
+      <div>
+        <ol class="tests">%%COND_ROWS%%</ol>
+        <p class="verdict-line" data-reveal>So the backtest is <strong>%%WIN%%</strong>. The bar for 2026 is unchanged.</p>
+        <p data-reveal style="margin-top:12px">The model was still put forward because it was the best forecast on every part of
+        the test; the reference and every baseline are sealed beside it and graded on the same truth.
+        <a href="%%GITHUB%%/blob/main/docs/adr/0004-gate-2.md">Read the decision and the case against it</a>.</p>
       </div>
     </div>
-  </div>
-  <div class="wrap grid field">
-    <div class="margin" data-reveal><span class="lbl gold">The field</span><p class="note-m">Whiskers mark the 95% interval of each score.</p></div>
-    <div>
+
+    <div class="field">
       <h3 data-reveal>Every forecast, on the same 2025 truth</h3>
-      <p data-reveal>Average precision rewards placing the cells that were lost at the top of the ranking; a forecast with no
-      skill scores the base rate, %%BASE_RATE%%.</p>
+      <p data-reveal>Average precision rewards placing the cells that were lost at the top of the ranking; a forecast with
+      no skill scores the base rate, %%BASE_RATE%%. Whiskers mark the 95% interval.</p>
       <ul class="race" id="race">
-        <li class="head-row"><span>Forecast</span><span class="lane-h">Average precision, all tiles</span><span class="n">All</span><span class="n t">Test</span><span class="n h">Held out</span></li>
+        <li class="head-row"><span>Forecast</span><span class="lane-h">Average precision · all tiles</span><span class="n">All</span><span class="n t">Test</span><span class="n h">Held out</span></li>
         %%ROWS%%
       </ul>
     </div>
-  </div>
-  <div class="wrap grid">
-    <div class="margin" data-reveal><span class="lbl gold">Calibration</span></div>
-    <div class="duo" style="margin-top:0">
+
+    <div class="duo">
       <div data-reveal>
         <h3>Are the probabilities honest?</h3>
-        <p>Each point is a tenth of the forecast cells, from least to most at risk: what was forecast, against what
-        happened in 2025. On the dotted line a forecast means exactly what it says. The model’s points fall below it in
-        every tenth: it foresaw more loss than came. The trees were better calibrated, though they ranked worse.</p>
-        <div class="caveats"><span class="lbl gold">What is weak, said plainly</span>
+        <p>Each point is a tenth of the forecast cells, from least to most at risk: what was forecast against what happened
+        in 2025. On the dotted line a forecast means exactly what it says. The model’s points fall below it in every
+        tenth: it forecast more loss than happened. The trees were better calibrated, though they ranked worse.</p>
+        <div class="caveats"><span class="lbl">Known weaknesses</span>
           <ol>
-            <li>The probabilities ran high on 2025: read the plate as a ranking of risk first.</li>
-            <li>On the 2024 validation year the model was 4.6% <i>below</i> the reference; a small check, 146 tiles, but on the record.</li>
+            <li>The probabilities ran high on 2025: read the map as a ranking of risk first.</li>
+            <li>On the 2024 validation year the model was 4.6% <i>below</i> the reference; a small check of 146 tiles, but on the record.</li>
             <li>The 2025 test data were read twice, once against the protocol, for an independent re-grade of the same frozen forecasts. Nothing changed; both reads are logged.</li>
             <li>One region, one kind of event, one year ahead.</li>
           </ol>
         </div>
       </div>
       <div class="chart" id="relchart" data-reveal>
-        <div class="keys"><span><i style="background:var(--s1)"></i>Model M (A2)</span><span><i style="background:var(--s2)"></i>Trees (B4)</span><span><i class="dash"></i>Honest</span></div>
+        <div class="keys"><span><i style="background:var(--s1)"></i>Model M (A2)</span><span><i style="background:var(--s2)"></i>Trees (B4)</span><span><i class="dash"></i>Perfect calibration</span></div>
         <svg id="rel" viewBox="0 0 420 352" role="img" aria-label="Reliability on the 2025 backtest: observed loss rate against forecast probability in ten equal bins. The model's points lie below the diagonal; the trees lie close to it."></svg>
         <div class="ctip" id="ctip"></div>
       </div>
@@ -424,78 +431,79 @@ footer .sig i { font-style: normal; color: var(--gold); }
   </div>
 </section>
 
-<section class="chapter" id="method">
-  <div class="wrap grid">
-    <div class="margin" data-reveal><div class="numeral">III</div><span class="lbl gold">The method</span></div>
-    <div>
-      <h2 data-reveal>Five years of light, read as one forecast.</h2>
-      <div class="flow">
-        <div class="step" data-reveal style="--d:.05s"><div class="no">1</div>
-          <svg viewBox="0 0 240 58" aria-hidden="true"><line class="ln" x1="0" y1="50" x2="240" y2="50"/>
-            <g class="pulse"><rect class="gd" x="8" y="30" width="34" height="20" opacity=".25"/><rect class="gd" x="52" y="24" width="34" height="26" opacity=".4"/><rect class="gd" x="96" y="16" width="34" height="34" opacity=".55"/><rect class="gd" x="140" y="20" width="34" height="30" opacity=".75"/><rect class="gd" x="184" y="8" width="34" height="42"/></g></svg>
-          <h3>Five years of Earth</h3>
-          <p>For every 640&nbsp;m cell, AlphaEarth satellite embeddings for 2021 to 2025, sixty-four numbers a year, for the
-          cell and its neighbourhood, with past forest loss and how much forest and land it holds.</p></div>
-        <div class="step" data-reveal style="--d:.18s"><div class="no">2</div>
-          <svg viewBox="0 0 240 58" aria-hidden="true"><line class="ln" x1="0" y1="50" x2="240" y2="50"/>
-            <g class="gl2" stroke-width="1"><path d="M20 40 C 70 6, 170 6, 220 40" opacity=".5"/><path d="M50 40 C 90 16, 150 16, 190 40" opacity=".75"/><path d="M90 40 C 110 26, 130 26, 150 40"/></g>
-            <circle class="gd pulse" cx="120" cy="40" r="5"/></svg>
-          <h3>A model that reads time</h3>
-          <p>A transformer reads each cell’s five-year history together with its neighbours and returns the chance of loss
-          in the year to come. It was trained on 800 tiles that touch no exam tile.</p></div>
-        <div class="step" data-reveal style="--d:.31s"><div class="no">3</div>
-          <svg viewBox="0 0 240 58" aria-hidden="true"><line class="ln" x1="0" y1="50" x2="240" y2="50"/>
-            <circle class="gl2" cx="120" cy="28" r="20"/><circle class="gl2" cx="120" cy="28" r="14" opacity=".5"/><circle class="gd pulse" cx="120" cy="28" r="5"/></svg>
-          <h3>Frozen, then sealed</h3>
-          <p>Three independently trained copies, each calibrated on 2024, averaged. Frozen before the backtest, never
-          refitted, and sealed with a digest before any 2026 truth exists.</p></div>
-      </div>
-      <p class="aside" data-reveal>The reference is the same network without the neighbourhood, trained the same way. It was the best of six
-      candidates on the 2024 validation year, so the bar is the strongest simple competitor, chosen before the model’s backtest.</p>
+<section class="section" id="method">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="idx">03</span><span class="lbl">The method</span></div>
+    <div class="intro" data-reveal>
+      <h2>Five years of satellite data, read as <strong>one forecast</strong>.</h2>
+      <p>The model reads how each place and its neighbourhood have changed, year by year, and estimates the chance that
+      forest there is lost the following year.</p>
     </div>
+    <div class="flow">
+      <div class="step" data-reveal style="--d:.05s"><span class="no">01</span>
+        <svg viewBox="0 0 240 56" aria-hidden="true"><line class="ln" x1="0" y1="50" x2="240" y2="50"/>
+          <g class="pulse"><rect class="gd" x="8" y="30" width="34" height="20" rx="2" opacity=".25"/><rect class="gd" x="52" y="24" width="34" height="26" rx="2" opacity=".4"/><rect class="gd" x="96" y="16" width="34" height="34" rx="2" opacity=".55"/><rect class="gd" x="140" y="20" width="34" height="30" rx="2" opacity=".75"/><rect class="gd" x="184" y="8" width="34" height="42" rx="2"/></g></svg>
+        <h3>Five years of Earth</h3>
+        <p>For every 640&nbsp;m cell, AlphaEarth satellite embeddings for 2021 to 2025, sixty-four numbers a year, for the
+        cell and its neighbourhood, with past forest loss and how much forest and land it holds.</p></div>
+      <div class="step" data-reveal style="--d:.15s"><span class="no">02</span>
+        <svg viewBox="0 0 240 56" aria-hidden="true"><line class="ln" x1="0" y1="50" x2="240" y2="50"/>
+          <g class="gl2" stroke-width="1.2"><path d="M20 42 C 70 6, 170 6, 220 42" opacity=".45"/><path d="M50 42 C 90 16, 150 16, 190 42" opacity=".7"/><path d="M90 42 C 110 26, 130 26, 150 42"/></g>
+          <circle class="gd pulse" cx="120" cy="42" r="5"/></svg>
+        <h3>A model that reads time</h3>
+        <p>A transformer reads each cell’s five-year history together with its neighbours and returns the chance of loss in
+        the year to come. It was trained on 800 tiles that touch no exam tile.</p></div>
+      <div class="step" data-reveal style="--d:.25s"><span class="no">03</span>
+        <svg viewBox="0 0 240 56" aria-hidden="true"><line class="ln" x1="0" y1="50" x2="240" y2="50"/>
+          <circle class="gl2" cx="120" cy="26" r="20"/><circle class="gl2" cx="120" cy="26" r="13" opacity=".5"/><circle class="gd pulse" cx="120" cy="26" r="5"/></svg>
+        <h3>Frozen, then sealed</h3>
+        <p>Three independently trained copies, each calibrated on 2024, averaged. Frozen before the backtest, never refitted,
+        and sealed with a digest before any 2026 truth exists.</p></div>
+    </div>
+    <p class="aside" data-reveal>The reference is the same network without the neighbourhood, trained the same way. It was the best of six
+    candidates on the 2024 validation year, so the bar is the strongest simple competitor, chosen before the model’s backtest.</p>
   </div>
 </section>
 
-<section class="chapter" id="verify">
-  <div class="wrap grid">
-    <div class="margin" data-reveal><div class="numeral">IV</div><span class="lbl gold">The seal</span></div>
-    <div>
-      <h2 data-reveal>Don’t take our word for it. Check the seal.</h2>
-      <div class="seal">
-        <div class="stamp" data-reveal aria-hidden="true">
-          <svg viewBox="0 0 300 300"><defs><path id="circ" d="M150,150 m-122,0 a122,122 0 1,1 244,0 a122,122 0 1,1 -244,0"/></defs>
-            <circle class="c" cx="150" cy="150" r="146" stroke-width="1"/><circle class="c" cx="150" cy="150" r="140" stroke-width=".6"/>
-            <circle class="c" cx="150" cy="150" r="104" stroke-width=".6"/><circle class="c" cx="150" cy="150" r="99" stroke-width="1"/>
-            <g class="ring"><text><textPath href="#circ" textLength="760" lengthAdjust="spacing">%%DIGEST%% ✦</textPath></text></g>
-            <text class="sm" x="150" y="112" text-anchor="middle">ALMANAC · 2027.01</text>
-            <text class="big" x="150" y="160" text-anchor="middle">Sealed</text>
-            <line x1="104" y1="176" x2="196" y2="176" stroke="#b8892a" stroke-width=".6"/>
-            <text class="sm" x="150" y="196" text-anchor="middle">22 · XI · 2026</text>
-          </svg>
-        </div>
-        <div>
-          <p data-reveal>The package is plain <code>.npy</code> layers, a tile list and a canonical manifest. Its digest is the
-          SHA&#8209;256 of the manifest, committed in public on 22 November 2026, before any 2026 truth existed.</p>
-          <div class="code" data-reveal><pre id="digest">%%DIGEST%%</pre><button type="button" data-copy="digest">Copy</button></div>
-          <p data-reveal>Download the package, then run the verifier. It needs only Python and NumPy, and nothing else from the project.</p>
-          <div class="code" data-reveal><pre id="cmd">tar -xf almanac-2027.01.tar
+<section class="section" id="verify">
+  <div class="wrap">
+    <div class="sec-head" data-reveal><span class="idx">04</span><span class="lbl">Verify</span></div>
+    <div class="intro" data-reveal>
+      <h2>Don’t take our word for it. <strong>Check the seal.</strong></h2>
+      <p>The forecast was fixed with a cryptographic digest and published before any 2026 truth existed. Anyone can confirm
+      that the package is the one that was sealed.</p>
+    </div>
+    <div class="seal">
+      <div class="stamp" data-reveal aria-hidden="true">
+        <svg viewBox="0 0 300 300"><defs><path id="circ" d="M150,150 m-122,0 a122,122 0 1,1 244,0 a122,122 0 1,1 -244,0"/></defs>
+          <circle class="c" cx="150" cy="150" r="146" stroke-width="1"/><circle class="c" cx="150" cy="150" r="140" stroke-width=".6" stroke-opacity=".6"/>
+          <circle class="c" cx="150" cy="150" r="104" stroke-width=".6" stroke-opacity=".6"/><circle class="c" cx="150" cy="150" r="99" stroke-width="1"/>
+          <g class="ring"><text><textPath href="#circ" textLength="760" lengthAdjust="spacing">%%DIGEST%% ·</textPath></text></g>
+          <text class="sm" x="150" y="114" text-anchor="middle">ALMANAC · 2027.01</text>
+          <text class="big" x="150" y="160" text-anchor="middle">Sealed</text>
+          <line x1="106" y1="176" x2="194" y2="176" stroke="#3a90c6" stroke-width=".8"/>
+          <text class="sm" x="150" y="196" text-anchor="middle">22 NOV 2026</text>
+        </svg>
+      </div>
+      <div>
+        <p data-reveal>The package is plain <code>.npy</code> layers, a tile list and a canonical manifest. Its digest is the
+        SHA&#8209;256 of the manifest, committed in public on 22 November 2026:</p>
+        <div class="code" data-reveal><pre id="digest">%%DIGEST%%</pre><button type="button" data-copy="digest">Copy</button></div>
+        <p data-reveal>Download the package, then run the verifier. It needs only Python and NumPy, and nothing else from the project:</p>
+        <div class="code" data-reveal><pre id="cmd">tar -xf almanac-2027.01.tar
 python tools/verify_issue.py almanac-2027.01 --digest %%DIGEST%%</pre><button type="button" data-copy="cmd">Copy</button></div>
-          <p data-reveal>The backtest was re-graded by separate code that shares nothing with the grader and reads the truth from
-          the source label files: <b>%%N_OK%% of %%N_CHECKS%%</b> values matched, the largest difference <span style="white-space:nowrap">%%LARGEST%%</span>.</p>
-        </div>
+        <p data-reveal>The backtest was re-graded by separate code that shares nothing with the grader and reads the truth from
+        the source label files: <b>%%N_OK%% of %%N_CHECKS%%</b> values matched, the largest difference <span style="white-space:nowrap">%%LARGEST%%</span>.</p>
       </div>
     </div>
-  </div>
-  <div class="wrap grid" style="margin-top:12vh">
-    <div class="margin" data-reveal><span class="lbl gold">The record</span></div>
-    <div class="duo" style="margin-top:0">
+    <div class="duo">
       <div data-reveal><h3>Every read of the test truth</h3><ol class="ledger">%%TOUCH_ROWS%%</ol></div>
       <div data-reveal><h3>The rules, timestamped</h3>
         <ul class="rules">
-          <li><a href="%%GITHUB%%/blob/main/docs/prereg/2027.01.md"><b>The pre-registration</b><span>Task, exam tiles, metric and the win condition; timestamped 15 November 2026 and anchored in Bitcoin.</span></a></li>
-          <li><a href="%%GITHUB%%/blob/main/docs/prereg/2027.01.amendment-2.md"><b>The amendments</b><span>The model and its stable recipe, each timestamped before the runs it governs.</span></a></li>
-          <li><a href="%%GITHUB%%/blob/main/docs/prereg/proofs/README.md"><b>The proofs</b><span>How to verify every timestamp yourself.</span></a></li>
-          <li><a href="%%GITHUB%%/blob/main/docs/phase2/STATUS.md"><b>Every run</b><span>Including the ones that collapsed, and the full backtest report.</span></a></li>
+          <li><a href="%%GITHUB%%/blob/main/docs/prereg/2027.01.md"><b>Pre-registration</b><span>Task, exam tiles, metric and the win condition; timestamped 15 November 2026 and anchored in Bitcoin.</span></a></li>
+          <li><a href="%%GITHUB%%/blob/main/docs/prereg/2027.01.amendment-2.md"><b>Amendments</b><span>The model and its stable recipe, each timestamped before the runs it governs.</span></a></li>
+          <li><a href="%%GITHUB%%/blob/main/docs/prereg/proofs/README.md"><b>Timestamp proofs</b><span>How to verify every timestamp yourself.</span></a></li>
+          <li><a href="%%GITHUB%%/blob/main/docs/phase2/STATUS.md"><b>Every training run</b><span>Including the ones that collapsed, and the full backtest report.</span></a></li>
         </ul>
       </div>
     </div>
@@ -504,14 +512,14 @@ python tools/verify_issue.py almanac-2027.01 --digest %%DIGEST%%</pre><button ty
 
 <footer>
   <div class="wrap">
-    <p class="sig">Graded in public. <i>Misses included.</i></p>
+    <p class="sig">Graded in public. <strong>Misses included.</strong></p>
     <div class="colophon">
-      <div><span class="lbl gold">Colophon</span><p>Set in Newsreader and Barlow Semi Condensed. Gold leaf on canopy: risk is drawn in one hue of
-      gold, brightening with rank. Generated from the project’s records by <code>build_site.py</code>; forecast built at commit <code>%%COMMIT%%</code>.</p></div>
-      <div><span class="lbl gold">Data</span><p>AlphaEarth Foundations Satellite Embedding dataset, Google and Google DeepMind, CC-BY 4.0.
+      <div><span class="lbl sky">About this page</span><p>Set in IBM Plex. Risk is drawn in one hue of blue, brightening with rank, on slate land.
+      Generated from the project’s records by <code>build_site.py</code>; forecast built at commit <code>%%COMMIT%%</code>.</p></div>
+      <div><span class="lbl sky">Data</span><p>AlphaEarth Foundations Satellite Embedding dataset, Google and Google DeepMind, CC-BY 4.0.
       Hansen, M. C. et al. 2013, Science 342: 850–853; Global Forest Change 2000–2025 v1.13, University of Maryland, CC-BY 4.0.
       Continents: Natural Earth.</p></div>
-      <div><span class="lbl gold">Source</span><p><a href="%%GITHUB%%">github.com/pranavpanchal1326/Almanac</a>, Apache 2.0.
+      <div><span class="lbl sky">Source</span><p><a href="%%GITHUB%%">github.com/pranavpanchal1326/Almanac</a>, Apache 2.0.
       Every number on this page is read from a committed record; none is typed by hand.</p></div>
     </div>
   </div>
@@ -530,21 +538,21 @@ const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const ease = (t) => 1 - Math.pow(1 - t, 3);
 const onView = (el, fn, threshold = 0.3) => { const o = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { o.disconnect(); fn(); } }, { threshold }); o.observe(el); };
 
-/* masthead, reveal, nav */
-const mast = document.getElementById("mast");
-addEventListener("scroll", () => mast.classList.toggle("solid", scrollY > innerHeight * 0.9), { passive: true });
+/* header, reveal, nav */
+const bar = document.getElementById("top-bar");
+addEventListener("scroll", () => bar.classList.toggle("solid", scrollY > 40), { passive: true });
 const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
 document.querySelectorAll("[data-reveal], .race li").forEach((el) => io.observe(el));
-const navLinks = [...document.querySelectorAll(".mast nav a[href^='#']")];
+const navLinks = [...document.querySelectorAll(".masthead nav a[href^='#']")];
 const so = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) navLinks.forEach((a) => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id)); }), { rootMargin: "-45% 0px -50% 0px" });
-document.querySelectorAll("section.chapter").forEach((s) => so.observe(s));
+document.querySelectorAll("section.section").forEach((s) => so.observe(s));
 
 /* data */
 function load(src) { return new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = src; }); }
 function pixels(im) { const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d", { willReadFrequently: true }); x.drawImage(im, 0, 0); return x.getImageData(0, 0, W, H).data; }
 const ready = Promise.all([load("map-data.png"), load("map-land.png")]).then(([d, l]) => ({ data: pixels(d), land: pixels(l) }));
 
-/* plate layers: the ground (land, and inside the region water in deep blue), one canvas per band, a glow of the two brightest */
+/* map layers: slate land and near-black water inside the region, one canvas per band, a glow of the two brightest */
 function layers({ data, land }) {
   const mk = () => { const c = document.createElement("canvas"); c.width = W; c.height = H; return c; };
   const base = mk(), bands = RAMP.map(mk), glow = mk();
@@ -553,7 +561,7 @@ function layers({ data, land }) {
   const gi = glow.getContext("2d").createImageData(W, H), g = gi.data;
   for (let j = 0; j < b.length; j += 4) {
     const a = land[j] / 255, inside = land[j] > 0;
-    b[j] = inside ? 12 + 7 * a : 10; b[j + 1] = inside ? 27 + 2 * a : 17; b[j + 2] = inside ? 36 - 13 * a : 14; b[j + 3] = 255;
+    b[j] = inside ? 7 + 20 * a : 5; b[j + 1] = inside ? 14 + 21 * a : 11; b[j + 2] = inside ? 27 + 22 * a : 22; b[j + 3] = 255;
     const k = data[j + 1];
     if (k !== 255) {
       const c = RAMP[k], o = imgs[k].data; o[j] = c[0]; o[j + 1] = c[1]; o[j + 2] = c[2]; o[j + 3] = 255;
@@ -583,10 +591,9 @@ const toPx = (lon, lat) => [(lon - W0) / MAP.res, (N0 - lat) / MAP.res];
   s += `<text class="scale-t" x="${sx}" y="${sy - 26}">0</text><text class="scale-t" x="${sx + len}" y="${sy - 26}" text-anchor="end">500 KM</text>`;
   s += `<rect class="hover" id="hov" x="-99" y="-99" width="16" height="16"/>`;
   svg.innerHTML = s;
-  // coordinates in the margin of the frame, as on an engraved plate
   const t = document.getElementById("ticks"); let h = "";
-  for (let lon = -70; lon <= -45; lon += 5) { const p = (lon - W0) / (E0 - W0) * 100; h += `<span class="top" style="left:calc(26px + (100% - 52px) * ${p / 100})">${-lon}°W</span><span class="bot" style="left:calc(26px + (100% - 52px) * ${p / 100})">${-lon}°W</span>`; }
-  for (let lat = 5; lat >= -20; lat -= 5) { const p = (N0 - lat) / (N0 - S0) * 100; const l = lat === 0 ? "0°" : Math.abs(lat) + "°" + (lat > 0 ? "N" : "S"); h += `<span class="lft" style="top:calc(26px + (100% - 52px) * ${p / 100})">${l}</span><span class="rgt" style="top:calc(26px + (100% - 52px) * ${p / 100})">${l}</span>`; }
+  for (let lon = -70; lon <= -45; lon += 5) { const p = (lon - W0) / (E0 - W0); h += `<span class="top" style="left:calc(26px + (100% - 52px) * ${p})">${-lon}°W</span><span class="bot" style="left:calc(26px + (100% - 52px) * ${p})">${-lon}°W</span>`; }
+  for (let lat = 5; lat >= -20; lat -= 5) { const p = (N0 - lat) / (N0 - S0); const l = lat === 0 ? "0°" : Math.abs(lat) + "°" + (lat > 0 ? "N" : "S"); h += `<span class="lft" style="top:calc(26px + (100% - 52px) * ${p})">${l}</span><span class="rgt" style="top:calc(26px + (100% - 52px) * ${p})">${l}</span>`; }
   t.innerHTML = h;
 })();
 
@@ -602,10 +609,10 @@ function drawGlow(a) {
   if (a <= 0) return;
   g.globalAlpha = a; g.filter = "blur(9px)"; g.drawImage(LY.glow, 0, 0); g.filter = "none"; g.globalAlpha = 1;
 }
-/* the plate develops like a print: the safest half first, the top one per cent last */
-function develop() {
+/* the map lights up in rank order: the safest half first, the top one per cent last */
+function reveal() {
   if (REDUCED) { compose(RAMP.map(() => 1)); drawGlow(1); return; }
-  const t0 = performance.now(), dur = 3800;
+  const t0 = performance.now(), dur = 3400;
   (function frame(now) {
     const t = (now - t0) / dur;
     compose(RAMP.map((_, i) => ease(clamp((t - i * 0.12) / 0.3, 0, 1))));
@@ -615,9 +622,9 @@ function develop() {
 }
 ready.then((d) => {
   D = d; LY = layers(d); compose(RAMP.map(() => 0));
-  onView(document.getElementById("viewport"), develop, 0.3);
+  onView(document.getElementById("viewport"), reveal, 0.3);
   if (paintGlobe) paintGlobe(d);
-}).catch(() => { document.getElementById("status").textContent = "The plate could not be loaded"; });
+}).catch(() => { document.getElementById("status").textContent = "The map could not be loaded"; });
 
 /* zoom, pan, read */
 const vp = document.getElementById("viewport"), stage = document.getElementById("stage"), frame = document.getElementById("frame"), tip = document.getElementById("tip"), status = document.getElementById("status");
@@ -655,13 +662,13 @@ function read(e) {
   const x = Math.floor((e.clientX - r.left) / r.width * W), y = Math.floor((e.clientY - r.top) / r.height * H);
   if (x < 0 || y < 0 || x >= W || y >= H) return hide();
   const lon = W0 + (x + .5) * MAP.res, lat = N0 - (y + .5) * MAP.res, j = (y * W + x) * 4, b = D.data[j + 1];
-  const where = `${Math.abs(lat).toFixed(2)}°${lat < 0 ? "S" : "N"} · ${Math.abs(lon).toFixed(2)}°W`;
+  const where = `${Math.abs(lat).toFixed(2)}°${lat < 0 ? "S" : "N"}  ${Math.abs(lon).toFixed(2)}°W`;
   let html;
-  if (b === 255) { const l = D.land[j]; html = `<span class="lbl">${where}</span><b>${l > 127 ? "No forecast here" : l > 0 ? "Water" : "Beyond the region"}</b>${l > 127 ? "<span>land without an eligible forest cell</span>" : ""}`; mark(-99, -99); }
-  else { const p = Math.pow(D.data[j] / 255, 2) * 100; html = `<span class="lbl">${where}</span><b>${MAP.bands[b]} of forest cells</b><span>forecast ${p < 1 ? p.toFixed(1) : p.toFixed(0)}% chance of loss in 2026</span>`; mark(x + .5, y + .5); }
+  if (b === 255) { const l = D.land[j]; html = `<span class="lbl">${where}</span><b>${l > 127 ? "No forecast here" : l > 0 ? "Water" : "Outside the region"}</b>${l > 127 ? "<span>Land without an eligible forest cell</span>" : ""}`; mark(-99, -99); }
+  else { const p = Math.pow(D.data[j] / 255, 2) * 100; html = `<span class="lbl">${where}</span><b>${MAP.bands[b]} of forest cells</b><span>Forecast ${p < 1 ? p.toFixed(1) : p.toFixed(0)}% chance of loss in 2026</span>`; mark(x + .5, y + .5); }
   tip.innerHTML = html;
   const vr = vp.getBoundingClientRect(), px = e.clientX - vr.left, py = e.clientY - vr.top;
-  tip.style.left = Math.min(px, vr.width - 240) + "px"; tip.style.top = Math.min(py, vr.height - 100) + "px"; tip.style.opacity = 1;
+  tip.style.left = Math.min(px, vr.width - 250) + "px"; tip.style.top = Math.min(py, vr.height - 100) + "px"; tip.style.opacity = 1;
   status.textContent = b === 255 ? where : `${where} · ${MAP.bands[b]}`;
 }
 
@@ -671,35 +678,34 @@ document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("clic
   catch (e) { b.textContent = "Select it"; }
 }));
 
-/* the verdict: an instrument's ruler, a needle and the interval */
+/* the backtest: a ruler with a needle and the interval */
 (function verdict() {
   const fig = document.getElementById("figure"), s = document.getElementById("rulersvg");
   const L = 10, R = 510, Y = 62, max = 0.25, X = (v) => L + clamp(v, 0, max) / max * (R - L);
   const fmt = (v) => "+" + (v * 100).toFixed(1) + "%";
   let h = `<line class="base" x1="${L}" y1="${Y}" x2="${R}" y2="${Y}"/>`;
   for (let i = 0; i <= 25; i++) { const x = X(i / 100), big = i % 5 === 0; h += `<line class="${big ? "t5" : "t1"}" x1="${x}" y1="${Y}" x2="${x}" y2="${Y + (big ? 12 : 6)}"/>`; if (big) h += `<text x="${x}" y="${Y + 28}" text-anchor="middle">${i}%</text>`; }
-  h += `<line class="bar10" x1="${X(.10)}" y1="${Y - 40}" x2="${X(.10)}" y2="${Y}"/><text x="${X(.10) - 6}" y="${Y - 44}" text-anchor="end">LOWER END NEEDS 10%</text>`;
-  h += `<line class="bar20" x1="${X(.20)}" y1="${Y - 52}" x2="${X(.20)}" y2="${Y + 12}"/><text class="paper" x="${X(.20) + 6}" y="${Y - 44}">THE BAR · 20%</text>`;
-  h += `<path class="ci" id="rci" d="M${X(VERDICT.lo)} ${Y - 14} v-8 H${X(VERDICT.hi)} v8"/><text class="gold" id="rcit" x="${(X(VERDICT.lo) + X(VERDICT.hi)) / 2}" y="${Y - 28}" text-anchor="middle" opacity="0">95% INTERVAL</text>`;
+  h += `<line class="bar10" x1="${X(.10)}" y1="${Y - 40}" x2="${X(.10)}" y2="${Y}"/><text x="${X(.10) - 6}" y="${Y - 44}" text-anchor="end">lower end ≥ 10%</text>`;
+  h += `<line class="bar20" x1="${X(.20)}" y1="${Y - 52}" x2="${X(.20)}" y2="${Y + 12}"/><text class="ink" x="${X(.20) + 6}" y="${Y - 44}">bar · 20%</text>`;
+  h += `<path class="ci" id="rci" d="M${X(VERDICT.lo)} ${Y - 14} v-8 H${X(VERDICT.hi)} v8"/><text class="sky" id="rcit" x="${(X(VERDICT.lo) + X(VERDICT.hi)) / 2}" y="${Y - 28}" text-anchor="middle" opacity="0">95% interval</text>`;
   h += `<path class="needle" id="needle" d="M0 ${Y} l-6 -11 h12 z" transform="translate(${X(0)} 0)"/>`;
   s.innerHTML = h;
   const ci = document.getElementById("rci"), ciLen = ci.getTotalLength(); ci.style.strokeDasharray = ciLen; ci.style.strokeDashoffset = REDUCED ? 0 : ciLen;
-  const show = () => {
-    const needle = document.getElementById("needle");
-    if (REDUCED) { needle.setAttribute("transform", `translate(${X(VERDICT.imp)} 0)`); document.getElementById("rcit").setAttribute("opacity", 1); return; }
-    const t0 = performance.now(), dur = 2200;
+  onView(document.getElementById("ruler"), () => {
+    const needle = document.getElementById("needle"), lab = document.getElementById("rcit");
+    if (REDUCED) { needle.setAttribute("transform", `translate(${X(VERDICT.imp)} 0)`); lab.setAttribute("opacity", 1); return; }
+    const t0 = performance.now(), dur = 2000;
     (function f(now) {
       const t = clamp((now - t0) / dur, 0, 1), e = ease(t);
       fig.textContent = fmt(VERDICT.imp * e); needle.setAttribute("transform", `translate(${X(VERDICT.imp * e)} 0)`);
-      if (t < 1) requestAnimationFrame(f); else { ci.style.transition = "stroke-dashoffset 1.2s cubic-bezier(.22,.7,.12,1)"; ci.style.strokeDashoffset = 0; document.getElementById("rcit").style.transition = "opacity 1s ease .6s"; document.getElementById("rcit").setAttribute("opacity", 1); }
+      if (t < 1) requestAnimationFrame(f); else { ci.style.transition = "stroke-dashoffset 1.1s cubic-bezier(.22,.7,.12,1)"; ci.style.strokeDashoffset = 0; lab.style.transition = "opacity 1s ease .5s"; lab.setAttribute("opacity", 1); }
     })(t0);
-  };
-  onView(document.getElementById("ruler"), show, 0.6);
+  }, 0.6);
 })();
 
 /* the field */
 document.querySelectorAll(".race li[data-ap]").forEach((li, i) => {
-  li.style.setProperty("--d", (i * 0.1) + "s");
+  li.style.setProperty("--d", (i * 0.08) + "s");
   onView(li, () => { li.querySelector(".run").style.width = li.dataset.ap + "%"; }, 0.5);
 });
 
@@ -711,8 +717,8 @@ document.querySelectorAll(".race li[data-ap]").forEach((li, i) => {
   let s = "";
   for (let i = 0; i <= 7; i++) { const v = i * 0.05; s += `<line class="gl" x1="${Lx}" y1="${sy(v)}" x2="${R}" y2="${sy(v)}"/>`; if (i % 2 === 0) s += `<text x="${sx(v)}" y="${B + 20}" text-anchor="middle">${Math.round(v * 100)}%</text><text x="${Lx - 10}" y="${sy(v) + 4}" text-anchor="end">${Math.round(v * 100)}%</text>`; }
   s += `<g class="axis"><line x1="${Lx}" y1="${B}" x2="${R}" y2="${B}"/><line x1="${Lx}" y1="${T}" x2="${Lx}" y2="${B}"/></g>`;
-  s += `<text x="${(Lx + R) / 2}" y="${B + 44}" text-anchor="middle">FORECAST · MEAN OF EACH TENTH</text>`;
-  s += `<text transform="translate(12 ${(T + B) / 2}) rotate(-90)" text-anchor="middle">OBSERVED IN 2025</text>`;
+  s += `<text x="${(Lx + R) / 2}" y="${B + 44}" text-anchor="middle">Forecast · mean of each tenth</text>`;
+  s += `<text transform="translate(12 ${(T + B) / 2}) rotate(-90)" text-anchor="middle">Observed in 2025</text>`;
   s += `<line class="diag" x1="${sx(0)}" y1="${sy(0)}" x2="${sx(max)}" y2="${sy(max)}"/>`;
   [["B4", 2, "Trees (B4)"], ["M_A2", 1, "Model M (A2)"]].forEach(([key, n, name]) => {
     const r = REL[key], pts = r.mean_forecast.map((f, i) => [f, r.observed_rate[i]]);
@@ -723,8 +729,8 @@ document.querySelectorAll(".race li[data-ap]").forEach((li, i) => {
   });
   el.innerHTML = s;
   onView(box, () => {
-    el.querySelectorAll("path.s").forEach((p, i) => { p.style.transition = `stroke-dashoffset 2.4s cubic-bezier(.22,.7,.12,1) ${i * .4}s`; p.style.strokeDashoffset = 0; });
-    el.querySelectorAll("circle:not(.hit)").forEach((c, i) => setTimeout(() => c.setAttribute("r", 4), REDUCED ? 0 : 600 + i * 70));
+    el.querySelectorAll("path.s").forEach((p, i) => { p.style.transition = `stroke-dashoffset 2.2s cubic-bezier(.22,.7,.12,1) ${i * .35}s`; p.style.strokeDashoffset = 0; });
+    el.querySelectorAll("circle:not(.hit)").forEach((c, i) => setTimeout(() => c.setAttribute("r", 4), REDUCED ? 0 : 600 + i * 60));
   }, 0.35);
   el.querySelectorAll(".hit").forEach((c) => {
     const show = () => { const b = box.getBoundingClientRect(), cr = c.getBoundingClientRect(); tipc.textContent = c.dataset.t; tipc.style.left = (cr.left - b.left + cr.width / 2) + "px"; tipc.style.top = (cr.top - b.top + 8) + "px"; tipc.style.opacity = 1; };
@@ -732,7 +738,7 @@ document.querySelectorAll(".race li[data-ap]").forEach((li, i) => {
   });
 })();
 
-/* the globe: an engraved night Earth that turns, then descends on the Amazon */
+/* the planet: Earth from orbit, turning, then descending on the Amazon */
 (async function orbit() {
   const cvs = document.getElementById("globe");
   let THREE, topo, geo;
@@ -749,24 +755,22 @@ document.querySelectorAll(".race li[data-ap]").forEach((li, i) => {
   const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(32, 1, 0.1, 200);
   const small = innerWidth < 700, TW = small ? 2048 : 4096, TH = TW / 2, S = TW / 4096;
 
-  // the engraving: ocean in ink with a fine graticule, land hatched like a copperplate, coasts in gold
+  // the surface: deep ocean, slate continents with a faint relief, light coastlines
   const tex = document.createElement("canvas"); tex.width = TW; tex.height = TH;
   const t = tex.getContext("2d");
-  t.fillStyle = "#070d0a"; t.fillRect(0, 0, TW, TH);
+  const og = t.createLinearGradient(0, 0, 0, TH); og.addColorStop(0, "#071a33"); og.addColorStop(.5, "#0a2446"); og.addColorStop(1, "#071a33");
+  t.fillStyle = og; t.fillRect(0, 0, TW, TH);
   const proj = geo.geoEquirectangular().scale(TW / (2 * Math.PI)).translate([TW / 2, TH / 2]), path = geo.geoPath(proj, t);
-  t.strokeStyle = "rgba(236,229,211,.07)"; t.lineWidth = 1; t.beginPath(); path(geo.geoGraticule().step([10, 10])()); t.stroke();
+  t.strokeStyle = "rgba(180,210,240,.06)"; t.lineWidth = 1; t.beginPath(); path(geo.geoGraticule().step([15, 15])()); t.stroke();
   const world = await fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json").then((r) => r.json()).catch(() => null);
   if (world) {
     const land = topo.feature(world, world.objects.land), borders = topo.mesh(world, world.objects.countries, (a, b) => a !== b);
     t.save(); t.beginPath(); path(land); t.clip();
-    t.fillStyle = "#111c16"; t.fillRect(0, 0, TW, TH);
-    t.strokeStyle = "rgba(236,229,211,.13)"; t.lineWidth = 1.1 * S;
-    const gap = 5.5 * S; t.beginPath();
-    for (let x = -TH; x < TW; x += gap) { t.moveTo(x, TH); t.lineTo(x + TH, 0); }
-    t.stroke();
+    const lg = t.createLinearGradient(0, 0, 0, TH); lg.addColorStop(0, "#1f2a3b"); lg.addColorStop(.5, "#1b2535"); lg.addColorStop(1, "#202b3c");
+    t.fillStyle = lg; t.fillRect(0, 0, TW, TH);
     t.restore();
-    t.strokeStyle = "rgba(217,177,79,.6)"; t.lineWidth = 1.6 * S; t.beginPath(); path(land); t.stroke();
-    t.strokeStyle = "rgba(236,229,211,.14)"; t.lineWidth = 1 * S; t.setLineDash([4 * S, 4 * S]); t.beginPath(); path(borders); t.stroke(); t.setLineDash([]);
+    t.strokeStyle = "rgba(124,192,232,.55)"; t.lineWidth = 1.4 * S; t.beginPath(); path(land); t.stroke();
+    t.strokeStyle = "rgba(180,194,214,.16)"; t.lineWidth = 1 * S; t.beginPath(); path(borders); t.stroke();
   }
   const texture = new THREE.CanvasTexture(tex); texture.colorSpace = THREE.SRGBColorSpace; texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
   const embers = document.createElement("canvas"); embers.width = TW; embers.height = TH;
@@ -786,30 +790,30 @@ document.querySelectorAll(".race li[data-ap]").forEach((li, i) => {
   spin.add(new THREE.Mesh(new THREE.SphereGeometry(1, 160, 160), new THREE.MeshBasicMaterial({ map: texture })));
   const emberMat = new THREE.MeshBasicMaterial({ map: emberTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
   spin.add(new THREE.Mesh(new THREE.SphereGeometry(1.004, 160, 160), emberMat));
-  // terminator: the night side falls into shadow
+  // sunlight from the upper left; the night side falls away
   tilt.add(new THREE.Mesh(new THREE.SphereGeometry(1.002, 96, 96), new THREE.ShaderMaterial({
     transparent: true, depthWrite: false,
     vertexShader: "varying vec3 vN; void main(){ vN = normalize(normalMatrix*normal); gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }",
-    fragmentShader: "varying vec3 vN; void main(){ float l = dot(vN, normalize(vec3(-.55,.4,.75))); gl_FragColor = vec4(.02,.035,.028, smoothstep(.25,-.55,l)*.86); }",
+    fragmentShader: "varying vec3 vN; void main(){ float l = dot(vN, normalize(vec3(-.55,.4,.75))); gl_FragColor = vec4(.008,.02,.045, smoothstep(.25,-.55,l)*.85); }",
   })));
-  // a thin warm limb, like gilt on the edge of a page
-  scene.add(new THREE.Mesh(new THREE.SphereGeometry(1.09, 96, 96), new THREE.ShaderMaterial({
+  // the atmosphere: Earth's thin blue limb
+  scene.add(new THREE.Mesh(new THREE.SphereGeometry(1.1, 96, 96), new THREE.ShaderMaterial({
     side: THREE.BackSide, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false,
     vertexShader: "varying vec3 vN; varying vec3 vP; void main(){ vN = normalize(normalMatrix*normal); vec4 p = modelViewMatrix*vec4(position,1.); vP = p.xyz; gl_Position = projectionMatrix*p; }",
-    fragmentShader: "varying vec3 vN; varying vec3 vP; void main(){ float d = dot(vN, normalize(-vP)); float f = pow(smoothstep(0., -.55, d), 3.); gl_FragColor = vec4(vec3(.85,.69,.31), 1.) * f * .5; }",
+    fragmentShader: "varying vec3 vN; varying vec3 vP; void main(){ float d = dot(vN, normalize(-vP)); float f = pow(smoothstep(0., -.55, d), 2.6); gl_FragColor = vec4(vec3(.32,.62,1.), 1.) * f * .85; }",
   })));
-  const N = small ? 900 : 1700, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+  const N = small ? 900 : 1800, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
   for (let i = 0; i < N; i++) {
     const u = Math.random() * 2 - 1, a = Math.random() * Math.PI * 2, r = 40 + Math.random() * 30, s = Math.sqrt(1 - u * u);
     pos.set([r * s * Math.cos(a), r * u, r * s * Math.sin(a)], i * 3);
-    const w = .25 + Math.random() * .55; col.set([w * .98, w * .93, w * .82], i * 3);
+    const w = .25 + Math.random() * .6; col.set([w * .88, w * .93, w], i * 3);
   }
   const sg = new THREE.BufferGeometry(); sg.setAttribute("position", new THREE.BufferAttribute(pos, 3)); sg.setAttribute("color", new THREE.BufferAttribute(col, 3));
   const stars = new THREE.Points(sg, new THREE.PointsMaterial({ size: small ? .15 : .11, vertexColors: true, transparent: true, opacity: .8, depthWrite: false }));
   scene.add(stars);
   document.querySelector(".orbit .fallback").style.opacity = 0;
 
-  const descend = document.getElementById("descend"), title = document.getElementById("title"), arrive = document.getElementById("arrive"), coords = document.getElementById("coords"), orbitEl = document.querySelector(".orbit");
+  const hero = document.getElementById("hero"), facts = document.getElementById("facts"), arrive = document.getElementById("arrive"), coords = document.getElementById("coords"), orbitEl = document.querySelector(".orbit");
   function size() { const w = cvs.clientWidth, h = cvs.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
   size(); addEventListener("resize", size);
   const rad = Math.PI / 180, target = { lon: -57.5, lat: -9.5 };
@@ -828,13 +832,14 @@ document.querySelectorAll(".race li[data-ap]").forEach((li, i) => {
     const lon = target.lon + drift * (1 - e), lat = (1 - e) * 6 + e * target.lat;
     spin.rotation.y = Math.PI / 2 - (lon + 180) * rad; tilt.rotation.x = lat * rad;
     const far = aspect < 1 ? 6.2 : 4.9, near = aspect < 1 ? 3.1 : 2.45;
-    const dist = far - e * (far - near), off = wide ? -1.15 * (1 - e) : 0, offY = wide ? 0 : 0.95 * (1 - e);
+    const dist = far - e * (far - near), off = wide ? -1.15 * (1 - e) : 0, offY = wide ? 0.08 * (1 - e) : 0.95 * (1 - e);
     camera.position.set(off, offY, dist); camera.lookAt(off, offY, 0);
-    emberMat.opacity = REDUCED ? .8 : 0.45 + 0.35 * (0.5 + 0.5 * Math.sin(time * 0.9));
+    emberMat.opacity = REDUCED ? .8 : 0.5 + 0.35 * (0.5 + 0.5 * Math.sin(time * 0.9));
     stars.rotation.y = time * 0.003;
-    title.style.opacity = clamp(1 - sm * 3, 0, 1); title.style.transform = `translateY(${-sm * 60}px)`;
-    arrive.style.opacity = clamp((sm - 0.62) / 0.2, 0, 1); descend.style.opacity = clamp(1 - sm * 5, 0, 1);
-    coords.innerHTML = `${Math.abs(lat).toFixed(1)}° ${lat < 0 ? "S" : "N"} · ${Math.abs(lon).toFixed(1)}° W<br>ALTITUDE ${Math.round((dist - 1) * 6371).toLocaleString("en")} KM`;
+    const fade = clamp(1 - sm * 3, 0, 1);
+    hero.style.opacity = fade; hero.style.transform = `translateY(${-sm * 60}px)`; facts.style.opacity = fade; facts.style.pointerEvents = fade < .1 ? "none" : "";
+    arrive.style.opacity = clamp((sm - 0.62) / 0.2, 0, 1);
+    coords.innerHTML = `${Math.abs(lat).toFixed(1)}° ${lat < 0 ? "S" : "N"}  ${Math.abs(lon).toFixed(1)}° W<br>alt ${Math.round((dist - 1) * 6371).toLocaleString("en")} km`;
     renderer.render(scene, camera);
   })(t0);
 })();
