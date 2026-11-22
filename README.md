@@ -64,6 +64,12 @@ ones that collapsed: [Phase 2 status](docs/phase2/STATUS.md).
   [How to verify](docs/prereg/proofs/README.md).
 - **Every read of the test truth** is logged: [test_touch_log.jsonl](docs/phase1/test_touch_log.jsonl).
 
+## Scorecard page
+
+`site/index.html` is the issue's public page: the claim, the 2026 map, the backtest, the win
+condition, the weaknesses, the digest and every read of the test truth. It is generated from the
+committed records by `python tools/phase4/build_site.py`; no number on it is typed by hand.
+
 ## Verify a forecast package
 
 The locked package is plain `.npy` layers, `tiles.csv` and a canonical manifest; its digest is the
