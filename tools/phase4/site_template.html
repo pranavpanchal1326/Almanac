@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Almanac issue 2027.01</title>
+<meta name="description" content="A forecast of forest loss in the Amazon and Cerrado for 2026, sealed before the truth exists and graded in public: the map, the rules, the backtest and how to verify it.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Almanac issue 2027.01: where will forest be lost in 2026?">
+<meta property="og:description" content="A forecast sealed before the truth exists, with its rules, its backtest (%%IMPROVEMENT%% over the reference, short of the +20% bar) and how to verify it.">
+<meta property="og:url" content="%%SITE_URL%%">
+<meta property="og:image" content="%%SITE_URL%%og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23d85b23'/%3E%3Cpath d='M8 23 16 8l8 15z' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root {
+  color-scheme: light;
+  --surface: #fcfcfb; --surface-2: #f3f2ef; --surface-3: #e9e7e2; --ink: #1d1d1b; --ink-2: #4a4a46; --muted: #6f6f69;
+  --rule: #dcdbd6; --accent: #b0441a; --link: #256abf;
+  --land: #e2e0d9; --grid: rgba(60,60,55,.22); --tile: rgba(60,60,55,.35); --held: #2b2b28;
+  --series-1: #2a78d6; --series-2: #eb6834; --bar: #c9c7c0; --bar-head: #d85b23;
+  --yes-bg: #e3f1e6; --yes-ink: #1f6b33; --no-bg: #f8e4e1; --no-ink: #9c2b1f;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface: #1a1a19; --surface-2: #232322; --surface-3: #2d2d2b; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #9a9993;
+    --rule: #383835; --accent: #f07a45; --link: #86b6ef;
+    --land: #34342f; --grid: rgba(220,220,210,.16); --tile: rgba(220,220,210,.28); --held: #f0efec;
+    --series-1: #3987e5; --series-2: #d95926; --bar: #4a4a45; --bar-head: #f07a45;
+    --yes-bg: #1e3524; --yes-ink: #9fd8ae; --no-bg: #3d211d; --no-ink: #f0a99f;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #1a1a19; --surface-2: #232322; --surface-3: #2d2d2b; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #9a9993;
+  --rule: #383835; --accent: #f07a45; --link: #86b6ef;
+  --land: #34342f; --grid: rgba(220,220,210,.16); --tile: rgba(220,220,210,.28); --held: #f0efec;
+  --series-1: #3987e5; --series-2: #d95926; --bar: #4a4a45; --bar-head: #f07a45;
+  --yes-bg: #1e3524; --yes-ink: #9fd8ae; --no-bg: #3d211d; --no-ink: #f0a99f;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 64px; }
+body { margin: 0; background: var(--surface); color: var(--ink);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+a { color: var(--link); text-underline-offset: 2px; }
+code, pre { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .86rem; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+header.top { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+header.top .wrap { display: flex; align-items: center; gap: 14px; height: 52px; }
+.brand { font-weight: 700; color: var(--ink); text-decoration: none; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.brand i { width: 18px; height: 18px; border-radius: 5px; background: var(--bar-head); display: inline-block; }
+nav.sections { display: flex; gap: 14px; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
+nav.sections::-webkit-scrollbar { display: none; }
+nav.sections a { color: var(--ink-2); text-decoration: none; font-size: .9rem; white-space: nowrap; }
+nav.sections a:hover { color: var(--ink); }
+.icon-btn { border: 1px solid var(--rule); background: var(--surface-2); color: var(--ink); border-radius: 8px;
+  height: 32px; min-width: 32px; padding: 0 9px; cursor: pointer; font: inherit; font-size: .85rem; display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
+.icon-btn:hover { background: var(--surface-3); }
+section { padding: 8px 0; }
+h1 { font-size: clamp(1.9rem, 4.6vw, 3rem); line-height: 1.08; margin: 12px 0 14px; letter-spacing: -0.02em; max-width: 20ch; }
+h2 { font-size: 1.45rem; margin: 56px 0 10px; letter-spacing: -0.01em; }
+h3 { font-size: 1.05rem; margin: 24px 0 8px; }
+p { margin: 0 0 12px; color: var(--ink-2); max-width: 70ch; }
+.eyebrow { font-size: .78rem; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin: 36px 0 0; }
+.lede { font-size: 1.12rem; color: var(--ink); max-width: 62ch; }
+.verdict { display: inline-block; margin: 4px 0 0; padding: 7px 14px; border-radius: 12px;
+  background: var(--surface-2); font-size: .92rem; color: var(--ink-2); max-width: 100%; }
+.verdict b { color: var(--ink); }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 28px 0 8px; }
+@media (max-width: 860px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stat { background: var(--surface-2); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.stat b { display: block; font-size: 1.45rem; font-variant-numeric: tabular-nums; line-height: 1.25; }
+.stat b.clip { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat span { font-size: .84rem; color: var(--muted); line-height: 1.4; display: block; margin-top: 2px; }
+@media (max-width: 420px) { .stat b { font-size: 1.2rem; } }
+.timeline { list-style: none; padding: 0; margin: 24px 0 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.timeline li { position: relative; padding: 20px 12px 0 0; font-size: .84rem; color: var(--muted); line-height: 1.38; }
+.timeline li::before { content: ""; position: absolute; top: 5px; left: 0; right: 0; height: 2px; background: var(--rule); }
+.timeline li::after { content: ""; position: absolute; top: 0; left: 0; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--muted); box-sizing: border-box; }
+.timeline li.done::before { background: var(--bar-head); }
+.timeline li.done::after { background: var(--bar-head); border-color: var(--bar-head); }
+.timeline li.now::before { background: linear-gradient(90deg, var(--bar-head) 0 30%, var(--rule) 30%); }
+.timeline li.now::after { box-shadow: 0 0 0 4px color-mix(in srgb, var(--bar-head) 30%, transparent); }
+.timeline b { display: block; color: var(--ink); font-size: .9rem; }
+@media (max-width: 700px) {
+  .timeline { grid-template-columns: 1fr; }
+  .timeline li { padding: 0 0 14px 26px; }
+  .timeline li::before, .timeline li.now::before { top: 14px; bottom: -2px; left: 5px; right: auto; width: 2px; height: auto; background: var(--rule); }
+  .timeline li.done:not(.now)::before { background: var(--bar-head); }
+  .timeline li:last-child::before { display: none; }
+}
+/* map */
+.mapcard { margin-top: 16px; border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; background: var(--surface-2); }
+.mapbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; padding: 10px 12px; border-bottom: 1px solid var(--rule); }
+.readout { font-size: .86rem; color: var(--ink-2); font-variant-numeric: tabular-nums; min-height: 1.4em; flex: 1; min-width: 200px; }
+.readout b { color: var(--ink); }
+.tools { display: flex; gap: 6px; }
+.viewport { position: relative; overflow: hidden; touch-action: none; cursor: crosshair; background: var(--surface); aspect-ratio: 2267 / 2000; }
+.viewport.zoomed { cursor: grab; }
+.viewport.drag { cursor: grabbing; }
+.stage { position: absolute; inset: 0; transform-origin: 0 0; --k: 1; --u: 3; }
+.stage canvas, .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.stage svg { pointer-events: none; }
+.stage svg .grid { stroke: var(--grid); stroke-width: calc(1px / var(--k)); vector-effect: non-scaling-stroke; fill: none; }
+.stage svg .tile { stroke: var(--tile); fill: none; stroke-width: calc(.8px / var(--k)); vector-effect: non-scaling-stroke; }
+.stage svg .held { stroke: var(--held); fill: none; stroke-width: calc(1.6px / var(--k)); stroke-dasharray: calc(6px / var(--k)) calc(4px / var(--k)); vector-effect: non-scaling-stroke; }
+.stage svg text { fill: var(--muted); font-family: system-ui, sans-serif; font-weight: 600; font-size: calc(12px * var(--u) / var(--k)); paint-order: stroke; stroke: var(--surface); stroke-width: calc(3px * var(--u) / var(--k)); stroke-linejoin: round; }
+.stage svg text.held-label { fill: var(--held); font-size: calc(13px * var(--u) / var(--k)); }
+.stage svg .scale { stroke: var(--ink-2); stroke-width: calc(2px / var(--k)); vector-effect: non-scaling-stroke; }
+.stage svg .hover { stroke: var(--ink); stroke-width: calc(2px / var(--k)); fill: none; vector-effect: non-scaling-stroke; }
+.legend { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 18px; padding: 12px; margin: 0; border-top: 1px solid var(--rule); font-size: .84rem; color: var(--ink-2); }
+@media (max-width: 700px) { .legend { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.legend li { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.legend b { color: var(--ink); font-weight: 600; }
+.sw { width: 16px; height: 16px; border-radius: 4px; background: var(--l); flex: none; }
+:root[data-theme="dark"] .sw { background: var(--d); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sw { background: var(--d); } }
+.note { font-size: .85rem; color: var(--muted); margin-top: 10px; max-width: 82ch; }
+/* tables */
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+thead th { font-size: .76rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.nowrap { white-space: nowrap; }
+tbody th { font-weight: 500; }
+.fname { display: block; font-weight: 600; color: var(--ink); }
+.fwhat { display: block; font-size: .8rem; color: var(--muted); font-weight: 400; max-width: 44ch; line-height: 1.4; }
+tr.head { background: color-mix(in srgb, var(--bar-head) 9%, transparent); }
+tr.head td.num { font-weight: 700; color: var(--ink); }
+td.bar { width: 26%; min-width: 120px; }
+.track { position: relative; display: block; height: 14px; }
+.fill { position: absolute; left: 0; top: 3px; height: 8px; border-radius: 0 4px 4px 0; background: var(--bar); }
+tr.head .fill { background: var(--bar-head); }
+.ci { position: absolute; top: 6px; height: 2px; background: var(--ink); opacity: .45; }
+.ci::before, .ci::after { content: ""; position: absolute; top: -3px; width: 2px; height: 8px; background: inherit; }
+.ci::before { left: 0; } .ci::after { right: 0; }
+.tag { display: inline-block; font-size: .8rem; font-weight: 600; padding: 2px 10px; border-radius: 999px; white-space: nowrap; }
+.tag.yes { background: var(--yes-bg); color: var(--yes-ink); }
+.tag.yes::before { content: "✓ "; }
+.tag.no { background: var(--no-bg); color: var(--no-ink); }
+.tag.no::before { content: "✕ "; }
+/* method */
+.flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: stretch; margin-top: 16px; }
+.flow .step { background: var(--surface-2); border-radius: 12px; padding: 14px; font-size: .9rem; color: var(--ink-2); line-height: 1.5; }
+.flow .step b { display: block; color: var(--ink); margin-bottom: 4px; }
+.flow .arrow { align-self: center; color: var(--muted); font-size: 1.3rem; }
+@media (max-width: 760px) { .flow { grid-template-columns: 1fr; } .flow .arrow { justify-self: center; transform: rotate(90deg); } }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+@media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+/* chart */
+.chart { background: var(--surface-2); border-radius: 12px; padding: 14px 12px 8px; position: relative; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart .axis line { stroke: var(--rule); }
+.chart .gl { stroke: var(--rule); stroke-dasharray: 2 4; }
+.chart text { fill: var(--muted); font: 12px system-ui, sans-serif; }
+.chart .diag { stroke: var(--muted); stroke-dasharray: 5 5; }
+.chart .s1 { stroke: var(--series-1); fill: none; stroke-width: 2; }
+.chart .s2 { stroke: var(--series-2); fill: none; stroke-width: 2; }
+.chart .d1 { fill: var(--series-1); stroke: var(--surface-2); stroke-width: 2; }
+.chart .d2 { fill: var(--series-2); stroke: var(--surface-2); stroke-width: 2; }
+.chart .lab { font-weight: 600; fill: var(--ink-2); }
+@media (max-width: 520px) { .chart text { font-size: 15px; } }
+.chart .hit { fill: transparent; cursor: pointer; }
+.keys { display: flex; flex-wrap: wrap; gap: 16px; font-size: .84rem; color: var(--ink-2); margin: 0 0 8px 4px; }
+.keys span { display: inline-flex; align-items: center; gap: 6px; }
+.keys i { width: 16px; height: 3px; border-radius: 2px; display: inline-block; }
+.keys i.dash { background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 7px) !important; height: 2px; }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--surface); font-size: .8rem; line-height: 1.35;
+  padding: 6px 9px; border-radius: 8px; white-space: nowrap; transform: translate(-50%, calc(-100% - 12px)); opacity: 0; transition: opacity .1s; z-index: 5; }
+/* lists, code */
+ul.plain { padding-left: 20px; color: var(--ink-2); max-width: 74ch; margin: 8px 0; }
+ul.plain li { margin-bottom: 8px; }
+.codebox { position: relative; background: var(--surface-2); border-radius: 10px; padding: 12px 84px 12px 14px; margin: 8px 0 14px; }
+.codebox pre { margin: 0; white-space: pre-wrap; word-break: break-all; color: var(--ink); }
+.codebox button { position: absolute; top: 8px; right: 8px; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 4px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: .92rem;
+  border: 1px solid var(--rule); color: var(--ink); background: var(--surface-2); }
+.btn:hover { background: var(--surface-3); }
+.btn.primary { background: var(--bar-head); border-color: var(--bar-head); color: #fff; }
+:root[data-theme="dark"] .btn.primary { color: #1a1a19; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #1a1a19; } }
+.weak { border-left: 3px solid var(--accent); padding: 2px 0 2px 16px; margin-top: 18px; }
+.weak p:first-child { color: var(--ink); font-weight: 600; margin-bottom: 4px; }
+footer { margin: 64px 0 0; padding: 20px 0 40px; border-top: 1px solid var(--rule); font-size: .84rem; color: var(--muted); }
+footer p { color: var(--muted); max-width: 92ch; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .tip { transition: none; } }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#top"><i aria-hidden="true"></i>Almanac 2027.01</a>
+  <nav class="sections" aria-label="Sections">
+    <a href="#forecast">Forecast</a><a href="#backtest">Backtest</a><a href="#method">Method</a>
+    <a href="#verify">Verify</a><a href="#rules">Rules</a>
+  </nav>
+  <button class="icon-btn" id="theme" type="button" aria-label="Switch between light and dark theme" title="Light or dark">◐</button>
+  <a class="icon-btn" href="%%GITHUB%%">GitHub</a>
+</div></header>
+
+<main class="wrap" id="top">
+<section>
+  <p class="eyebrow">Almanac · issue 2027.01 · forest loss · Amazon and Cerrado</p>
+  <h1>Where will forest be lost in 2026? A forecast made before anyone can know.</h1>
+  <p class="lede">For every 640 m cell of forest on %%TILES%% exam tiles, the probability that at least
+  2.5% of it (about 1 hectare) is lost in 2026. The forecast and the rules that grade it were fixed
+  before the 2026 loss maps exist. When they are published, it is graded here, in public, misses included.</p>
+  <p class="verdict">Backtest on 2025: <b>%%IMPROVEMENT%%</b> over the reference, short of the <b>+20%</b> bar, so <b>%%WIN%%</b>. The bar for 2026 is unchanged.</p>
+
+  <div class="stats">
+    <div class="stat"><b>%%IMPROVEMENT%%</b><span>average precision over the reference, 2025 backtest (needs +20%)</span></div>
+    <div class="stat"><b>%%LO%% to %%HI%%</b><span>95% interval of that improvement (lower end needs +10%)</span></div>
+    <div class="stat"><b class="clip" title="%%DIGEST%%">%%SHORT%%…</b><span>package digest, published 22 Nov 2026, before any 2026 truth</span></div>
+    <div class="stat"><b>15 Jan 2027</b><span>formal lock: timestamps, two signatures, archive deposit</span></div>
+  </div>
+
+  <ol class="timeline" aria-label="Timeline">
+    <li class="done"><b>15 Nov 2026</b>Rules and win condition timestamped, before any model was trained</li>
+    <li class="done"><b>21 Nov 2026</b>Backtest on 2025, graded once</li>
+    <li class="done now"><b>22 Nov 2026</b>2026 forecast made and sealed; digest published</li>
+    <li><b>15 Jan 2027</b>Formal lock</li>
+    <li><b>2027</b>Exam: graded on the 2026 forest-loss maps when they are published</li>
+  </ol>
+</section>
+
+<section id="forecast">
+  <h2>The 2026 forecast</h2>
+  <p>The headline forecast, model M (A2), covers %%HEAD_CELLS%% forest cells. Colours rank each place
+  against all the others: the darkest band is the 1% of cells with the highest risk (probability
+  %%TOP1%% or more). The backtest showed the model’s probabilities run high, so read the ranking
+  first. Hover or tap for a place’s value; zoom with the buttons or a double-click, then drag.</p>
+  <div class="mapcard">
+    <div class="mapbar">
+      <div class="readout" id="readout" aria-live="polite">Hover or tap the map</div>
+      <div class="tools">
+        <button class="icon-btn" id="zin" type="button" aria-label="Zoom in">+</button>
+        <button class="icon-btn" id="zout" type="button" aria-label="Zoom out">−</button>
+        <button class="icon-btn" id="zreset" type="button">Reset</button>
+      </div>
+    </div>
+    <div class="viewport" id="viewport">
+      <div class="stage" id="stage">
+        <canvas id="map" role="img" aria-label="Map of the forecast risk of forest loss in 2026 on the %%TILES%% exam tiles of the Amazon and Cerrado, shaded by risk rank from the lowest half to the top 1%, over the land of the region, with the held-out region outlined."></canvas>
+        <svg id="overlay" aria-hidden="true"></svg>
+      </div>
+      <noscript><img src="og.png" alt="Preview of the 2026 forecast map" style="width:100%"></noscript>
+    </div>
+    <ul class="legend" aria-label="Risk bands, by rank among all forecast cells">%%BANDS%%</ul>
+  </div>
+  <p class="note">Each map pixel (about 1.7 km) averages the 640 m cells inside it. Grey is land in the
+  region with no forecast: outside the exam tiles, or a cell without forest, with too little land or
+  without a valid 2025 satellite embedding. Faint squares: the %%TILES%% exam tiles, 82 km each.
+  Dashed box: the held-out region, never used in training. Grid every 5°.</p>
+  <div class="cta">
+    <a class="btn primary" href="%%RELEASE%%">Download the sealed package</a>
+    <a class="btn" href="%%GITHUB%%/blob/main/docs/phase4/LABEL.md">Read the forecast label</a>
+  </div>
+</section>
+
+<section id="backtest">
+  <h2>The backtest: graded once, on 2025</h2>
+  <p>Before the forecast was made, the frozen model was scored once on 2025, on the same %%TILES%%
+  tiles: %%CELLS%% forest cells, %%EVENTS%% of them lost. Average precision (AP) rewards putting the
+  cells that were lost at the top of the ranking; a forecast with no skill scores the base rate,
+  %%BASE_RATE%%. Bars: AP on all tiles; whiskers: its 95% interval.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Forecast</th><th>AP, all tiles</th><th class="num">All 499</th><th class="num">Test 379</th><th class="num">Held-out 120</th></tr></thead>
+    <tbody>%%ROWS%%</tbody>
+  </table></div>
+
+  <h3>The win condition, applied to the backtest</h3>
+  <p>Fixed and timestamped before any model was trained. All three must hold.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Condition</th><th class="num">Result</th><th>Status</th></tr></thead>
+    <tbody>%%COND_ROWS%%</tbody>
+  </table></div>
+  <p style="margin-top:14px">So the backtest is <b>%%WIN%%</b>. The model was still put forward as the
+  headline because it was the best forecast on every part of the test; the 20% bar for 2026 was not
+  moved, and the reference and every baseline are locked beside it and graded on the same truth.
+  <a href="%%GITHUB%%/blob/main/docs/adr/0004-gate-2.md">The decision, and the case against it</a>.</p>
+
+  <div class="two" style="margin-top:28px">
+    <div>
+      <h3>Are the probabilities honest?</h3>
+      <p>Each point is one tenth of the forecast cells, from least to most risky: what was forecast
+      against what happened in 2025. Points on the dashed line are perfectly calibrated. The model’s
+      points sit below it: it forecast more loss than happened, in every tenth. The trees (B4) were
+      better calibrated, though they ranked worse.</p>
+      <div class="weak">
+        <p>What is weak, said plainly</p>
+        <ul class="plain">
+          <li>The probabilities ran high on 2025: read the map as a ranking of risk first.</li>
+          <li>On the 2024 validation year the model was 4.6% <i>below</i> the reference; that check had only 146 tiles, but it is part of the record.</li>
+          <li>The 2025 test data were read twice: once for the graded backtest and once, against the protocol, for an independent re-grade of the same frozen forecasts. Nothing changed; both reads are logged below.</li>
+          <li>One region, one kind of event, one year ahead.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chart" id="relchart">
+      <div class="keys"><span><i style="background:var(--series-1)"></i>Model M (A2)</span><span><i style="background:var(--series-2)"></i>Trees (B4)</span><span><i class="dash"></i>Perfect calibration</span></div>
+      <svg id="rel" viewBox="0 0 420 350" role="img" aria-label="Reliability on the 2025 backtest: observed loss rate against forecast probability in ten equal bins, for the model and for gradient-boosted trees. The model's points lie below the diagonal."></svg>
+      <div class="tip" id="reltip"></div>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <h2>How the forecast is made</h2>
+  <div class="flow">
+    <div class="step"><b>Inputs, up to 2025</b>For each 640 m cell: five years (2021–2025) of AlphaEarth
+    satellite embeddings, 64 numbers a year, for the cell and its neighbourhood; past forest loss;
+    forest and land share.</div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="step"><b>Model M (A2)</b>A transformer reads each cell’s five-year history together
+    with its neighbours and gives the chance of loss the next year. Trained on 800 tiles that touch
+    no exam tile.</div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="step"><b>Forecast for 2026</b>Three independently trained copies, each calibrated on
+    2024, averaged. Frozen before the backtest and not refitted since.</div>
+  </div>
+  <p class="note">The reference, B5, is the same network without the neighbourhood, trained the same
+  way. It was the best of six candidates on the 2024 validation year, so the bar is the strongest
+  simple competitor, chosen before the model’s backtest.</p>
+</section>
+
+<section id="verify">
+  <h2>Check it yourself</h2>
+  <p>The package is plain <code>.npy</code> layers, a tile list and a canonical manifest. Its digest is
+  the SHA-256 of the manifest, committed to the repository on 22 November 2026:</p>
+  <div class="codebox"><pre id="digest">%%DIGEST%%</pre><button class="icon-btn" type="button" data-copy="digest">Copy</button></div>
+  <p>Download the package from the release, then run the verifier. It needs only Python and NumPy and
+  imports nothing else from the project:</p>
+  <div class="codebox"><pre id="cmd">tar -xf almanac-2027.01.tar
+python tools/verify_issue.py almanac-2027.01 --digest %%DIGEST%%</pre><button class="icon-btn" type="button" data-copy="cmd">Copy</button></div>
+  <p>The backtest was re-graded by separate code that shares nothing with the grader, reading the
+  truth from the source label files: %%N_OK%% of %%N_CHECKS%% values matched, the largest difference %%LARGEST%%.</p>
+
+  <h3>Every read of the test truth (%%N_TOUCH%%)</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Date (UTC)</th><th>What</th></tr></thead>
+    <tbody>%%TOUCH_ROWS%%</tbody>
+  </table></div>
+</section>
+
+<section id="rules">
+  <h2>The rules and their proofs</h2>
+  <ul class="plain">
+    <li><a href="%%GITHUB%%/blob/main/docs/prereg/2027.01.md">Pre-registration 2027.01</a>: the task, the exam tiles, the metric and the win condition, timestamped on 15 November 2026 by FreeTSA and DigiCert and anchored in Bitcoin.</li>
+    <li><a href="%%GITHUB%%/blob/main/docs/prereg/2027.01.amendment-1.md">Amendment 1</a> (the model) and <a href="%%GITHUB%%/blob/main/docs/prereg/2027.01.amendment-2.md">amendment 2</a> (the stable recipe and the reference), each timestamped before the runs it governs.</li>
+    <li><a href="%%GITHUB%%/blob/main/docs/prereg/proofs/README.md">How to verify the timestamps</a>.</li>
+    <li><a href="%%GITHUB%%/blob/main/docs/phase2/STATUS.md">Every training run</a>, including the ones that collapsed, and the <a href="%%GITHUB%%/blob/main/docs/phase2/stage_b_report.md">full backtest report</a>.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>Generated from the project’s records by <code>tools/phase4/build_site.py</code>; forecast built at
+  commit <code>%%COMMIT%%</code>. Code: <a href="%%GITHUB%%">github.com/pranavpanchal1326/Almanac</a> (Apache 2.0).</p>
+  <p>Input data: AlphaEarth Foundations Satellite Embedding dataset, produced by Google and Google
+  DeepMind, used under CC-BY 4.0. Forest labels and land mask: Hansen, M. C. et al. 2013, Science 342:
+  850–853; Global Forest Change 2000–2025 v1.13, University of Maryland, under CC-BY 4.0.</p>
+</footer>
+</main>
+
+<script>
+const MAP = %%MAPJSON%%;
+const REL = %%RELJSON%%;
+const root = document.documentElement;
+const media = matchMedia("(prefers-color-scheme: dark)");
+const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : media.matches;
+const cssVar = (n) => getComputedStyle(root).getPropertyValue(n).trim();
+try { const t = localStorage.getItem("almanac-theme"); if (t === "light" || t === "dark") root.dataset.theme = t; } catch (e) {}
+function rethemed() { paint(); drawRel(); }
+document.getElementById("theme").addEventListener("click", () => {
+  root.dataset.theme = isDark() ? "light" : "dark";
+  try { localStorage.setItem("almanac-theme", root.dataset.theme); } catch (e) {}
+  rethemed();
+});
+media.addEventListener("change", rethemed);
+
+/* ---------- map ---------- */
+const W = MAP.width, H = MAP.height, [W0, S0, E0, N0] = MAP.bounds;
+const canvas = document.getElementById("map"), svg = document.getElementById("overlay");
+canvas.width = W; canvas.height = H;
+svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+let DATA = null, LAND = null;
+const toPx = (lon, lat) => [(lon - W0) / MAP.res, (N0 - lat) / MAP.res];
+const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+function colour(v) {
+  if (v.startsWith("#")) return hexRgb(v);
+  const m = v.match(/[\d.]+/g) || ["0", "0", "0"];
+  return m.slice(0, 3).map(Number);
+}
+function load(src) { return new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = src; }); }
+function pixels(im) { const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d", { willReadFrequently: true }); x.drawImage(im, 0, 0); return x.getImageData(0, 0, W, H).data; }
+function paint() {
+  if (!DATA) return;
+  const ctx = canvas.getContext("2d"), out = ctx.createImageData(W, H), o = out.data;
+  const ramp = (isDark() ? MAP.dark : MAP.light).map(hexRgb), land = colour(cssVar("--land")), bg = colour(cssVar("--surface"));
+  for (let j = 0; j < o.length; j += 4) {
+    const b = DATA[j + 1];
+    if (b !== 255) { const c = ramp[b]; o[j] = c[0]; o[j + 1] = c[1]; o[j + 2] = c[2]; }
+    else { const a = LAND[j] / 255; o[j] = bg[0] + (land[0] - bg[0]) * a; o[j + 1] = bg[1] + (land[1] - bg[1]) * a; o[j + 2] = bg[2] + (land[2] - bg[2]) * a; }
+    o[j + 3] = 255;
+  }
+  ctx.putImageData(out, 0, 0);
+}
+function overlay() {
+  let s = "";
+  for (let lon = -70; lon <= -45; lon += 5) { const [x] = toPx(lon, 0); s += `<line class="grid" x1="${x}" y1="0" x2="${x}" y2="${H}"/><text x="${x + 8}" y="${H - 16}">${-lon}°W</text>`; }
+  for (let lat = 5; lat >= -20; lat -= 5) { const [, y] = toPx(0, lat); s += `<line class="grid" x1="0" y1="${y}" x2="${W}" y2="${y}"/><text x="12" y="${y - 10}">${lat === 0 ? "0°" : Math.abs(lat) + "°" + (lat > 0 ? "N" : "S")}</text>`; }
+  for (const [x, y, w, h] of MAP.tiles) s += `<rect class="tile" x="${x}" y="${y}" width="${w}" height="${h}"/>`;
+  const [hw, hs, he, hn] = MAP.heldOut, [x0, y0] = toPx(hw, hn), [x1, y1] = toPx(he, hs);
+  s += `<rect class="held" x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}"/><text class="held-label" x="${x0 + 10}" y="${y0 - 14}">Held-out region</text>`;
+  const km = 500, lat = -23.2, len = km / (111.32 * Math.cos(lat * Math.PI / 180)) / MAP.res, [sx, sy] = toPx(-73.8, lat);
+  s += `<line class="scale" x1="${sx}" y1="${sy}" x2="${sx + len}" y2="${sy}"/><line class="scale" x1="${sx}" y1="${sy - 10}" x2="${sx}" y2="${sy + 10}"/><line class="scale" x1="${sx + len}" y1="${sy - 10}" x2="${sx + len}" y2="${sy + 10}"/><text x="${sx}" y="${sy - 20}">${km} km</text>`;
+  s += `<rect class="hover" id="hov" x="-99" y="-99" width="16" height="16"/>`;
+  svg.innerHTML = s;
+}
+overlay();
+Promise.all([load("map-data.png"), load("map-land.png")])
+  .then(([d, l]) => { DATA = pixels(d); LAND = pixels(l); paint(); })
+  .catch(() => { document.getElementById("readout").textContent = "The map could not be loaded."; });
+
+/* zoom and pan */
+const vp = document.getElementById("viewport"), stage = document.getElementById("stage"), readout = document.getElementById("readout");
+let k = 1, tx = 0, ty = 0;
+function apply() {
+  const w = vp.clientWidth, h = vp.clientHeight;
+  k = Math.max(1, Math.min(k, 8));
+  tx = Math.min(0, Math.max(w - w * k, tx)); ty = Math.min(0, Math.max(h - h * k, ty));
+  stage.style.transform = `translate(${tx}px, ${ty}px) scale(${k})`;
+  stage.style.setProperty("--k", k);
+  stage.style.setProperty("--u", W / Math.max(1, vp.clientWidth));
+  const m = document.getElementById("hov"); if (m) { m.setAttribute("width", 16 / k); m.setAttribute("height", 16 / k); }
+  vp.classList.toggle("zoomed", k > 1);
+}
+function zoomAt(f, cx, cy) { const nk = Math.max(1, Math.min(k * f, 8)); tx = cx - (cx - tx) * nk / k; ty = cy - (cy - ty) * nk / k; k = nk; apply(); }
+document.getElementById("zin").onclick = () => zoomAt(1.8, vp.clientWidth / 2, vp.clientHeight / 2);
+document.getElementById("zout").onclick = () => zoomAt(1 / 1.8, vp.clientWidth / 2, vp.clientHeight / 2);
+document.getElementById("zreset").onclick = () => { k = 1; tx = ty = 0; apply(); };
+vp.addEventListener("dblclick", (e) => { const r = vp.getBoundingClientRect(); zoomAt(2, e.clientX - r.left, e.clientY - r.top); });
+let drag = null, moved = false;
+vp.addEventListener("pointerdown", (e) => { drag = [e.clientX, e.clientY, tx, ty]; moved = false; });
+vp.addEventListener("pointermove", (e) => {
+  if (drag && k > 1) {
+    const dx = e.clientX - drag[0], dy = e.clientY - drag[1];
+    if (Math.abs(dx) + Math.abs(dy) > 3) { moved = true; vp.classList.add("drag"); if (!vp.hasPointerCapture(e.pointerId)) vp.setPointerCapture(e.pointerId); }
+    if (moved) { tx = drag[2] + dx; ty = drag[3] + dy; apply(); }
+  }
+  if (!moved) read(e);
+});
+const end = (e) => { if (drag && !moved) read(e); drag = null; moved = false; vp.classList.remove("drag"); };
+vp.addEventListener("pointerup", end);
+vp.addEventListener("pointercancel", end);
+vp.addEventListener("pointerleave", () => { if (!drag) { readout.textContent = "Hover or tap the map"; mark(-99, -99); } });
+window.addEventListener("resize", apply);
+apply();
+function mark(x, y) { const r = document.getElementById("hov"); if (r) { r.setAttribute("x", x - 8 / k); r.setAttribute("y", y - 8 / k); } }
+function read(e) {
+  if (!DATA) return;
+  const r = canvas.getBoundingClientRect();
+  const x = Math.floor((e.clientX - r.left) / r.width * W), y = Math.floor((e.clientY - r.top) / r.height * H);
+  if (x < 0 || y < 0 || x >= W || y >= H) return;
+  const lon = W0 + (x + .5) * MAP.res, lat = N0 - (y + .5) * MAP.res, j = (y * W + x) * 4;
+  const where = `${Math.abs(lat).toFixed(2)}°${lat < 0 ? "S" : "N"}, ${Math.abs(lon).toFixed(2)}°W`;
+  const b = DATA[j + 1];
+  if (b === 255) { readout.textContent = `${where} · ${LAND[j] > 127 ? "land, no forecast here" : "water, or outside the region"}`; mark(-99, -99); return; }
+  const p = Math.pow(DATA[j] / 255, 2) * 100;
+  readout.innerHTML = `${where} · <b>${MAP.bands[b]}</b> of cells by risk · forecast ${p < 1 ? p.toFixed(1) : p.toFixed(0)}%`;
+  mark(x + .5, y + .5);
+}
+
+/* copy buttons */
+document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText(document.getElementById(b.dataset.copy).textContent); b.textContent = "Copied"; setTimeout(() => (b.textContent = "Copy"), 1500); }
+  catch (e) { b.textContent = "Select it"; }
+}));
+
+/* reliability chart */
+function drawRel() {
+  const el = document.getElementById("rel"), tip = document.getElementById("reltip");
+  const L = 62, R = 408, T = 10, B = 300, max = 0.35;
+  const sx = (v) => L + (Math.min(v, max) / max) * (R - L), sy = (v) => B - (Math.min(v, max) / max) * (B - T);
+  let s = "";
+  for (let i = 0; i <= 7; i++) { const v = i * 0.05; s += `<line class="gl" x1="${L}" y1="${sy(v)}" x2="${R}" y2="${sy(v)}"/>`; if (i % 2 === 0) s += `<text x="${sx(v)}" y="${B + 18}" text-anchor="middle">${Math.round(v * 100)}%</text><text x="${L - 8}" y="${sy(v) + 4}" text-anchor="end">${Math.round(v * 100)}%</text>`; }
+  s += `<g class="axis"><line x1="${L}" y1="${B}" x2="${R}" y2="${B}"/><line x1="${L}" y1="${T}" x2="${L}" y2="${B}"/></g>`;
+  s += `<text x="${(L + R) / 2}" y="${B + 40}" text-anchor="middle">Forecast probability (mean of each tenth of cells)</text>`;
+  s += `<text transform="translate(14 ${(T + B) / 2}) rotate(-90)" text-anchor="middle">Observed loss rate, 2025</text>`;
+  s += `<line class="diag" x1="${sx(0)}" y1="${sy(0)}" x2="${sx(max)}" y2="${sy(max)}"/>`;
+  [["B4", 2, "Trees (B4)"], ["M_A2", 1, "Model M (A2)"]].forEach(([key, n, name]) => {
+    const r = REL[key], pts = r.mean_forecast.map((f, i) => [f, r.observed_rate[i]]);
+    s += `<path class="s${n}" d="${pts.map(([f, o], i) => (i ? "L" : "M") + sx(f).toFixed(1) + " " + sy(o).toFixed(1)).join(" ")}"/>`;
+    pts.forEach(([f, o], i) => {
+      const t = `${name}, tenth ${i + 1}: forecast ${(f * 100).toFixed(1)}%, observed ${(o * 100).toFixed(1)}%`;
+      s += `<circle class="d${n}" cx="${sx(f)}" cy="${sy(o)}" r="4.5"/><circle class="hit" cx="${sx(f)}" cy="${sy(o)}" r="12" data-t="${t}"/>`;
+    });
+    // Direct labels at the 9th tenth, where the two lines are far apart: the model below, the trees above.
+    const [lf, lo] = pts[8];
+    s += n === 1
+      ? `<text class="lab" x="${sx(lf) + 10}" y="${sy(lo) + 18}" text-anchor="start">${name}</text>`
+      : `<text class="lab" x="${sx(lf) - 10}" y="${sy(lo) - 10}" text-anchor="end">${name}</text>`;
+  });
+  el.innerHTML = s;
+  const box = () => document.getElementById("relchart").getBoundingClientRect();
+  el.querySelectorAll(".hit").forEach((c) => {
+    const show = () => { const b = box(), cr = c.getBoundingClientRect(); tip.textContent = c.dataset.t; tip.style.left = (cr.left - b.left + cr.width / 2) + "px"; tip.style.top = (cr.top - b.top + 8) + "px"; tip.style.opacity = 1; };
+    c.addEventListener("pointerenter", show); c.addEventListener("pointerdown", show);
+    c.addEventListener("pointerleave", () => (tip.style.opacity = 0));
+  });
+}
+drawRel();
+</script>
+</body>
+</html>

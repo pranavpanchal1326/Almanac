@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "If you use this forecast, method or scorecard, please cite it as below."
+title: "Almanac: forecasts of forest loss in the Amazon and Cerrado, sealed before the truth exists (issue 2027.01)"
+abstract: >-
+  A forecast of forest loss in 2026 for 640 m cells on 499 exam tiles of the Amazon and Cerrado,
+  made from AlphaEarth satellite embeddings up to 2025 and sealed on 22 November 2026, before any
+  2026 loss map exists. The task, exam tiles, metric and win condition were pre-registered and
+  timestamped before any model was trained. On a single graded backtest on 2025 the model's
+  average precision was 16.0% above the reference (95% interval +10.7% to +22.3%), short of the
+  pre-registered 20% margin.
+type: software
+authors:
+  - alias: pranavpanchal1326
+version: "2027.01"
+date-released: "2026-11-22"
+license: Apache-2.0
+url: "https://pranavpanchal1326.github.io/Almanac/"
+repository-code: "https://github.com/pranavpanchal1326/Almanac"
+keywords:
+  - forecasting
+  - deforestation
+  - Amazon
+  - Cerrado
+  - remote sensing
+  - satellite embeddings
+  - pre-registration
+  - reproducibility
+references:
+  - type: article
+    title: "High-Resolution Global Maps of 21st-Century Forest Cover Change"
+    authors:
+      - family-names: Hansen
+        given-names: M. C.
+    journal: Science
+    volume: 342
+    start: 850
+    end: 853
+    year: 2013
+  - type: data
+    title: "AlphaEarth Foundations Satellite Embedding dataset"
+    authors:
+      - name: Google
+      - name: Google DeepMind
+    license: CC-BY-4.0

@@ -1,8 +1,11 @@
 # Almanac
 
-Forecasts of Earth-surface change, locked before the truth exists, then graded in public.
+Forecasts of Earth-surface change, sealed before the truth exists, then graded in public.
 
-**Scorecard of the first issue: https://pranavpanchal1326.github.io/Almanac/**
+[![The 2026 forest-loss forecast for the Amazon and Cerrado: the scorecard](site/og.png)](https://pranavpanchal1326.github.io/Almanac/)
+
+**Scorecard of the first issue: https://pranavpanchal1326.github.io/Almanac/** — the interactive
+map, the backtest, the rules and how to verify the package.
 
 The first exam is regional: for every 640 m cell of forest in the Brazilian Amazon and Cerrado,
 the probability of forest loss in **2026**, made from data up to 2025 and fixed before the 2026
@@ -134,6 +137,27 @@ data file the exam depends on is listed with its SHA-256 in
 Steps 2 and 3 need the Global Forest Change v1.13 `lossyear`, `datamask` and `treecover2000`
 rasters for the region in `D:/almanac-data/labels/gfc`.
 
+**Phase 2** (model; one NVIDIA GPU with 8 GB, about 10 hours per run):
+
+| Step | Command | Task |
+|---|---|---|
+| 1 | `uv run --extra train python tools/phase2/build_store.py configs/splits/amazon_cerrado_v1.csv` | 2.1 (training store) |
+| 2 | `bash tools/phase2/run_stage_a.sh list stage_a2_b5 stage_a2_m_a stage_a2_m_a_s2 stage_a2_m_a_s3` | 2.3–2.4 (supervised runs; configs in `configs/model`) |
+| 3 | `uv run --extra train python tools/phase2/ensemble.py D:/almanac-data/runs/stage_a2_m_a_s1 D:/almanac-data/runs/stage_a2_m_a_s2 D:/almanac-data/runs/stage_a2_m_a_s3 --out docs/phase2/ensemble_m_a` | 2.6 (calibration, ensemble) |
+| 4 | `uv run --extra train python tools/phase2/stage_b.py build OUT [--dry]` | 2.7 (package for the backtest) |
+| 5 | `uv run --extra train python tools/phase2/stage_b.py grade OUT --dry` | rehearsal on validation; the real grade is a single logged read of the test truth and is already done |
+
+**Phase 4** (the 2026 forecast):
+
+| Step | Command | Task |
+|---|---|---|
+| 1 | `uv run python tools/phase4/forecast_baselines.py configs/baselines/amazon_cerrado_v1.json D:/almanac-data/packages/2027.01` | 4.3 (baselines B0–B4 for 2026) |
+| 2 | `uv run --extra train python tools/phase4/forecast_exam.py` | 4.2 (model and reference for 2026, from the frozen weights) |
+| 3 | `uv run python tools/phase4/archive_package.py PACKAGE OUT.tar` | release archive (reproducible bytes) |
+| 4 | `uv run python tools/phase4/build_site.py` | the scorecard page in `site/` |
+
+Frozen weights are listed with their SHA-256 in [docs/phase2/STATUS.md](docs/phase2/STATUS.md#frozen-weights).
+
 **Phase 0:** `uv run almanac index sync`, then the scripts in `tools/phase0` (sites in
 `configs/phase0/sites.json`); details in the Phase 0 report.
 
@@ -156,6 +180,11 @@ rasters for the region in `D:/almanac-data/labels/gfc`.
 | `configs` | Region, split, threshold, baseline and data-manifest files |
 | `tests` | Unit, property, golden and live-read tests |
 | `docs` | Phase reports, decision records, pre-registration and proofs |
+
+## Cite
+
+If you use the forecast, the method or the scorecard, cite the repository; GitHub's "Cite this
+repository" button reads [CITATION.cff](CITATION.cff).
 
 ## Licence
 
