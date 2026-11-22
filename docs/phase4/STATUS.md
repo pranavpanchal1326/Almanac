@@ -22,7 +22,7 @@ exam's win condition is unchanged. The public label is fixed in [LABEL.md](LABEL
 | — | One maintainer: second-person rules replaced | Decided 2026-11-22 | [ADR 0005](../adr/0005-single-maintainer.md) |
 | 4.6 | Rebuild (per ADR 0005: clean-environment rebuild by the maintainer) | Not started | |
 | 4.7 | Lock (per ADR 0005: single maintainer, external witnesses) | 15 January 2027 | |
-| 3.10 | Leakage review by an outsider | Open: a reviewer is being sought | ADR 0005 |
+| 3.10 | Leakage review by an outsider | Open: kit ready 2026-11-22 (self-check passes, 20 of 20); a reviewer is being sought | [kit](../review/LEAKAGE_REVIEW.md), ADR 0005 |
 | 4.4, 4.10, 4.11 | Grader tag, announcement, retrospective | Not started | |
 
 ## The 2026 forecasts (task 4.2)

@@ -165,6 +165,12 @@ logged in [test_touch_log.jsonl](docs/phase1/test_touch_log.jsonl).
   by public, external ones, and an independent leakage review is still being sought
   ([ADR 0005](docs/adr/0005-single-maintainer.md)).
 
+> [!TIP]
+> **Review it.** If you did not build this and can read Python, the
+> [leakage review kit](docs/review/LEAKAGE_REVIEW.md) takes about two hours and needs no data:
+> one script, five questions, and a [report template](../../issues/new?template=leakage-review.md).
+> Findings against the project are published as readily as a clean bill.
+
 <br>
 
 ## ◆ The exam, in full
