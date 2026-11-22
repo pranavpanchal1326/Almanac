@@ -1,0 +1,68 @@
+{
+ "what": "issue 2027.01 forecasts for 2026 (ADR 0004: model M (A2) is the headline)",
+ "target": 2026,
+ "tiles": 499,
+ "model": {
+  "name": "M_A2",
+  "seeds": {
+   "stage_a2_m_a_s1": "0aced0fdfdf8b8cf091f636d49f448ff8897d6967866048be2a0a7388b769117",
+   "stage_a2_m_a_s2": "7c7e5bd345c811ab3a9aa8d3dbc14297bd175ddb2aae55139ff307a2b78e0bad",
+   "stage_a2_m_a_s3": "3437866de8705e0b18f800cdaae6a6e353596c9f99a7d67f436cc74bc4ca834d"
+  },
+  "calibration_sha256": "19e03140016e58b825030f4d94b06ece88159f462283827e560c07b18802f455",
+  "forest": "mean of the seeds' isotonic-mapped probabilities",
+  "embedding": "mean of the seeds' probabilities (no calibration defined)"
+ },
+ "reference": {
+  "name": "B5_A2",
+  "checkpoint_sha256": "bcfd6cd4b72077e968576cea19eb0e62e3d31383386a3ea3104f74deb109cdb6"
+ },
+ "baseline_layers": {
+  "B0_embedding.npy": "e88ab47b95a8df7e06c39f941be8a2ca1e56297df31e9d7d3946bef9e17a9fe2",
+  "B0_forest.npy": "babe34b87cfcb75b55f32291164a41cdff02862031ed44f7f7244ed106d02a0f",
+  "B1_embedding.npy": "2e3a9dd3562301d564629129ee8e4ae338ba1a05709ab15325825e9e080600fa",
+  "B1_forest.npy": "d57b76854375a6a15b45bcffd8a25f55d1cd6eb2428eb0c0cbb832e32df84796",
+  "B2_embedding.npy": "bf1373bc592d6c1a3eb02529934186a66dd7839a23ea7a931f0f19974d91dcb9",
+  "B2_forest.npy": "e6094d5b2d0eb3309539e8d54f8dd3c4c340584fb7b31750d55f4685afa04b12",
+  "B3_embedding.npy": "738c7594e1d9ab31c7377c6196d24502e3744a1d48ccf23bf17f560caa1ee971",
+  "B3_forest.npy": "17097748964e57f33ef3579a3f5752bca54e4ae6cf3ad288b0eb7d024ee58018",
+  "B4_embedding.npy": "7af7211ec6e16c2e4ce8ad39b954abb64e29a923f559b3b8a2caa94f037b40c2",
+  "B4_forest.npy": "47361e7a59b1a335f7cadcccfb0b400e206d7868f6dec6b07d80ed7f41d1e27c"
+ },
+ "layers": {
+  "M_A2_forest": {
+   "cells": 4795484,
+   "mean": 0.06410555158045138,
+   "p99": 0.3185015618801117
+  },
+  "B5_A2_forest": {
+   "cells": 4795484,
+   "mean": 0.0399995691157278,
+   "p99": 0.3720487952232361
+  },
+  "M_A2_embedding": {
+   "cells": 6056182,
+   "mean": 0.01578151800058872,
+   "p99": 0.2872822892665877
+  },
+  "B5_A2_embedding": {
+   "cells": 6056182,
+   "mean": 0.01796389580942571,
+   "p99": 0.32766830921173096
+  }
+ },
+ "determinism": {
+  "tiles": [
+   "18N_E581920_N245760",
+   "20N_E500000_N-81920",
+   "20S_E500000_N8935040",
+   "21S_E336160_N8607360",
+   "22S_E663840_N9098880"
+  ],
+  "max_abs_difference_seed_1_forest": 0.0,
+  "max_abs_difference_reference_forest": 0.0
+ },
+ "git_commit": "63f66f9890dda01fe977ffd99fdf3c6ac7a1ec42",
+ "built": "2026-11-22T03:55:13+00:00",
+ "seconds": 1426
+}

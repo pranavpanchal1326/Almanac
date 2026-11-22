@@ -40,7 +40,7 @@ the margin for the 2026 exam was not changed.
   The second read changed nothing and is logged and disclosed (ADR 0004).
 - One region, one event type, one year ahead. Nothing here says the method works elsewhere.
 
-**Verify it yourself.** Package digest: `<filled in at lock>`. Timestamps: `<filled in at lock>`.
+**Verify it yourself.** Package digest: `bc834b2691f0f1c9fdee05a0c0fbae87958efe3a8d3e670aeff113f9b02b7949` (sealed 2026-11-22; check it with `python tools/verify_issue.py PACKAGE --digest <digest>`). Timestamps: `<filled in at lock>`.
 Code, rules, every run (including failed ones) and the test-touch log:
 https://github.com/pranavpanchal1326/Almanac.
 

@@ -17,7 +17,7 @@ The full plan is in [BLUEPRINT.md](BLUEPRINT.md); the regional plan to the first
 | 0 — Look: is yearly change in the embeddings real? | Passed | [REPORT](docs/phase0/REPORT.md), [ADR 0001](docs/adr/0001-gate-0.md) |
 | 1 — Scoreboard: a fair exam and simple competitors | Passed | [STATUS](docs/phase1/STATUS.md), [ADR 0003](docs/adr/0003-gate-1.md) |
 | 2 — Model, backtested once on 2025 | **Partial**: best forecast on every part, short of the 20% margin | [STATUS](docs/phase2/STATUS.md), [ADR 0004](docs/adr/0004-gate-2.md) |
-| 4 — Lock of the 2026 forecast | 15 January 2027 (does not move) | [STATUS](docs/phase4/STATUS.md), [label](docs/phase4/LABEL.md) |
+| 4 — Lock of the 2026 forecast | Forecast made and sealed 2026-11-22 (digest `bc834b26…7949`); formal lock 15 January 2027 | [STATUS](docs/phase4/STATUS.md), [label](docs/phase4/LABEL.md) |
 | Exam | When the 2026 forest-loss maps are published (2027) | |
 
 ## The result so far, stated plainly

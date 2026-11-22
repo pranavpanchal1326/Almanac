@@ -13,9 +13,40 @@ exam's win condition is unchanged. The public label is fixed in [LABEL.md](LABEL
 | 4.3 | Baseline forecasts for 2026, B0–B4, on the 499 exam tiles | Done | `D:/almanac-data/packages/2027.01/baselines/` (10 layers, float32) |
 | 4.5 | Package format: layers, canonical manifest, package digest | Done | `src/almanac/registry/package.py`, `tests/unit/test_package.py` |
 | — | Grader for the exam (win condition with the guard) | Done, tested against the report; reference corrected to B5 under amendment 2 (2026-11-21) | `tools/phase5/grade.py` |
-| 4.2 | Model forecast for 2026 (M A2) and the reference's (B5 A2) | Next: frozen weights, inputs up to 2025, no refit | |
-| — | Public label | Fixed 2026-11-21, before the forecast exists | [LABEL.md](LABEL.md) |
+| 4.2 | Model forecast for 2026 (M A2) and the reference's (B5 A2) | Done 2026-11-22: frozen weights, inputs up to 2025, no refit; bit-exact on a repeat | [2026 forecasts](#the-2026-forecasts-task-42), `tools/phase4/forecast_exam.py` |
+| — | Public label | Fixed 2026-11-21, before the forecast existed | [LABEL.md](LABEL.md) |
+| — | Package sealed; stand-alone verifier | Done 2026-11-22: digest `bc834b26…7949`, `VERIFIED` | [manifest](package_2027.01_manifest.json), `tools/verify_issue.py` |
 | 4.4, 4.6–4.11 | Grader tag, independent rebuild, lock, site, release, announcement | Not started | |
+
+## The 2026 forecasts (task 4.2)
+
+Built 2026-11-22 in 24 minutes by `tools/phase4/forecast_exam.py` at commit `831c482`. It calls the
+stage B prediction and calibration code with target 2026, so the forecast is made by the same
+path that was backtested. Before writing, it checked the four frozen checkpoints and the
+calibration file against the stage B record (all equal). Record: [forecast_2026_meta.json](forecast_2026_meta.json).
+
+| Layer | Cells forecast | Mean probability | 99th percentile |
+|---|---|---|---|
+| `M_A2_forest` (headline) | 4,795,484 | 0.0641 | 0.319 |
+| `B5_A2_forest` (reference) | 4,795,484 | 0.0400 | 0.372 |
+| `M_A2_embedding` | 6,056,182 | 0.0158 | 0.287 |
+| `B5_A2_embedding` | 6,056,182 | 0.0180 | 0.328 |
+
+- **Coverage:** both forecasts cover every cell the baselines forecast, for both tasks.
+- **Repeatability:** five tiles predicted a second time gave identical values (largest difference
+  0.0, model seed 1 and reference), so an independent rebuild on the same hardware and software
+  should give the same digest.
+- **The headline's mean, 6.4%,** is above the 2025 base rate of forest-loss cells on these
+  tiles (4.0%), which matches the backtest finding that its probabilities run high; the
+  label says so. Nothing is recalibrated.
+
+**Sealed 2026-11-22.** Package `D:/almanac-data/packages/2027.01` (437 MB: 14 layers, `tiles.csv`,
+both meta files), digest
+`bc834b2691f0f1c9fdee05a0c0fbae87958efe3a8d3e670aeff113f9b02b7949`, the SHA-256 of
+[package_2027.01_manifest.json](package_2027.01_manifest.json). `tools/verify_issue.py` prints
+`VERIFIED` for it and for a second copy on another drive. Committing the manifest publishes the
+digest now, seven weeks before the formal lock and before any 2026 truth exists; the lock on
+15 January adds the timestamps, signatures and archive deposit.
 
 ## Format
 
