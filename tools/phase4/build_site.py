@@ -39,7 +39,7 @@ from pathlib import Path
 
 import numpy as np
 import rasterio.warp
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 from rasterio.transform import Affine, from_origin
 from rasterio.warp import Resampling, reproject
 
@@ -58,11 +58,13 @@ RELEASE = f"{GITHUB}/releases/tag/issue-2027.01-sealed"
 # Risk bands: cut points as percentiles of the headline forecast over its forecast cells.
 CUTS = [50, 75, 90, 95, 99]
 BAND_NAMES = ["Lowest half", "Top 50%", "Top 25%", "Top 10%", "Top 5%", "Top 1%"]
-# One-hue orange ramps (dataviz validate_palette.js: monotone lightness, visible steps, one hue, in
-# both modes). This is a sequential map, so the lowest band is allowed to recede toward the
-# background, as the palette's sequential rule permits: low risk should not look alarming.
-RAMP_LIGHT = ["#f8dccb", "#f3b48e", "#ea8452", "#d65a22", "#a33e15", "#5e1f07"]
-RAMP_DARK = ["#4a2516", "#7d3517", "#b44a1c", "#e2652c", "#f59b6c", "#fdd5bd"]
+# "Infrared": false-colour infrared imagery shows living vegetation in magenta, so risk is one
+# luminous magenta hue on a night-blue Earth. Checked with the dataviz validator (--ordinal, dark,
+# surface #05070d): monotone lightness, every step at least 0.06 apart, one hue (spread 20 deg). The
+# lowest band is allowed to sink into the night, as the sequential rule permits: low risk should
+# not glow.
+RAMP = ["#2b0f2b", "#561a4f", "#93277a", "#d23f9e", "#ff86c9", "#ffdcef"]
+NIGHT = (5, 7, 13)
 
 
 def read_json(path: Path):
@@ -153,33 +155,45 @@ def font(size: int, bold: bool = False):
 
 def og_image(prob: np.ndarray, land: np.ndarray, cuts: np.ndarray, headline: str, sub: str) -> None:
     w, h = 1200, 630
-    bg, landc, ink, muted = (252, 252, 251), (226, 224, 218), (29, 29, 27), (95, 95, 90)
-    rgb = np.full((*prob.shape, 3), bg, np.uint8)
+    landc, waterc = np.array([16, 22, 36]), np.array([12, 40, 52])
     a = np.clip(land, 0, 1)[..., None]
-    rgb = (rgb * (1 - a) + np.array(landc) * a).astype(np.uint8)
+    rgb = np.where((land > 0)[..., None], waterc * (1 - a) + landc * a, np.array(NIGHT, float))
     fin = np.isfinite(prob)
     band = np.digitize(np.nan_to_num(prob), cuts)
-    for i, c in enumerate(RAMP_LIGHT):
-        sel = fin & (band == i)
-        rgb[sel] = [int(c[k : k + 2], 16) for k in (1, 3, 5)]
-    m = Image.fromarray(rgb)
-    m.thumbnail((480, 560))
-    img = Image.new("RGB", (w, h), bg)
-    img.paste(m, (w - m.width - 20, (h - m.height) // 2))
+    for i, c in enumerate(RAMP):
+        rgb[fin & (band == i)] = [int(c[k : k + 2], 16) for k in (1, 3, 5)]
+    gl = np.zeros((*prob.shape, 3), np.uint8)
+    for i in (4, 5):
+        gl[fin & (band == i)] = [int(RAMP[i][k : k + 2], 16) for k in (1, 3, 5)]
+    m = ImageChops.add(Image.fromarray(rgb.astype(np.uint8)), Image.fromarray(gl).filter(ImageFilter.GaussianBlur(5)))
+    m.thumbnail((480, 540))
+    halo = Image.new("RGB", (w, h), NIGHT)
+    ImageDraw.Draw(halo).ellipse([w - 660, -60, w + 140, h + 60], fill=(48, 12, 46))
+    img = halo.filter(ImageFilter.GaussianBlur(110))
+    img.paste(m, (w - m.width - 30, (h - m.height) // 2))
     d = ImageDraw.Draw(img)
-    d.text((56, 64), "ALMANAC · ISSUE 2027.01", font=font(22, True), fill=muted)
-    y = 112
+    serif = font_file(["georgiai.ttf", "DejaVuSerif-Italic.ttf"], 56)
+    d.text((60, 70), "ALMANAC  ·  ISSUE 2027.01", font=font(20, True), fill=(255, 134, 201))
+    y = 118
     for line in headline.split("\n"):
-        d.text((56, y), line, font=font(46, True), fill=ink)
-        y += 58
+        d.text((60, y), line, font=serif, fill=(236, 240, 246))
+        y += 66
     y += 18
     for line in sub.split("\n"):
-        d.text((56, y), line, font=font(26), fill=muted)
-        y += 36
-    for i, c in enumerate(RAMP_LIGHT):
-        d.rectangle([56 + i * 44, h - 92, 56 + i * 44 + 40, h - 78], fill=c)
-    d.text((56, h - 70), "Forest-loss risk in 2026, lowest half → top 1%", font=font(20), fill=muted)
+        d.text((60, y), line, font=font(24), fill=(138, 147, 166))
+        y += 34
+    for i, c in enumerate(RAMP):
+        d.rectangle([60 + i * 46, h - 84, 60 + i * 46 + 42, h - 74], fill=c)
+    d.text((60, h - 64), "Forest-loss risk in 2026 · lowest half → top 1%", font=font(18), fill=(138, 147, 166))
     img.save(SITE / "og.png", optimize=True)
+
+
+def font_file(names: list[str], size: int):
+    for name in names:
+        for root in (Path("C:/Windows/Fonts"), Path("/usr/share/fonts/truetype/dejavu")):
+            if (root / name).exists():
+                return ImageFont.truetype(str(root / name), size)
+    return font(size, True)
 
 
 def pct(x: float, digits: int = 1) -> str:
@@ -220,7 +234,7 @@ def build(package: Path, page_only: bool = False) -> None:
         prob, cuts, boxes = forecast_map(package, tiles, width, height, dst)
         encode(prob, land, cuts)
         og_image(prob, land, cuts,
-                 "Where will forest be lost\nin 2026? A forecast made\nbefore anyone can know.",
+                 "Where will the forest\nbe lost in 2026?",
                  f"Amazon and Cerrado · {len(tiles)} exam tiles\nSealed 22 Nov 2026 · digest {digest[:8]}\n"
                  "Graded in public, misses included")
         CACHE.parent.mkdir(parents=True, exist_ok=True)
@@ -241,15 +255,15 @@ def build(package: Path, page_only: bool = False) -> None:
     for k, name, what in order:
         b = forest["all"]["baselines"][k]
         lo, hi = b["ap_ci95"]
-        nums = "".join(f'<td class="num">{forest[p]["baselines"][k]["ap"]:.3f}</td>' for p in ("all", "test", "held_out"))
-        cls = ' class="head"' if k == "M_A2" else ""
+        nums = "".join(f'<span class="n {c}">{forest[p]["baselines"][k]["ap"]:.3f}</span>'
+                       for p, c in (("all", ""), ("test", "t"), ("held_out", "h")))
+        cls = {"M_A2": ' class="me"', "B5_A2": ' class="ref"'}.get(k, "")
         rows.append(
-            f'<tr{cls}><th scope="row"><span class="fname">{html.escape(name)}</span>'
-            f'<span class="fwhat">{html.escape(what)}</span></th>'
-            f'<td class="bar"><span class="track" title="AP {b["ap"]:.3f}, 95% interval {lo:.3f} to {hi:.3f}">'
-            f'<span class="fill" style="width:{100 * b["ap"] / top:.1f}%"></span>'
-            f'<span class="ci" style="left:{100 * lo / top:.1f}%;width:{100 * (hi - lo) / top:.1f}%"></span></span></td>'
-            f"{nums}</tr>"
+            f'<li{cls} data-ap="{100 * b["ap"] / top:.1f}"><span class="who"><b>{html.escape(name)}</b>'
+            f"<span>{html.escape(what)}</span></span>"
+            f'<span class="lane" title="AP {b["ap"]:.3f}, 95% interval {lo:.3f} to {hi:.3f}"><span class="run"></span>'
+            f'<span class="ci" style="left:{100 * lo / top:.1f}%;width:{100 * (hi - lo) / top:.1f}%"></span></span>'
+            f"{nums}</li>"
         )
     cond = [
         ("At least 20% above the reference", pct(v["relative_improvement"]), v["condition_1_at_least_20pct"]),
@@ -259,12 +273,14 @@ def build(package: Path, page_only: bool = False) -> None:
          v["condition_3_positive_on_each_part"]),
     ]
     cond_rows = "".join(
-        f'<tr><th scope="row">{html.escape(a)}</th><td class="num">{b}</td>'
-        f'<td><span class="tag {"yes" if ok else "no"}">{"Met" if ok else "Not met"}</span></td></tr>'
-        for a, b, ok in cond
+        f'<li class="gate {"open" if ok else "shut"}" data-reveal><span class="gate-n">0{n}</span>'
+        f'<span class="gate-what">{html.escape(a)}</span><span class="gate-val">{b}</span>'
+        f'<span class="gate-state">{"Met" if ok else "Not met"}</span></li>'
+        for n, (a, b, ok) in enumerate(cond, 1)
     )
     touch_rows = "".join(
-        f'<tr><td class="nowrap">{html.escape(t["when"][:10])}</td><td>{html.escape(t["what"])}</td></tr>' for t in touches
+        f'<li data-reveal><time>{html.escape(t["when"][:10])}</time><span>{html.escape(t["what"])}</span></li>'
+        for t in touches
     )
     n_checks, n_ok = len(repro["checks"]), sum(c["ok"] for c in repro["checks"])
     largest = max(c["difference"] for c in repro["checks"])
@@ -274,12 +290,11 @@ def build(package: Path, page_only: bool = False) -> None:
         "bounds": BOUNDS, "res": RES, "width": width, "height": height,
         "tiles": boxes, "heldOut": HELD_OUT,
         "cuts": [float(c) for c in cuts], "bands": BAND_NAMES,
-        "light": RAMP_LIGHT, "dark": RAMP_DARK,
+        "ramp": RAMP,
     }
     bands_html = "".join(
-        f'<li><span class="sw" style="--l:{RAMP_LIGHT[i]};--d:{RAMP_DARK[i]}"></span>'
-        f"<span><b>{BAND_NAMES[i]}</b> {band_range(i, cuts)}</span></li>"
-        for i in reversed(range(len(BAND_NAMES)))
+        f'<li style="--c:{RAMP[i]}"><b>{BAND_NAMES[i]}</b><span>{band_range(i, cuts)}</span></li>'
+        for i in range(len(BAND_NAMES))
     )
     tokens = {
         "IMPROVEMENT": pct(v["relative_improvement"]), "LO": pct(v["ci95"][0]), "HI": pct(v["ci95"][1]),
@@ -291,6 +306,10 @@ def build(package: Path, page_only: bool = False) -> None:
         "COMMIT": meta["git_commit"][:7], "BANDS": bands_html,
         "MAPJSON": json.dumps(mapjson, separators=(",", ":")),
         "RELJSON": json.dumps(rel, separators=(",", ":")),
+        "VERDICTJSON": json.dumps({"imp": v["relative_improvement"], "lo": v["ci95"][0], "hi": v["ci95"][1],
+                                   "test": v["improvement_by_part"]["test"],
+                                   "held": v["improvement_by_part"]["held_out"], "win": v["win"]},
+                                  separators=(",", ":")),
         "GITHUB": GITHUB, "SITE_URL": SITE_URL, "RELEASE": RELEASE, "N_TOUCH": str(len(touches)),
     }
     page = Path(__file__).with_name("site_template.html").read_text(encoding="utf-8")
