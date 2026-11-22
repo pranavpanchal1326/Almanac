@@ -168,7 +168,7 @@ logged in [test_touch_log.jsonl](docs/phase1/test_touch_log.jsonl).
 > [!TIP]
 > **Review it.** If you did not build this and can read Python, the
 > [leakage review kit](docs/review/LEAKAGE_REVIEW.md) takes about two hours and needs no data:
-> one script, five questions, and a [report template](../../issues/new?template=leakage-review.md).
+> one script, five questions, and a [report template](https://github.com/pranavpanchal1326/Almanac/issues/new?template=leakage-review.md).
 > Findings against the project are published as readily as a clean bill.
 
 <br>
