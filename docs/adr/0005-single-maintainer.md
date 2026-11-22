@@ -48,7 +48,8 @@ How to check them: [docs/phase4/proofs/README.md](../phase4/proofs/README.md).
 
 ## What changes in the plan
 
-- Task 4.6 becomes a recorded clean-environment rebuild by the maintainer.
+- Task 4.6 becomes a recorded clean-environment rebuild by the maintainer. Done 2026-11-22: all
+  layers byte-identical ([rebuild record](../phase4/REBUILD_2027.01.md)).
 - Task 4.7 becomes a single-maintainer lock on 15 January 2027: confirm the digest still matches,
   deposit the archive with a permanent identifier, publish the frozen
   weights, sign the lock commit, and fill in the label. The checklist in Appendix D.3 is ticked by

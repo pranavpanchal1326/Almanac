@@ -20,7 +20,7 @@ exam's win condition is unchanged. The public label is fixed in [LABEL.md](LABEL
 | 4.9 | Public release of the sealed package | Published 2026-11-22 as a pre-release, tag `issue-2027.01-sealed`, asset `almanac-2027.01.tar` (SHA-256 `a6164cda…`); the public copy downloaded back and verified against digest `bc834b26` | [release](https://github.com/pranavpanchal1326/Almanac/releases/tag/issue-2027.01-sealed), `tools/phase4/archive_package.py`, [notes](RELEASE_2027.01.md) |
 | — | Package digest timestamped | Done 2026-11-22: FreeTSA 08:24:35 and DigiCert 08:24:37 UTC (RFC 3161, both verified), OpenTimestamps in Bitcoin block 977,029 (09:03:53 UTC) | [proofs](proofs/README.md) |
 | — | One maintainer: second-person rules replaced | Decided 2026-11-22 | [ADR 0005](../adr/0005-single-maintainer.md) |
-| 4.6 | Rebuild (per ADR 0005: clean-environment rebuild by the maintainer) | Not started | |
+| 4.6 | Rebuild (per ADR 0005: clean-environment rebuild by the maintainer) | Done 2026-11-22, PASS: fresh clone of the public repository at `63f66f9`, fresh environment from the lock file; all 14 layers byte-identical, digest equal to `bc834b26` with the sealed run record (`forecast/meta.json` differs only in its build time) | [rebuild record](REBUILD_2027.01.md), `tools/phase4/compare_rebuild.py` |
 | 4.7 | Lock (per ADR 0005: single maintainer, external witnesses) | 15 January 2027 | |
 | 3.10 | Leakage review by an outsider | Open: kit ready 2026-11-22 (self-check passes, 20 of 20); a reviewer is being sought | [kit](../review/LEAKAGE_REVIEW.md), ADR 0005 |
 | 4.4, 4.10, 4.11 | Grader tag, announcement, retrospective | Not started | |
@@ -59,7 +59,8 @@ digest now, seven weeks before the formal lock and before any 2026 truth exists;
 
 A layer is a plain `.npy` file, float32 `[499, 128, 128]`: probability of the event in 2026, NaN
 where the cell is not eligible; tiles in the order of `tiles.csv`. Plain `.npy` is byte-for-byte
-reproducible, so an independent rebuild gives the same package digest; zip-based `.npz` embeds
+reproducible, so an independent rebuild gives the same layers (the package digest also covers
+`forecast/meta.json`, which records the build time: [rebuild record](REBUILD_2027.01.md)); zip-based `.npz` embeds
 timestamps and would not. The manifest lists every file's size and SHA-256 in canonical JSON, and
 the package digest is the SHA-256 of the manifest.
 
