@@ -58,13 +58,12 @@ RELEASE = f"{GITHUB}/releases/tag/issue-2027.01-sealed"
 # Risk bands: cut points as percentiles of the headline forecast over its forecast cells.
 CUTS = [50, 75, 90, 95, 99]
 BAND_NAMES = ["Lowest half", "Top 50%", "Top 25%", "Top 10%", "Top 5%", "Top 1%"]
-# "Infrared": false-colour infrared imagery shows living vegetation in magenta, so risk is one
-# luminous magenta hue on a night-blue Earth. Checked with the dataviz validator (--ordinal, dark,
-# surface #05070d): monotone lightness, every step at least 0.06 apart, one hue (spread 20 deg). The
-# lowest band is allowed to sink into the night, as the sequential rule permits: low risk should
-# not glow.
-RAMP = ["#2b0f2b", "#561a4f", "#93277a", "#d23f9e", "#ff86c9", "#ffdcef"]
-NIGHT = (5, 7, 13)
+# "The Atlas": risk is gold leaf on a canopy-black ground, the light of fire and of clearings seen
+# in a dark forest. One hue (spread 9 deg), monotone lightness with every step at least 0.06 apart
+# (dataviz validator, --ordinal, dark, surface #0a110e). The lowest band is allowed to sink into the
+# ground, as the sequential rule permits: low risk should not shine.
+RAMP = ["#2b2614", "#55461a", "#8a6d22", "#c19a30", "#e6c25a", "#faecb4"]
+NIGHT = (10, 17, 14)
 
 
 def read_json(path: Path):
@@ -155,7 +154,7 @@ def font(size: int, bold: bool = False):
 
 def og_image(prob: np.ndarray, land: np.ndarray, cuts: np.ndarray, headline: str, sub: str) -> None:
     w, h = 1200, 630
-    landc, waterc = np.array([16, 22, 36]), np.array([12, 40, 52])
+    landc, waterc = np.array([18, 29, 23]), np.array([11, 26, 34])
     a = np.clip(land, 0, 1)[..., None]
     rgb = np.where((land > 0)[..., None], waterc * (1 - a) + landc * a, np.array(NIGHT, float))
     fin = np.isfinite(prob)
@@ -168,23 +167,23 @@ def og_image(prob: np.ndarray, land: np.ndarray, cuts: np.ndarray, headline: str
     m = ImageChops.add(Image.fromarray(rgb.astype(np.uint8)), Image.fromarray(gl).filter(ImageFilter.GaussianBlur(5)))
     m.thumbnail((480, 540))
     halo = Image.new("RGB", (w, h), NIGHT)
-    ImageDraw.Draw(halo).ellipse([w - 660, -60, w + 140, h + 60], fill=(48, 12, 46))
+    ImageDraw.Draw(halo).ellipse([w - 660, -60, w + 140, h + 60], fill=(34, 30, 14))
     img = halo.filter(ImageFilter.GaussianBlur(110))
     img.paste(m, (w - m.width - 30, (h - m.height) // 2))
     d = ImageDraw.Draw(img)
     serif = font_file(["georgiai.ttf", "DejaVuSerif-Italic.ttf"], 56)
-    d.text((60, 70), "ALMANAC  ·  ISSUE 2027.01", font=font(20, True), fill=(255, 134, 201))
+    d.text((60, 70), "ALMANAC  ·  ISSUE 2027.01", font=font(20, True), fill=(217, 177, 79))
     y = 118
     for line in headline.split("\n"):
-        d.text((60, y), line, font=serif, fill=(236, 240, 246))
+        d.text((60, y), line, font=serif, fill=(236, 229, 211))
         y += 66
     y += 18
     for line in sub.split("\n"):
-        d.text((60, y), line, font=font(24), fill=(138, 147, 166))
+        d.text((60, y), line, font=font(24), fill=(141, 149, 132))
         y += 34
     for i, c in enumerate(RAMP):
         d.rectangle([60 + i * 46, h - 84, 60 + i * 46 + 42, h - 74], fill=c)
-    d.text((60, h - 64), "Forest-loss risk in 2026 · lowest half → top 1%", font=font(18), fill=(138, 147, 166))
+    d.text((60, h - 64), "Forest-loss risk in 2026 · lowest half → top 1%", font=font(18), fill=(141, 149, 132))
     img.save(SITE / "og.png", optimize=True)
 
 
@@ -234,7 +233,7 @@ def build(package: Path, page_only: bool = False) -> None:
         prob, cuts, boxes = forecast_map(package, tiles, width, height, dst)
         encode(prob, land, cuts)
         og_image(prob, land, cuts,
-                 "Where will the forest\nbe lost in 2026?",
+                 "The forest,\nforetold.",
                  f"Amazon and Cerrado · {len(tiles)} exam tiles\nSealed 22 Nov 2026 · digest {digest[:8]}\n"
                  "Graded in public, misses included")
         CACHE.parent.mkdir(parents=True, exist_ok=True)

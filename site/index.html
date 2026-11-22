@@ -4,264 +4,282 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Almanac issue 2027.01</title>
-<meta name="description" content="A forecast of forest loss in the Amazon and Cerrado for 2026, sealed before the truth exists and graded in public: the map, the rules, the backtest and how to verify it.">
-<meta name="theme-color" content="#05070d">
+<meta name="description" content="The forest, foretold: where the Amazon and the Cerrado will lose forest in 2026, forecast and sealed before anyone can know, and graded in public.">
+<meta name="theme-color" content="#0a110e">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Almanac 2027.01: where will the forest be lost in 2026?">
-<meta property="og:description" content="A forecast sealed before the truth exists, with its rules, its backtest (+16.0% over the reference, short of the +20% bar) and how to verify it.">
+<meta property="og:title" content="The forest, foretold · Almanac 2027.01">
+<meta property="og:description" content="Where the Amazon and the Cerrado will lose forest in 2026: a forecast sealed before the truth exists. Backtest +16.0% over the reference, short of the +20% bar.">
 <meta property="og:url" content="https://pranavpanchal1326.github.io/Almanac/">
 <meta property="og:image" content="https://pranavpanchal1326.github.io/Almanac/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3CradialGradient id='g' cx='.38' cy='.35'%3E%3Cstop offset='0' stop-color='%23ffdcef'/%3E%3Cstop offset='.45' stop-color='%23de45a4'/%3E%3Cstop offset='1' stop-color='%23200a22'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='%2305070d'/%3E%3Ccircle cx='16' cy='16' r='10' fill='url(%23g)'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a110e'/%3E%3Ccircle cx='16' cy='16' r='10.5' fill='none' stroke='%23d9b14f' stroke-width='1.4'/%3E%3Cpath d='M5.5 16h21M16 5.5c-4 3-4 18 0 21M16 5.5c4 3 4 18 0 21' fill='none' stroke='%23d9b14f' stroke-width='.9'/%3E%3Ccircle cx='19' cy='18' r='2.4' fill='%23faecb4'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Barlow+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
 :root {
   color-scheme: dark;
-  --night: #05070d; --deep: #0a0e17; --glass: rgba(255,255,255,.035); --glass-2: rgba(255,255,255,.06);
-  --line: rgba(255,255,255,.09); --line-2: rgba(255,255,255,.16);
-  --ink: #eceff5; --ink-2: #b7bfcd; --muted: #8a93a6; --dim: #5d667a;
-  --ir: #ff86c9; --ir-2: #de45a4; --ir-3: #ad2c86; --ir-hot: #ffdcef;
-  --water: #6fd8ee; --series-1: #e0559f; --series-2: #2f9fd0;
-  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
-  --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "Geist Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
-  --ease: cubic-bezier(.2,.7,.1,1);
+  --ground: #0a110e; --ground-2: #0f1813; --ground-3: #142019;
+  --paper: #ece5d3; --ink-2: #c6bfac; --muted: #8d9584; --dim: #616a5e;
+  --rule: rgba(236,229,211,.13); --rule-2: rgba(236,229,211,.26);
+  --gold: #d9b14f; --gold-2: #b8892a; --gold-hot: #faecb4; --river: #86aec6;
+  --s1: #b8892a; --s2: #3b89c9;
+  --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --label: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --ease: cubic-bezier(.22,.7,.12,1);
 }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; background: var(--night); }
-body { margin: 0; background: var(--night); color: var(--ink); font: 400 16px/1.65 var(--sans); overflow-x: hidden; }
-::selection { background: var(--ir-2); color: #fff; }
-a { color: var(--ink); text-decoration-color: var(--ir-3); text-underline-offset: 3px; text-decoration-thickness: 1px; transition: color .2s, text-decoration-color .2s; }
-a:hover { color: var(--ir); text-decoration-color: var(--ir); }
-:focus-visible { outline: 2px solid var(--ir); outline-offset: 3px; border-radius: 4px; }
-code, pre, .mono { font-family: var(--mono); }
-body::after { content: ""; position: fixed; inset: -50%; pointer-events: none; z-index: 100; opacity: .055;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain 1.2s steps(6) infinite; }
-@keyframes grain { 0%{transform:translate(0,0)} 20%{transform:translate(-3%,2%)} 40%{transform:translate(2%,-3%)} 60%{transform:translate(-2%,-1%)} 80%{transform:translate(3%,3%)} }
-.wrap { width: min(1120px, 100% - 32px); margin: 0 auto; }
+html { -webkit-text-size-adjust: 100%; background: var(--ground); }
+body { margin: 0; background: var(--ground); color: var(--paper); font: 360 1.125rem/1.62 var(--serif); font-optical-sizing: auto; overflow-x: hidden;
+  font-variant-numeric: lining-nums; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 90; opacity: .045; mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+::selection { background: var(--gold-2); color: var(--ground); }
+a { color: inherit; text-decoration: underline; text-decoration-color: var(--gold-2); text-decoration-thickness: 1px; text-underline-offset: .18em; transition: color .2s, text-decoration-color .2s; }
+a:hover { color: var(--gold); text-decoration-color: var(--gold); }
+:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
+code, pre { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .82em; }
+.lbl { font: 500 .74rem/1.3 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.lbl.gold { color: var(--gold); }
+.wrap { width: min(1180px, 100% - 40px); margin: 0 auto; }
 
-/* ---------- nav ---------- */
-.nav { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 4px;
-  padding: 5px; border-radius: 999px; background: rgba(10,14,23,.55); border: 1px solid var(--line); backdrop-filter: blur(14px) saturate(140%);
-  max-width: calc(100% - 24px); }
-.nav a { color: var(--ink-2); text-decoration: none; font-size: .82rem; letter-spacing: .01em; padding: 6px 12px; border-radius: 999px; white-space: nowrap; transition: background .25s, color .25s; }
-.nav a:hover, .nav a.on { color: var(--ink); background: var(--glass-2); }
-.nav .mark { display: flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 600; padding-left: 8px; }
-.nav .mark i { width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 35% 32%, var(--ir-hot), var(--ir-2) 45%, #200a22); box-shadow: 0 0 12px rgba(255,134,201,.6); }
-.nav .links { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
-.nav .links::-webkit-scrollbar { display: none; }
-@media (max-width: 640px) { .nav .mark span { display: none; } .nav a { padding: 6px 9px; font-size: .78rem; } }
+/* ---------- masthead ---------- */
+.mast { position: fixed; inset: 0 0 auto; z-index: 50; transition: background .4s, border-color .4s; border-bottom: 1px solid transparent; }
+.mast.solid { background: rgba(10,17,14,.92); border-bottom-color: var(--rule); backdrop-filter: blur(6px); }
+.mast .wrap { display: flex; align-items: baseline; gap: 22px; height: 58px; padding-top: 18px; }
+.mast .word { font: italic 400 1.35rem/1 var(--serif); color: var(--paper); text-decoration: none; letter-spacing: -.005em; }
+.mast .word small { font: 500 .66rem/1 var(--label); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); font-style: normal; margin-left: 10px; vertical-align: .25em; }
+.mast nav { margin-left: auto; display: flex; gap: 22px; overflow-x: auto; scrollbar-width: none; }
+.mast nav::-webkit-scrollbar { display: none; }
+.mast nav a { font: 500 .74rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2); text-decoration: none; white-space: nowrap; padding-bottom: 4px; border-bottom: 1px solid transparent; }
+.mast nav a:hover, .mast nav a.on { color: var(--gold); border-bottom-color: var(--gold); }
+@media (max-width: 640px) { .mast .word small { display: none; } .mast nav { gap: 14px; } }
 
-/* ---------- hero: the orbit ---------- */
-.orbit { position: relative; height: 270vh; }
+/* ---------- the globe ---------- */
+.orbit { position: relative; height: 260vh; }
 .orbit .stick { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 #globe { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.orbit .fallback { position: absolute; inset: 0; transition: opacity 1.2s; background: radial-gradient(60% 60% at 70% 55%, rgba(222,69,164,.18), transparent 70%), radial-gradient(40% 40% at 72% 52%, #0e1526, var(--night)); }
-.orbit .veil { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 80% at 18% 45%, rgba(5,7,13,.86), rgba(5,7,13,.25) 52%, transparent 72%); }
-.hero { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; pointer-events: none; will-change: opacity, transform; }
-.kicker { font: 500 .75rem/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--ir); display: inline-flex; align-items: center; gap: 12px; }
-.kicker::before { content: ""; width: 28px; height: 1px; background: currentColor; box-shadow: 0 0 8px currentColor; }
-h1 { font: 400 clamp(3rem, 8.6vw, 7.6rem)/.92 var(--serif); letter-spacing: -.02em; margin: 22px 0 26px; max-width: 11ch; text-wrap: balance; }
-h1 em { font-style: italic; background: linear-gradient(100deg, var(--ir-hot) 0%, var(--ir) 35%, var(--ir-2) 70%, var(--ir-3)); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 22px rgba(255,134,201,.35)); padding-right: .06em; }
-.hero .lede { font-size: clamp(1rem, 1.6vw, 1.2rem); color: var(--ink-2); max-width: 44ch; margin: 0; font-weight: 300; }
-.hero .lede b { color: var(--ink); font-weight: 500; }
-.scrollcue { margin-top: 44px; display: inline-flex; align-items: center; gap: 14px; font: 500 .72rem/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
-.scrollcue i { position: relative; width: 1px; height: 46px; background: var(--line-2); overflow: hidden; }
-.scrollcue i::after { content: ""; position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--ir); box-shadow: 0 0 8px var(--ir); animation: drip 2.2s var(--ease) infinite; }
-@keyframes drip { to { top: 110%; } }
-.arrive { position: absolute; z-index: 2; left: 0; right: 0; bottom: 9vh; text-align: center; opacity: 0; pointer-events: none; padding: 0 16px; }
-.arrive p { margin: 0; font: italic 400 clamp(1.6rem, 3.4vw, 2.6rem)/1.1 var(--serif); color: var(--ink); text-shadow: 0 2px 30px #000; }
-.arrive small { display: block; margin-top: 10px; font: 500 .72rem/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
-.orbit .stick::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 38vh; pointer-events: none; background: linear-gradient(180deg, transparent, rgba(5,7,13,.92)); }
-.coords { position: absolute; z-index: 2; right: 22px; bottom: 22px; font: 400 .7rem/1.6 var(--mono); color: var(--dim); text-align: right; letter-spacing: .08em; }
-@media (max-width: 640px) { .coords { display: none; } }
+.orbit .fallback { position: absolute; inset: 0; transition: opacity 1.4s; background: radial-gradient(38% 52% at 72% 54%, #15211a, var(--ground) 70%); }
+.orbit .veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(10,17,14,.92) 0%, rgba(10,17,14,.55) 36%, transparent 62%); }
+.orbit .stick::after { content: ""; position: absolute; inset: auto 0 0; height: 34vh; pointer-events: none; background: linear-gradient(180deg, transparent, var(--ground)); }
+.title { position: absolute; inset: 0; display: flex; align-items: center; z-index: 2; will-change: opacity, transform; }
+.title .wrap { display: grid; grid-template-columns: minmax(0, 620px); }
+.title .lbl { color: var(--gold); display: flex; gap: 14px; align-items: center; }
+.title .lbl::after { content: ""; flex: 0 0 64px; height: 1px; background: var(--gold-2); }
+h1 { font: 300 clamp(3.6rem, 9.4vw, 8.4rem)/.9 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.028em; margin: 26px 0 30px; }
+h1 i { font-weight: 300; color: var(--gold); }
+.deck { font: 340 clamp(1.08rem, 1.7vw, 1.32rem)/1.5 var(--serif); color: var(--ink-2); margin: 0; max-width: 34em; }
+.deck b { font-weight: 500; color: var(--paper); }
+.byline { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 8px 28px; }
+.byline span { font: 500 .72rem/1.4 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.byline span b { color: var(--paper); font-weight: 600; }
+.descend { position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%); z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.descend i { width: 1px; height: 44px; background: linear-gradient(var(--gold), transparent); animation: sink 2.6s var(--ease) infinite; transform-origin: top; }
+@keyframes sink { 0% { transform: scaleY(0); opacity: 1; } 70% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+.arrive { position: absolute; inset: auto 0 12vh; z-index: 3; text-align: center; opacity: 0; pointer-events: none; padding: 0 20px; }
+.arrive p { margin: 0; font: italic 300 clamp(1.9rem, 4vw, 3.2rem)/1.1 var(--serif); color: var(--paper); }
+.arrive .lbl { margin-top: 14px; display: block; }
+.coords { position: absolute; right: 24px; bottom: 26px; z-index: 3; text-align: right; font: 500 .68rem/1.7 var(--label); letter-spacing: .16em; color: var(--dim); }
+@media (max-width: 700px) { .coords { display: none; } .orbit .veil { background: linear-gradient(180deg, rgba(10,17,14,.9) 0%, rgba(10,17,14,.5) 55%, transparent 80%); } .title { align-items: flex-start; padding-top: 18vh; } }
 
 /* ---------- chapters ---------- */
-.chapter { position: relative; padding: 18vh 0 6vh; }
-.chapter-head { display: grid; grid-template-columns: 170px 1fr; gap: 24px; align-items: start; margin-bottom: 44px; }
-.chapter-no { font: 400 .74rem/1.4 var(--mono); letter-spacing: .2em; color: var(--ir); padding-top: 18px; }
-.chapter-no::after { content: ""; display: block; width: 44px; height: 1px; margin-top: 14px; background: linear-gradient(90deg, var(--ir), transparent); }
-h2 { font: 400 clamp(2.3rem, 5.2vw, 4.4rem)/1 var(--serif); letter-spacing: -.015em; margin: 0 0 18px; text-wrap: balance; }
-h2 em { font-style: italic; color: var(--ir); }
-h3 { font: 400 1.7rem/1.15 var(--serif); margin: 0 0 12px; }
-.chapter p { color: var(--ink-2); max-width: 62ch; margin: 0 0 14px; font-weight: 300; }
-.chapter p b { color: var(--ink); font-weight: 500; }
-@media (max-width: 760px) { .chapter-head { grid-template-columns: 1fr; gap: 6px; } .chapter-no { padding-top: 0; } }
-
-[data-reveal] { opacity: 0; transform: translateY(26px); transition: opacity 1.1s var(--ease), transform 1.1s var(--ease); transition-delay: var(--d, 0s); }
+.chapter { position: relative; padding: 16vh 0 4vh; }
+.chapter + .chapter { border-top: 1px solid var(--rule); }
+.grid { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 40px; }
+.margin { position: relative; }
+.numeral { font: 200 4.6rem/.85 var(--serif); font-variation-settings: "opsz" 72; color: var(--gold); letter-spacing: -.02em; }
+.margin .lbl { margin-top: 18px; display: block; }
+.margin .note-m { margin-top: 18px; font: italic 360 .92rem/1.5 var(--serif); color: var(--muted); }
+h2 { font: 300 clamp(2.4rem, 5vw, 4.2rem)/1.02 var(--serif); font-variation-settings: "opsz" 72; letter-spacing: -.022em; margin: -6px 0 22px; max-width: 16em; }
+h3 { font: 400 1.65rem/1.15 var(--serif); font-variation-settings: "opsz" 48; letter-spacing: -.01em; margin: 0 0 12px; }
+.chapter p { margin: 0 0 16px; color: var(--ink-2); max-width: 36em; }
+.chapter p b { color: var(--paper); font-weight: 500; }
+.dropcap::first-letter { float: left; font: 300 4.3em/.8 var(--serif); font-variation-settings: "opsz" 72; color: var(--gold); padding: .06em .08em 0 0; }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; gap: 14px; } .numeral { font-size: 3rem; } .margin .note-m { display: none; } }
+[data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 1.2s var(--ease), transform 1.2s var(--ease); transition-delay: var(--d, 0s); }
 [data-reveal].in { opacity: 1; transform: none; }
 
-/* ---------- the map ---------- */
-.atlas { width: min(100%, calc(84vh * 1.1335)); margin-left: auto !important; margin-right: auto !important; position: relative; border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: var(--deep);
-  box-shadow: 0 40px 120px -40px rgba(222,69,164,.28), inset 0 1px 0 rgba(255,255,255,.05); margin: 0; }
-.atlas .viewport { position: relative; aspect-ratio: 2267 / 2000; overflow: hidden; touch-action: none; cursor: crosshair; }
-.atlas .viewport.zoomed { cursor: grab; } .atlas .viewport.drag { cursor: grabbing; }
+/* ---------- plate I: the map ---------- */
+.plate { margin: 44px 0 0; }
+.plate-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--rule-2); }
+.plate-head h3 { margin: 0; font-style: italic; font-weight: 300; }
+.frame { position: relative; margin: 26px auto 0; padding: 26px; width: min(100%, calc(80vh * 1.1335 + 52px)); border: 1px solid var(--rule-2); }
+.frame::before { content: ""; position: absolute; inset: 5px; border: 1px solid var(--rule); pointer-events: none; }
+.ticks span { position: absolute; font: 500 .62rem/1 var(--label); letter-spacing: .08em; color: var(--muted); white-space: nowrap; transition: opacity .3s; }
+.ticks .top, .ticks .bot { transform: translateX(-50%); }
+.ticks .top { top: 9px; } .ticks .bot { bottom: 9px; }
+.ticks .lft, .ticks .rgt { transform: translateY(-50%) rotate(-90deg); }
+.ticks .lft { left: -3px; } .ticks .rgt { right: -3px; }
+.frame.zoomed .ticks span { opacity: 0; }
+.viewport { position: relative; aspect-ratio: 2267 / 2000; overflow: hidden; touch-action: none; cursor: crosshair; background: var(--ground); }
+.viewport.zoomed { cursor: grab; } .viewport.drag { cursor: grabbing; }
 .stage { position: absolute; inset: 0; transform-origin: 0 0; --k: 1; --u: 3; }
 .stage canvas, .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .stage svg { pointer-events: none; }
-#glow { mix-blend-mode: screen; animation: breathe 5.5s ease-in-out infinite; }
-@keyframes breathe { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
-.stage svg .grid { stroke: rgba(111,216,238,.1); stroke-width: calc(1px / var(--k)); vector-effect: non-scaling-stroke; fill: none; }
-.stage svg .tile { stroke: rgba(236,239,245,.08); fill: none; stroke-width: calc(.8px / var(--k)); vector-effect: non-scaling-stroke; }
-.stage svg .held { stroke: var(--water); fill: none; stroke-width: calc(1.3px / var(--k)); stroke-dasharray: calc(5px / var(--k)) calc(5px / var(--k)); vector-effect: non-scaling-stroke; }
-.stage svg text { fill: var(--muted); font-family: var(--mono); font-size: calc(10.5px * var(--u) / var(--k)); letter-spacing: .08em; }
-.stage svg text.held-label { fill: var(--water); font-size: calc(11px * var(--u) / var(--k)); }
-.stage svg .scale { stroke: var(--muted); stroke-width: calc(1.5px / var(--k)); vector-effect: non-scaling-stroke; }
-.stage svg .hover { stroke: #fff; stroke-width: calc(1.5px / var(--k)); fill: none; vector-effect: non-scaling-stroke; }
-.atlas .hud { position: absolute; left: 14px; right: 14px; top: 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; pointer-events: none; z-index: 3; }
-.atlas .hud > * { pointer-events: auto; }
-.pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(5,7,13,.62); border: 1px solid var(--line); backdrop-filter: blur(10px); border-radius: 999px; padding: 7px 13px; font: 400 .74rem/1.2 var(--mono); color: var(--ink-2); letter-spacing: .04em; max-width: 60vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.zoom { display: flex; gap: 6px; }
-.zoom button { all: unset; cursor: pointer; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: rgba(5,7,13,.62); border: 1px solid var(--line); color: var(--ink); font: 400 1rem/1 var(--mono); backdrop-filter: blur(10px); transition: border-color .2s, background .2s; }
-.zoom button:hover { border-color: var(--ir); background: rgba(222,69,164,.12); }
-.zoom button:focus-visible { outline: 2px solid var(--ir); }
-.tip { position: absolute; z-index: 4; pointer-events: none; min-width: 200px; padding: 10px 13px; border-radius: 12px; background: rgba(5,7,13,.84); border: 1px solid var(--line-2); backdrop-filter: blur(10px);
-  font: 400 .74rem/1.5 var(--mono); color: var(--ink-2); opacity: 0; transform: translate(14px, 14px); transition: opacity .15s; }
-.tip b { display: block; font: italic 400 1.3rem/1.15 var(--serif); color: var(--ink); margin: 2px 0 4px; }
-.tip .sw { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; box-shadow: 0 0 8px currentColor; }
-.legend { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; list-style: none; padding: 18px 18px 20px; margin: 0; border-top: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.015), transparent); }
-.legend li { position: relative; padding-top: 18px; font: 400 .7rem/1.45 var(--mono); color: var(--muted); letter-spacing: .02em; padding-right: 6px; }
-.legend li::before { content: ""; position: absolute; left: 0; right: 2px; top: 0; height: 8px; background: var(--c); box-shadow: 0 0 14px -2px var(--c); }
-.legend li:first-child::before { border-radius: 4px 0 0 4px; } .legend li:last-child::before { border-radius: 0 4px 4px 0; right: 0; }
-.legend b { display: block; color: var(--ink); font: 500 .76rem/1.4 var(--sans); }
-@media (max-width: 700px) { .legend { grid-template-columns: repeat(3, 1fr); row-gap: 14px; } .legend li::before { border-radius: 4px !important; } }
-.note { font: 300 .85rem/1.6 var(--sans); color: var(--muted); max-width: 86ch; margin-top: 16px; }
-.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
-.btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 20px; border-radius: 999px; text-decoration: none; font: 500 .9rem/1 var(--sans); color: var(--ink); border: 1px solid var(--line-2); background: var(--glass); transition: border-color .3s, background .3s, transform .3s var(--ease), box-shadow .3s; }
-.btn:hover { color: #fff; border-color: var(--ir); background: rgba(222,69,164,.1); transform: translateY(-2px); }
-.btn.lit { border-color: transparent; background: linear-gradient(120deg, var(--ir-2), var(--ir-3)); color: #fff; box-shadow: 0 10px 40px -10px rgba(222,69,164,.7); }
-.btn.lit:hover { box-shadow: 0 14px 50px -8px rgba(255,134,201,.85); }
-.btn span { transition: transform .3s var(--ease); } .btn:hover span { transform: translateX(4px); }
+#glow { mix-blend-mode: screen; animation: breathe 7s ease-in-out infinite; }
+@keyframes breathe { 0%,100% { opacity: .35; } 50% { opacity: .85; } }
+.stage svg .grid { stroke: rgba(236,229,211,.07); stroke-width: calc(1px / var(--k)); vector-effect: non-scaling-stroke; fill: none; }
+.stage svg .tile { stroke: rgba(236,229,211,.06); fill: none; stroke-width: calc(.7px / var(--k)); vector-effect: non-scaling-stroke; }
+.stage svg .held { stroke: var(--river); fill: none; stroke-width: calc(1.1px / var(--k)); stroke-dasharray: calc(6px / var(--k)) calc(4px / var(--k)); vector-effect: non-scaling-stroke; }
+.stage svg text { fill: var(--river); font-family: var(--label); font-weight: 500; letter-spacing: .14em; font-size: calc(10.5px * var(--u) / var(--k)); }
+.stage svg .scale { stroke: var(--ink-2); stroke-width: calc(1.2px / var(--k)); vector-effect: non-scaling-stroke; }
+.stage svg text.scale-t { fill: var(--ink-2); }
+.stage svg .hover { stroke: var(--paper); stroke-width: calc(1.2px / var(--k)); fill: none; vector-effect: non-scaling-stroke; }
+.north { position: absolute; right: 40px; top: 40px; width: 34px; height: 54px; pointer-events: none; z-index: 2; }
+.tools { position: absolute; left: 38px; top: 38px; z-index: 3; display: flex; flex-direction: column; border: 1px solid var(--rule-2); background: rgba(10,17,14,.85); }
+.tools button { all: unset; cursor: pointer; width: 32px; height: 32px; display: grid; place-items: center; color: var(--paper); font: 400 1.05rem/1 var(--serif); transition: color .2s, background .2s; }
+.tools button + button { border-top: 1px solid var(--rule); }
+.tools button:hover { color: var(--gold); background: rgba(217,177,79,.08); }
+.tools button:focus-visible { outline: 1px solid var(--gold); outline-offset: -2px; }
+.tip { position: absolute; z-index: 4; pointer-events: none; padding: 9px 12px 10px 14px; background: rgba(10,17,14,.94); border-left: 2px solid var(--gold); opacity: 0; transform: translate(16px, 16px); transition: opacity .15s; min-width: 200px; }
+.tip .lbl { font-size: .64rem; }
+.tip b { display: block; font: italic 400 1.2rem/1.2 var(--serif); color: var(--paper); margin: 3px 0 2px; }
+.tip span { font: 400 .9rem/1.35 var(--serif); color: var(--ink-2); }
+.readout { min-height: 1.4em; margin-top: 14px; text-align: center; }
+.key { display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: start; margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--rule); }
+.key h4 { margin: 0; font: italic 400 1.15rem/1.3 var(--serif); color: var(--paper); }
+.key h4 + .lbl { display: block; margin-top: 8px; }
+.steps { display: grid; grid-template-columns: repeat(6, 1fr); list-style: none; margin: 0; padding: 0; }
+.steps li { padding: 0 8px 0 0; }
+.steps li::before { content: ""; display: block; height: 14px; background: var(--c); margin-bottom: 10px; }
+.steps li:first-child::before { box-shadow: inset 0 0 0 1px var(--rule-2); }
+.steps b { display: block; font: 500 .72rem/1.3 var(--label); letter-spacing: .12em; text-transform: uppercase; color: var(--paper); }
+.steps span { display: block; font: 400 .86rem/1.35 var(--serif); color: var(--muted); margin-top: 2px; }
+@media (max-width: 760px) { .key { grid-template-columns: 1fr; gap: 14px; } .steps { grid-template-columns: repeat(3, 1fr); row-gap: 16px; } .frame { padding: 16px; } .ticks { display: none; } .north { right: 26px; top: 26px; width: 26px; height: 42px; } .tools { left: 24px; top: 24px; } }
+.figcap { margin-top: 18px; font: italic 360 .95rem/1.55 var(--serif); color: var(--muted); max-width: 54em; }
+.figcap b { font-style: normal; font: 500 .72rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-right: 10px; }
+.links { display: flex; flex-wrap: wrap; gap: 14px 34px; margin-top: 30px; }
+.go { display: inline-flex; align-items: baseline; gap: 12px; font: 500 .8rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--paper); text-decoration: none; padding: 15px 0 13px; border-bottom: 1px solid var(--gold-2); transition: color .25s, border-color .25s, gap .3s var(--ease); }
+.go:hover { color: var(--gold); border-color: var(--gold); gap: 18px; }
+.go.prime { color: var(--ground); background: var(--gold); border: 0; padding: 15px 22px 13px; }
+.go.prime:hover { background: var(--gold-hot); color: var(--ground); }
 
 /* ---------- the verdict ---------- */
-.verdict { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
-@media (max-width: 900px) { .verdict { grid-template-columns: 1fr; gap: 36px; } }
-.bignum { font: 400 clamp(5.5rem, 15vw, 11rem)/.9 var(--serif); letter-spacing: -.04em; background: linear-gradient(180deg, #fff 10%, var(--ir) 70%, var(--ir-3)); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 40px rgba(222,69,164,.35)); font-variant-numeric: tabular-nums; padding-right: .05em; }
-.bignum-cap { font: 500 .72rem/1.6 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: 16px; max-width: 42ch; }
-.gauge { position: relative; margin: 56px 0 8px; height: 74px; }
-.gauge .track { position: absolute; left: 0; right: 0; top: 34px; height: 2px; background: var(--line-2); }
-.gauge .ci { position: absolute; top: 28px; height: 14px; border-radius: 7px; left: 0; width: 0; background: linear-gradient(90deg, rgba(222,69,164,.15), rgba(255,134,201,.5), rgba(222,69,164,.15)); transition: width 1.6s var(--ease) .3s, left 1.6s var(--ease) .3s; }
-.gauge .dot { position: absolute; top: 27px; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: var(--ir-hot); box-shadow: 0 0 0 4px rgba(255,134,201,.25), 0 0 26px var(--ir); left: 0; transition: left 1.8s var(--ease) .3s; }
-.gauge .bar { position: absolute; top: 14px; height: 42px; width: 0; border-left: 1px dashed var(--ink-2); }
-.gauge .bar span { position: absolute; top: -20px; left: 0; transform: translateX(-50%); white-space: nowrap; font: 500 .66rem/1 var(--mono); color: var(--ink-2); letter-spacing: .06em; }
-.gauge .bar.bar20 { border-left: 2px solid var(--ink); } .gauge .bar.bar20 span { color: var(--ink); }
-.gauge .ticks { position: absolute; left: 0; right: 0; top: 56px; display: flex; justify-content: space-between; font: 400 .66rem/1 var(--mono); color: var(--dim); }
-.gates { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
-.gate { display: grid; grid-template-columns: 30px 1fr auto auto; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass); }
-.gate-n { font: 400 .72rem/1 var(--mono); color: var(--dim); }
-.gate-what { font-size: .92rem; color: var(--ink-2); line-height: 1.4; }
-.gate-val { font: 500 .88rem/1 var(--mono); color: var(--ink); white-space: nowrap; }
-.gate-state { font: 500 .68rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 7px 10px; border-radius: 999px; white-space: nowrap; }
-.gate.open .gate-state { color: var(--water); background: rgba(111,216,238,.1); box-shadow: inset 0 0 0 1px rgba(111,216,238,.35); }
-.gate.open .gate-state::before { content: "● "; text-shadow: 0 0 8px var(--water); }
-.gate.shut { border-color: rgba(255,134,201,.35); background: linear-gradient(90deg, rgba(222,69,164,.1), transparent); }
-.gate.shut .gate-state { color: var(--ir); background: rgba(255,134,201,.1); box-shadow: inset 0 0 0 1px rgba(255,134,201,.4); }
-.gate.shut .gate-state::before { content: "○ "; }
-@media (max-width: 560px) { .gate { grid-template-columns: 1fr auto; } .gate-n { display: none; } .gate-what { grid-column: 1 / -1; } }
-.verdict-line { margin-top: 26px !important; font: italic 400 1.6rem/1.3 var(--serif) !important; color: var(--ink) !important; max-width: 36ch; }
-.verdict-line em { color: var(--ir); }
+.verdict { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: start; margin-top: 46px; }
+@media (max-width: 960px) { .verdict { grid-template-columns: 1fr; gap: 40px; } }
+.figure { font: 200 clamp(4.4rem, 7.6vw, 7.8rem)/.86 var(--serif); white-space: nowrap; font-variation-settings: "opsz" 72; letter-spacing: -.05em; color: var(--paper); font-variant-numeric: lining-nums tabular-nums; }
+.figure sup { font-size: .32em; vertical-align: .95em; letter-spacing: 0; color: var(--gold); margin-left: .05em; }
+.figure-cap { margin-top: 18px; }
+.ruler { margin-top: 52px; }
+.ruler svg { width: 100%; height: auto; display: block; overflow: visible; }
+.ruler text { font: 500 11px var(--label); letter-spacing: .1em; fill: var(--muted); }
+.ruler .t1 { stroke: var(--rule-2); } .ruler .t5 { stroke: var(--ink-2); }
+.ruler .base { stroke: var(--ink-2); }
+.ruler .bar20 { stroke: var(--paper); stroke-width: 1.5; }
+.ruler .bar10 { stroke: var(--muted); stroke-dasharray: 3 3; }
+.ruler .ci { fill: none; stroke: var(--gold); stroke-width: 1.2; }
+.ruler .needle { fill: var(--gold-hot); stroke: var(--ground); stroke-width: 1.5; }
+.ruler text.gold { fill: var(--gold); } .ruler text.paper { fill: var(--paper); }
+.tests { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule-2); }
+.gate { display: grid; grid-template-columns: 34px 1fr auto; gap: 6px 16px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+.gate-n { font: 300 1.4rem/1 var(--serif); color: var(--dim); }
+.gate-what { font: 400 1.05rem/1.4 var(--serif); color: var(--paper); }
+.gate-val { grid-column: 2; font: 500 .74rem/1 var(--label); letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+.gate-state { grid-column: 3; grid-row: 1 / span 2; align-self: center; font: 500 .72rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; padding: 8px 0 8px 12px; border-left: 1px solid var(--rule); white-space: nowrap; }
+.gate.open .gate-state { color: var(--ink-2); } .gate.open .gate-state::before { content: "✓  "; color: var(--gold); }
+.gate.shut .gate-what { color: var(--gold-hot); }
+.gate.shut .gate-state { color: var(--gold); } .gate.shut .gate-state::before { content: "✕  "; }
+.verdict-line { margin-top: 30px !important; font: italic 300 1.7rem/1.32 var(--serif) !important; color: var(--paper) !important; max-width: 20em !important; }
+.verdict-line i { font-style: normal; color: var(--gold); }
 
 /* ---------- the field ---------- */
-.race { list-style: none; margin: 0; padding: 0; }
-.race li { display: grid; grid-template-columns: minmax(200px, 1.2fr) 2fr repeat(3, 76px); align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
-.race li.head-row { padding: 0 0 10px; font: 500 .64rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
-.race li.head-row .n { font: inherit; color: inherit; white-space: nowrap; }
-.race .who b { display: block; font: 500 .95rem/1.3 var(--sans); color: var(--ink); }
-.race .who span { display: block; font-size: .78rem; color: var(--muted); line-height: 1.4; margin-top: 2px; font-weight: 300; }
+.field { margin-top: 15vh; }
+.race { list-style: none; margin: 26px 0 0; padding: 0; border-top: 1px solid var(--rule-2); }
+.race li { display: grid; grid-template-columns: minmax(210px, 1.15fr) 2fr repeat(3, 80px); align-items: center; gap: 18px; padding: 17px 0; border-bottom: 1px solid var(--rule); }
+.race li.head-row { padding: 12px 0; }
+.race li.head-row span { font: 500 .66rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.race li.head-row .n { text-align: right; }
+.race .who b { display: block; font: 450 1.02rem/1.3 var(--serif); color: var(--paper); }
+.race .who span { display: block; font: italic 360 .86rem/1.4 var(--serif); color: var(--muted); margin-top: 2px; }
 .race .lane { position: relative; height: 14px; }
-.race .run { position: absolute; left: 0; top: 4px; height: 6px; border-radius: 3px; background: #3a4255; width: 0; transition: width 1.8s var(--ease); transition-delay: var(--d, 0s); }
-.race .ci { position: absolute; top: 6px; height: 2px; background: var(--ink-2); opacity: 0; transition: opacity .8s ease 1.4s; }
-.race .ci::before, .race .ci::after { content: ""; position: absolute; top: -4px; width: 1px; height: 10px; background: var(--ink-2); }
-.race .ci::before { left: 0; } .race .ci::after { right: 0; }
-.race li.in .ci { opacity: .5; }
-.race li.me .run { background: linear-gradient(90deg, var(--ir-3), var(--ir)); box-shadow: 0 0 18px rgba(255,134,201,.6); }
-.race li.ref .run { background: #6b7489; }
-.race li.me .who b { color: var(--ir); }
-.race .n { text-align: right; font: 400 .9rem/1 var(--mono); color: var(--ink-2); font-variant-numeric: tabular-nums; }
-.race li.me .n { color: var(--ink); font-weight: 500; }
+.race .run { position: absolute; left: 0; top: 6px; height: 2px; background: var(--dim); width: 0; transition: width 2s var(--ease); transition-delay: var(--d, 0s); }
+.race .run::after { content: ""; position: absolute; right: -4px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--ink-2); }
+.race .ci { position: absolute; top: 2px; height: 10px; border-left: 1px solid var(--muted); border-right: 1px solid var(--muted); opacity: 0; transition: opacity .8s ease 1.6s; }
+.race li.in .ci { opacity: .7; }
+.race li.me .run { background: var(--gold); height: 3px; top: 5px; } .race li.me .run::after { background: var(--gold-hot); box-shadow: 0 0 12px var(--gold); }
+.race li.me .who b { color: var(--gold); }
+.race .n { text-align: right; font: 400 1.02rem/1 var(--serif); font-variant-numeric: lining-nums tabular-nums; color: var(--ink-2); }
+.race li.me .n { color: var(--paper); font-weight: 500; }
 @media (max-width: 760px) { .race li { grid-template-columns: 1fr 64px; } .race .lane { grid-column: 1 / -1; order: 3; } .race .n.t, .race .n.h, .race li.head-row .lane-h { display: none; } }
 
 /* ---------- calibration ---------- */
-.duo { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: center; margin-top: 14vh; }
-@media (max-width: 900px) { .duo { grid-template-columns: 1fr; gap: 30px; } }
-.chart { position: relative; padding: 22px 18px 12px; border-radius: 22px; border: 1px solid var(--line); background: var(--glass); }
+.duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: 64px; align-items: start; margin-top: 15vh; }
+@media (max-width: 960px) { .duo { grid-template-columns: 1fr; gap: 34px; } }
+.chart { position: relative; }
 .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
-.chart text { fill: var(--dim); font: 400 11px var(--mono); letter-spacing: .04em; }
-.chart .gl { stroke: rgba(255,255,255,.06); }
-.chart .axis line { stroke: var(--line-2); }
-.chart .diag { stroke: var(--muted); stroke-dasharray: 3 5; }
-.chart .s { fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.chart .s1 { stroke: var(--series-1); filter: drop-shadow(0 0 6px rgba(224,85,159,.7)); }
-.chart .s2 { stroke: var(--series-2); filter: drop-shadow(0 0 6px rgba(47,159,208,.6)); }
-.chart .d1 { fill: var(--series-1); stroke: var(--deep); stroke-width: 2; transition: r .4s var(--ease); }
-.chart .d2 { fill: var(--series-2); stroke: var(--deep); stroke-width: 2; transition: r .4s var(--ease); }
-.chart .lab { font: 500 12px var(--sans); fill: var(--ink); letter-spacing: 0; }
+.chart text { fill: var(--muted); font: 500 11px var(--label); letter-spacing: .08em; }
+.chart .gl { stroke: rgba(236,229,211,.06); }
+.chart .axis line { stroke: var(--rule-2); }
+.chart .diag { stroke: var(--ink-2); stroke-dasharray: 2 5; }
+.chart .s { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.chart .s1 { stroke: var(--s1); } .chart .s2 { stroke: var(--s2); }
+.chart .d1 { fill: var(--s1); stroke: var(--ground); stroke-width: 2; } .chart .d2 { fill: var(--s2); stroke: var(--ground); stroke-width: 2; }
+.chart .lab { font: italic 400 14px var(--serif); fill: var(--paper); letter-spacing: 0; }
 .chart .hit { fill: transparent; cursor: pointer; }
-@media (max-width: 520px) { .chart text { font-size: 14px; } .chart .lab { font-size: 15px; } }
-.keys { display: flex; flex-wrap: wrap; gap: 18px; font: 400 .72rem/1 var(--mono); color: var(--ink-2); margin: 0 0 12px 6px; letter-spacing: .03em; }
-.keys span { display: inline-flex; align-items: center; gap: 8px; }
-.keys i { width: 18px; height: 2px; border-radius: 1px; display: inline-block; }
-.keys i.dash { background: repeating-linear-gradient(90deg, var(--muted) 0 3px, transparent 3px 7px); }
-.ctip { position: absolute; pointer-events: none; padding: 7px 10px; border-radius: 10px; background: rgba(5,7,13,.92); border: 1px solid var(--line-2); font: 400 .72rem/1.4 var(--mono); color: var(--ink); white-space: nowrap; transform: translate(-50%, calc(-100% - 12px)); opacity: 0; transition: opacity .12s; }
-.weak { margin-top: 26px; padding: 20px 22px; border-radius: 18px; border: 1px solid rgba(255,134,201,.25); background: linear-gradient(135deg, rgba(222,69,164,.08), transparent 60%); }
-.weak h4 { margin: 0 0 10px; font: 500 .7rem/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--ir); }
-.weak ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: .92rem; font-weight: 300; }
-.weak li { margin: 6px 0; } .weak li::marker { color: var(--ir-3); }
+@media (max-width: 520px) { .chart text { font-size: 14px; } .chart .lab { font-size: 17px; } }
+.keys { display: flex; flex-wrap: wrap; gap: 22px; margin: 0 0 14px; }
+.keys span { display: inline-flex; align-items: center; gap: 9px; font: 500 .7rem/1 var(--label); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+.keys i { width: 20px; height: 2px; display: inline-block; }
+.keys i.dash { background: repeating-linear-gradient(90deg, var(--ink-2) 0 2px, transparent 2px 6px); }
+.ctip { position: absolute; pointer-events: none; padding: 7px 10px 7px 12px; background: rgba(10,17,14,.95); border-left: 2px solid var(--gold); font: 400 .88rem/1.35 var(--serif); color: var(--paper); white-space: nowrap; transform: translate(-50%, calc(-100% - 12px)); opacity: 0; transition: opacity .12s; }
+.caveats { margin: 26px 0 0; padding: 22px 0 0; border-top: 1px solid var(--rule-2); }
+.caveats ol { margin: 12px 0 0; padding: 0; list-style: none; counter-reset: c; }
+.caveats li { counter-increment: c; position: relative; padding-left: 34px; margin: 0 0 12px; font: 360 .98rem/1.5 var(--serif); color: var(--ink-2); }
+.caveats li::before { content: counter(c, lower-roman) "."; position: absolute; left: 0; top: 0; font-style: italic; color: var(--gold); }
 
 /* ---------- method ---------- */
-.flow { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-@media (max-width: 860px) { .flow { grid-template-columns: 1fr; } }
-.flow svg.wire { position: absolute; left: 0; right: 0; top: 50px; width: 100%; height: 4px; overflow: visible; pointer-events: none; }
-@media (max-width: 860px) { .flow svg.wire { display: none; } }
-.wire path { stroke: url(#wireg); stroke-width: 1.5; fill: none; stroke-dasharray: 3 9; animation: flowdash 1.4s linear infinite; }
-@keyframes flowdash { to { stroke-dashoffset: -24; } }
-.step { position: relative; padding: 26px 24px 24px; border-radius: 22px; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.01)); }
-.step .orb { position: relative; z-index: 1; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 22px; font: 400 .74rem/1 var(--mono); color: var(--ink);
-  background: radial-gradient(circle at 35% 30%, rgba(255,220,239,.35), rgba(173,44,134,.35) 55%, #0b0e18); border: 1px solid rgba(255,134,201,.35); box-shadow: 0 0 30px -6px rgba(222,69,164,.6); }
-.step h3 { font-size: 1.6rem; }
-.step p { font-size: .93rem; margin: 0; }
-.aside { margin-top: 24px !important; font-size: .9rem !important; color: var(--muted) !important; max-width: 80ch !important; }
+.flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 46px; border-top: 1px solid var(--rule-2); }
+.flow .step { padding: 26px 28px 8px 0; }
+.flow .step + .step { padding-left: 28px; border-left: 1px solid var(--rule); }
+.flow .no { font: 200 3.4rem/1 var(--serif); font-variation-settings: "opsz" 72; color: var(--gold); }
+.flow h3 { margin-top: 14px; }
+.flow p { font-size: 1rem; }
+.flow svg { display: block; width: 100%; height: 58px; margin: 16px 0 8px; overflow: visible; }
+.flow svg .ln { stroke: var(--rule-2); fill: none; }
+.flow svg .gd { fill: var(--gold); } .flow svg .gl2 { stroke: var(--gold); fill: none; }
+.flow svg .pulse { animation: pulse 3.2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
+@media (max-width: 860px) { .flow { grid-template-columns: 1fr; } .flow .step + .step { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); } }
+.aside { margin-top: 30px !important; font-style: italic; color: var(--muted) !important; max-width: 44em !important; }
 
 /* ---------- the seal ---------- */
-.seal { display: grid; grid-template-columns: 300px 1fr; gap: 56px; align-items: center; }
+.seal { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 64px; align-items: center; margin-top: 46px; }
 @media (max-width: 860px) { .seal { grid-template-columns: 1fr; justify-items: center; } .seal > div:last-child { width: 100%; } }
-.ring { position: relative; width: 300px; height: 300px; }
-.ring svg { width: 100%; height: 100%; overflow: visible; }
-.ring .spin { transform-origin: 150px 150px; animation: spin 90s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.ring text { font: 400 9.6px var(--mono); fill: var(--ink-2); letter-spacing: .6px; }
-.ring .core { position: absolute; inset: 70px; border-radius: 50%; display: grid; place-items: center; text-align: center;
-  background: radial-gradient(circle at 38% 32%, rgba(255,220,239,.28), rgba(173,44,134,.22) 45%, rgba(5,7,13,.95) 75%); border: 1px solid rgba(255,134,201,.4); box-shadow: 0 0 60px -10px rgba(222,69,164,.8), inset 0 0 40px rgba(5,7,13,.8); }
-.ring .core b { display: block; font: italic 400 1.9rem/1 var(--serif); color: var(--ink); }
-.ring .core span { display: block; margin-top: 8px; font: 500 .6rem/1.4 var(--mono); letter-spacing: .18em; color: var(--ir); text-transform: uppercase; }
-.code { position: relative; margin: 10px 0 18px; padding: 16px 92px 16px 18px; border-radius: 14px; border: 1px solid var(--line); background: rgba(0,0,0,.35); }
-.code pre { margin: 0; font: 400 .8rem/1.7 var(--mono); color: var(--ink); white-space: pre-wrap; word-break: break-all; }
-.code button { all: unset; cursor: pointer; position: absolute; top: 12px; right: 12px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line-2); font: 500 .66rem/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); transition: border-color .2s, color .2s; }
-.code button:hover { border-color: var(--ir); color: var(--ir); }
-.code button:focus-visible { outline: 2px solid var(--ir); }
-.log { list-style: none; margin: 12px 0 0; padding: 0 0 0 22px; border-left: 1px solid var(--line-2); }
-.log li { position: relative; padding: 0 0 18px; }
-.log li::before { content: ""; position: absolute; left: -27px; top: 6px; width: 9px; height: 9px; border-radius: 50%; background: var(--night); border: 1px solid var(--ir); box-shadow: 0 0 10px rgba(255,134,201,.5); }
-.log time { display: block; font: 500 .72rem/1.4 var(--mono); color: var(--ir); letter-spacing: .08em; }
-.log span { display: block; font-size: .9rem; color: var(--ink-2); font-weight: 300; }
-.rules { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-@media (max-width: 760px) { .rules { grid-template-columns: 1fr; } }
-.rules a { display: block; height: 100%; padding: 20px 22px; border-radius: 18px; border: 1px solid var(--line); background: var(--glass); text-decoration: none; transition: border-color .3s, transform .3s var(--ease), background .3s; }
-.rules a:hover { border-color: rgba(255,134,201,.5); transform: translateY(-3px); background: rgba(222,69,164,.06); color: var(--ink); }
-.rules b { display: block; font: 400 1.35rem/1.2 var(--serif); color: var(--ink); margin-bottom: 6px; }
-.rules span { display: block; font-size: .86rem; color: var(--muted); font-weight: 300; line-height: 1.5; }
+.stamp { width: 300px; height: 300px; }
+.stamp svg { width: 100%; height: 100%; overflow: visible; }
+.stamp .ring { transform-origin: 150px 150px; animation: turn 240s linear infinite; }
+@keyframes turn { to { transform: rotate(360deg); } }
+.stamp text { font: 500 9.4px var(--label); letter-spacing: 1.6px; fill: var(--gold); }
+.stamp .c { fill: none; stroke: var(--gold-2); }
+.stamp .big { font: italic 300 34px var(--serif); letter-spacing: 0; fill: var(--paper); }
+.stamp .sm { font: 500 9px var(--label); letter-spacing: 2.6px; fill: var(--gold); }
+.code { position: relative; margin: 10px 0 20px; padding: 16px 96px 16px 18px; background: var(--ground-2); border: 1px solid var(--rule); }
+.code pre { margin: 0; line-height: 1.75; color: var(--paper); white-space: pre-wrap; word-break: break-all; }
+.code button { all: unset; cursor: pointer; position: absolute; top: 12px; right: 12px; padding: 8px 12px 7px; border: 1px solid var(--rule-2); font: 500 .66rem/1 var(--label); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2); transition: border-color .2s, color .2s; }
+.code button:hover { border-color: var(--gold); color: var(--gold); }
+.code button:focus-visible { outline: 1px solid var(--gold); }
+.ledger { list-style: none; margin: 18px 0 0; padding: 0; border-top: 1px solid var(--rule-2); }
+.ledger li { display: grid; grid-template-columns: 110px 1fr; gap: 18px; padding: 13px 0; border-bottom: 1px solid var(--rule); }
+.ledger time { font: 500 .74rem/1.6 var(--label); letter-spacing: .12em; color: var(--gold); }
+.ledger span { font: 360 .98rem/1.5 var(--serif); color: var(--ink-2); }
+.rules { list-style: none; margin: 18px 0 0; padding: 0; border-top: 1px solid var(--rule-2); }
+.rules a { display: block; padding: 16px 0; border-bottom: 1px solid var(--rule); text-decoration: none; transition: padding .3s var(--ease); }
+.rules a:hover { padding-left: 10px; color: var(--paper); }
+.rules b { display: block; font: italic 400 1.25rem/1.25 var(--serif); color: var(--paper); }
+.rules a:hover b { color: var(--gold); }
+.rules span { display: block; font: 360 .94rem/1.45 var(--serif); color: var(--muted); margin-top: 2px; }
 
-footer { margin-top: 16vh; padding: 48px 0 64px; border-top: 1px solid var(--line); }
-footer .sig { font: italic 400 clamp(2rem, 5vw, 3.4rem)/1 var(--serif); color: var(--ink); margin: 0 0 28px; }
-footer .sig em { color: var(--ir); }
-footer p { font-size: .8rem; color: var(--dim); max-width: 92ch; margin: 0 0 10px; line-height: 1.6; }
-footer a { color: var(--muted); }
+/* ---------- colophon ---------- */
+footer { margin-top: 18vh; border-top: 1px solid var(--rule-2); padding: 56px 0 72px; }
+footer .sig { font: italic 300 clamp(2.2rem, 5vw, 3.8rem)/1.05 var(--serif); font-variation-settings: "opsz" 72; margin: 0 0 38px; color: var(--paper); }
+footer .sig i { font-style: normal; color: var(--gold); }
+.colophon { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px; }
+.colophon p { margin: 8px 0 0; font: 360 .9rem/1.55 var(--serif); color: var(--muted); }
+.colophon a { color: var(--ink-2); }
+@media (max-width: 860px) { .colophon { grid-template-columns: 1fr; gap: 22px; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -270,134 +288,135 @@ footer a { color: var(--muted); }
 </style>
 </head>
 <body>
-<nav class="nav" aria-label="Sections">
-  <a class="mark" href="#top"><i aria-hidden="true"></i><span>Almanac</span></a>
-  <div class="links">
-    <a href="#forecast">Forecast</a><a href="#verdict">Verdict</a><a href="#method">Method</a><a href="#verify">Verify</a><a href="https://github.com/pranavpanchal1326/Almanac">GitHub ↗</a>
+<header class="mast" id="mast">
+  <div class="wrap">
+    <a class="word" href="#top">Almanac<small>Issue 2027.01</small></a>
+    <nav aria-label="Sections"><a href="#forecast">Forecast</a><a href="#verdict">Verdict</a><a href="#method">Method</a><a href="#verify">Verify</a><a href="https://github.com/pranavpanchal1326/Almanac">Source</a></nav>
   </div>
-</nav>
+</header>
 
-<header class="orbit" id="top">
+<section class="orbit" id="top" aria-label="Introduction">
   <div class="stick">
     <div class="fallback" aria-hidden="true"></div>
     <canvas id="globe" aria-hidden="true"></canvas>
     <div class="veil" aria-hidden="true"></div>
-    <div class="hero" id="hero">
+    <div class="title" id="title">
       <div class="wrap">
-        <span class="kicker">Almanac · Issue 2027.01</span>
-        <h1>Where will the forest be <em>lost</em> in 2026?</h1>
-        <p class="lede">A forecast for every 640&nbsp;m cell of forest across <b>499 tiles</b> of the Amazon and
-        Cerrado, sealed before anyone can know, and graded in public when the 2026 maps arrive. Misses included.</p>
-        <div class="scrollcue"><i aria-hidden="true"></i>Scroll to descend</div>
+        <div>
+          <span class="lbl">A forecast of forest loss · Amazon &amp; Cerrado</span>
+          <h1>The forest, <i>foretold.</i></h1>
+          <p class="deck">Where the Amazon and the Cerrado will lose forest in 2026: a forecast for <b>4,795,484 cells</b>
+          of forest, each 640&nbsp;metres across, sealed before anyone can know, and graded in public when the truth arrives.</p>
+          <div class="byline"><span>Sealed <b>22 Nov 2026</b></span><span>Locked <b>15 Jan 2027</b></span><span>Backtest <b>+16.0%</b></span></div>
+        </div>
       </div>
     </div>
-    <div class="arrive" id="arrive"><p>The Amazon and the Cerrado</p><small>4,795,484 forest cells · forecast for 2026</small></div>
-    <div class="coords" id="coords" aria-hidden="true">LAT 4.0°N · LON 57.5°W<br>ALT 19 750 KM</div>
+    <div class="descend lbl" id="descend" aria-hidden="true"><i></i>Descend</div>
+    <div class="arrive" id="arrive"><p>The Amazon and the Cerrado</p><span class="lbl gold">499 exam tiles · forecast for 2026</span></div>
+    <div class="coords" id="coords" aria-hidden="true"></div>
   </div>
-</header>
+</section>
 
 <main>
 <section class="chapter" id="forecast">
-  <div class="wrap">
-    <div class="chapter-head" data-reveal>
-      <div class="chapter-no">I · THE FORECAST</div>
-      <div>
-        <h2>Risk, seen in <em>infrared</em></h2>
-        <p>False-colour infrared imagery paints living vegetation magenta. Here the glow is the forecast: the
-        brighter a place, the higher its risk of losing forest in 2026, ranked against every other forest cell.
-        The brightest are the top 1%, a probability of <b>32%</b> or more. The model’s probabilities ran high
-        in its backtest, so read the light as a ranking first.</p>
-      </div>
+  <div class="wrap grid">
+    <div class="margin" data-reveal><div class="numeral">I</div><span class="lbl gold">The forecast</span>
+      <p class="note-m">Plate I is the headline forecast exactly as sealed: no smoothing, no recolouring after the fact.</p></div>
+    <div>
+      <h2 data-reveal>Gold marks where the forest is most at risk.</h2>
+      <p class="dropcap" data-reveal>Every cell of forest is ranked against every other. The brighter the gold, the higher its risk of loss
+      in 2026; the faintest is the safest half, the brightest the top one per cent, a forecast probability of
+      <b>32%</b> or more. In its backtest the model’s probabilities ran high, so read the light as a ranking first.</p>
     </div>
-    <figure class="atlas" data-reveal>
-      <div class="viewport" id="viewport">
-        <div class="stage" id="stage">
-          <canvas id="map" role="img" aria-label="Map of the forecast risk of forest loss in 2026 on the 499 exam tiles of the Amazon and Cerrado. Brighter magenta means higher risk rank, from the lowest half to the top 1%. Rivers and the coast show in dark cyan; the held-out region is outlined."></canvas>
-          <canvas id="glow" aria-hidden="true"></canvas>
-          <svg id="overlay" aria-hidden="true"></svg>
+  </div>
+  <div class="wrap">
+    <figure class="plate" data-reveal>
+      <div class="plate-head"><h3>Plate I. Risk of forest loss in 2026</h3><span class="lbl">Model M (A2) · 499 tiles · 640 m cells</span></div>
+      <div class="frame" id="frame">
+        <div class="ticks" id="ticks" aria-hidden="true"></div>
+        <div class="viewport" id="viewport">
+          <div class="stage" id="stage">
+            <canvas id="map" role="img" aria-label="Map of the forecast risk of forest loss in 2026 on the 499 exam tiles of the Amazon and Cerrado. Brighter gold means a higher risk rank, from the lowest half to the top one per cent. Rivers and the coast show in deep blue; the held-out region is outlined."></canvas>
+            <canvas id="glow" aria-hidden="true"></canvas>
+            <svg id="overlay" aria-hidden="true"></svg>
+          </div>
+          <div class="tip" id="tip"></div>
         </div>
-        <div class="hud">
-          <span class="pill" id="status" aria-live="polite">Hover, tap or zoom</span>
-          <div class="zoom"><button id="zin" type="button" aria-label="Zoom in">+</button><button id="zout" type="button" aria-label="Zoom out">−</button><button id="zreset" type="button" aria-label="Reset zoom">⟲</button></div>
-        </div>
-        <div class="tip" id="tip"></div>
+        <div class="tools"><button id="zin" type="button" aria-label="Zoom in">+</button><button id="zout" type="button" aria-label="Zoom out">−</button><button id="zreset" type="button" aria-label="Reset zoom">○</button></div>
+        <svg class="north" viewBox="0 0 34 54" aria-hidden="true"><path d="M17 4 L24 30 L17 25 L10 30 Z" fill="#d9b14f"/><path d="M17 25 L24 30 L17 34 Z" fill="none" stroke="#d9b14f" stroke-width=".8"/><text x="17" y="50" text-anchor="middle" fill="#ece5d3" style="font:600 11px 'Barlow Semi Condensed',sans-serif;letter-spacing:.1em">N</text></svg>
       </div>
-      <ul class="legend" aria-label="Risk bands, by rank among all forecast cells, from lowest to highest"><li style="--c:#2b0f2b"><b>Lowest half</b><span>0.0–2.6%</span></li><li style="--c:#561a4f"><b>Top 50%</b><span>2.6–9.4%</span></li><li style="--c:#93277a"><b>Top 25%</b><span>9.4–19.3%</span></li><li style="--c:#d23f9e"><b>Top 10%</b><span>19.3–24.5%</span></li><li style="--c:#ff86c9"><b>Top 5%</b><span>24.5–31.9%</span></li><li style="--c:#ffdcef"><b>Top 1%</b><span>probability 32% or more</span></li></ul>
+      <div class="readout lbl" id="status" aria-live="polite">Hover or tap the plate · zoom with + and −, then drag</div>
+      <div class="key">
+        <div><h4>Risk, ranked among all forecast forest cells</h4><span class="lbl">Forecast probability for each band</span></div>
+        <ul class="steps" aria-label="Risk bands from lowest to highest"><li style="--c:#2b2614"><b>Lowest half</b><span>0.0–2.6%</span></li><li style="--c:#55461a"><b>Top 50%</b><span>2.6–9.4%</span></li><li style="--c:#8a6d22"><b>Top 25%</b><span>9.4–19.3%</span></li><li style="--c:#c19a30"><b>Top 10%</b><span>19.3–24.5%</span></li><li style="--c:#e6c25a"><b>Top 5%</b><span>24.5–31.9%</span></li><li style="--c:#faecb4"><b>Top 1%</b><span>probability 32% or more</span></li></ul>
+      </div>
+      <figcaption class="figcap"><b>Plate I</b>Each pixel, about 1.7&nbsp;km, averages the 640&nbsp;m cells within it. Dark land carries no forecast:
+      beyond the exam tiles, without forest, with too little land, or without a valid 2025 satellite embedding. Faint
+      squares are the 499 exam tiles, 82&nbsp;km a side; the dashed outline is the held-out region, never seen in training.</figcaption>
     </figure>
-    <p class="note" data-reveal>Each pixel (about 1.7&nbsp;km) averages the 640&nbsp;m cells inside it. Dark land carries no forecast:
-    outside the exam tiles, without forest, too little land, or no valid 2025 satellite embedding. Faint squares:
-    the 499 exam tiles, 82&nbsp;km each. Cyan dashes: the held-out region, never used in training. Grid every 5°.</p>
-    <div class="actions" data-reveal>
-      <a class="btn lit" href="https://github.com/pranavpanchal1326/Almanac/releases/tag/issue-2027.01-sealed">Download the sealed package <span>→</span></a>
-      <a class="btn" href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/phase4/LABEL.md">Read the forecast label <span>→</span></a>
+    <div class="links" data-reveal>
+      <a class="go prime" href="https://github.com/pranavpanchal1326/Almanac/releases/tag/issue-2027.01-sealed">Download the sealed package <span aria-hidden="true">→</span></a>
+      <a class="go" href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/phase4/LABEL.md">Read the forecast label <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>
 
 <section class="chapter" id="verdict">
-  <div class="wrap">
-    <div class="chapter-head" data-reveal>
-      <div class="chapter-no">II · THE VERDICT</div>
-      <div>
-        <h2>It has already sat <em>one</em> exam</h2>
-        <p>Before the 2026 forecast was made, the frozen model was graded once on 2025, on the same 499 tiles:
-        4,814,716 forest cells, 192,761 of them lost. The bar was fixed and timestamped before any model was
-        trained: beat the reference by at least 20%.</p>
-      </div>
-    </div>
-    <div class="verdict">
-      <div data-reveal>
-        <div class="bignum" id="bignum">+16.0%</div>
-        <div class="bignum-cap">Average precision above the reference, 2025 backtest. The bar: +20%.</div>
-        <div class="gauge" id="gauge" role="img" aria-label="Improvement +16.0%, 95% interval +10.7% to +22.3%, against marks at +10% and +20%">
-          <div class="track"></div><div class="ci" id="gci"></div>
-          <div class="bar" id="g10"><span>10% · lower end</span></div>
-          <div class="bar bar20" id="g20"><span>20% · the bar</span></div>
-          <div class="dot" id="gdot"></div>
-          <div class="ticks"><span>0%</span><span>5%</span><span>10%</span><span>15%</span><span>20%</span><span>25%</span></div>
+  <div class="wrap grid">
+    <div class="margin" data-reveal><div class="numeral">II</div><span class="lbl gold">The verdict</span>
+      <p class="note-m">The bar was written down and timestamped before a single model was trained.</p></div>
+    <div>
+      <h2 data-reveal>It has already sat one exam, and fell short of the bar it set itself.</h2>
+      <p data-reveal>Before the 2026 forecast was made, the frozen model was graded once on 2025, on the same 499 tiles:
+      4,814,716 forest cells, 192,761 of them lost. To count as a win it had to beat the reference by at least
+      twenty per cent.</p>
+      <div class="verdict">
+        <div data-reveal>
+          <div class="figure" id="figure">+16.0%</div>
+          <div class="lbl figure-cap">Average precision above the reference · 2025 backtest</div>
+          <div class="ruler" id="ruler" role="img" aria-label="Improvement +16.0%, 95% interval +10.7% to +22.3%, against the 10% and 20% marks"><svg id="rulersvg" viewBox="0 0 520 96"></svg></div>
+        </div>
+        <div>
+          <ol class="tests"><li class="gate shut" data-reveal><span class="gate-n">01</span><span class="gate-what">At least 20% above the reference</span><span class="gate-val">+16.0%</span><span class="gate-state">Not met</span></li><li class="gate open" data-reveal><span class="gate-n">02</span><span class="gate-what">Lower end of the 95% interval above 10%</span><span class="gate-val">+10.7%</span><span class="gate-state">Met</span></li><li class="gate open" data-reveal><span class="gate-n">03</span><span class="gate-what">Better on the test tiles and on the held-out region, separately</span><span class="gate-val">+14.4% · +15.7%</span><span class="gate-state">Met</span></li></ol>
+          <p class="verdict-line" data-reveal>So the backtest is <i>not a win</i>, and the bar for 2026 stands unchanged.</p>
+          <p data-reveal style="margin-top:14px">The model was still put forward because it was the best forecast on every part of the test;
+          the reference and every baseline are sealed beside it and graded on the same truth.
+          <a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/adr/0004-gate-2.md">The decision, and the case against it.</a></p>
         </div>
       </div>
-      <div>
-        <ol class="gates"><li class="gate shut" data-reveal><span class="gate-n">01</span><span class="gate-what">At least 20% above the reference</span><span class="gate-val">+16.0%</span><span class="gate-state">Not met</span></li><li class="gate open" data-reveal><span class="gate-n">02</span><span class="gate-what">Lower end of the 95% interval above 10%</span><span class="gate-val">+10.7%</span><span class="gate-state">Met</span></li><li class="gate open" data-reveal><span class="gate-n">03</span><span class="gate-what">Better on the test tiles and on the held-out region, separately</span><span class="gate-val">+14.4% · +15.7%</span><span class="gate-state">Met</span></li></ol>
-        <p class="verdict-line" data-reveal>So the backtest is <em>not a win</em>. The bar for 2026 is unchanged.</p>
-        <p data-reveal style="margin-top:12px">The model was still put forward because it was the best forecast on every part of the
-        test, and the reference and every baseline are locked beside it, graded on the same truth.
-        <a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/adr/0004-gate-2.md">The decision, and the case against it</a>.</p>
-      </div>
     </div>
-
-    <div style="margin-top:14vh">
-      <div class="chapter-head" data-reveal style="margin-bottom:28px">
-        <div class="chapter-no">THE FIELD</div>
-        <div><h3>Every forecast, on the same 2025 truth</h3>
-        <p>Average precision rewards putting the cells that were lost at the top of the ranking. No skill scores the
-        base rate, 0.040. Whiskers: the 95% interval.</p></div>
-      </div>
+  </div>
+  <div class="wrap grid field">
+    <div class="margin" data-reveal><span class="lbl gold">The field</span><p class="note-m">Whiskers mark the 95% interval of each score.</p></div>
+    <div>
+      <h3 data-reveal>Every forecast, on the same 2025 truth</h3>
+      <p data-reveal>Average precision rewards placing the cells that were lost at the top of the ranking; a forecast with no
+      skill scores the base rate, 0.040.</p>
       <ul class="race" id="race">
-        <li class="head-row"><span>Forecast</span><span class="lane-h">All 499 tiles</span><span class="n">All</span><span class="n t">Test</span><span class="n h">Held-out</span></li>
+        <li class="head-row"><span>Forecast</span><span class="lane-h">Average precision, all tiles</span><span class="n">All</span><span class="n t">Test</span><span class="n h">Held out</span></li>
         <li class="me" data-ap="91.0"><span class="who"><b>Model M (A2)</b><span>The headline: a network over five years of satellite embeddings and each cell’s neighbourhood</span></span><span class="lane" title="AP 0.468, 95% interval 0.422 to 0.515"><span class="run"></span><span class="ci" style="left:82.0%;width:18.0%"></span></span><span class="n ">0.468</span><span class="n t">0.361</span><span class="n h">0.673</span></li><li class="ref" data-ap="78.4"><span class="who"><b>Reference B5 (A2)</b><span>The same network without the neighbourhood: the bar to beat</span></span><span class="lane" title="AP 0.404, 95% interval 0.351 to 0.456"><span class="run"></span><span class="ci" style="left:68.2%;width:20.3%"></span></span><span class="n ">0.404</span><span class="n t">0.315</span><span class="n h">0.581</span></li><li data-ap="75.0"><span class="who"><b>Gradient-boosted trees (B4)</b><span>Past loss nearby, at three radii, plus the embeddings</span></span><span class="lane" title="AP 0.386, 95% interval 0.353 to 0.420"><span class="run"></span><span class="ci" style="left:68.5%;width:13.2%"></span></span><span class="n ">0.386</span><span class="n t">0.315</span><span class="n h">0.549</span></li><li data-ap="38.6"><span class="who"><b>Proximity (B3)</b><span>Distance-weighted forest loss of the last three years</span></span><span class="lane" title="AP 0.199, 95% interval 0.172 to 0.228"><span class="run"></span><span class="ci" style="left:33.4%;width:10.9%"></span></span><span class="n ">0.199</span><span class="n t">0.160</span><span class="n h">0.283</span></li><li data-ap="15.4"><span class="who"><b>Last year’s change (B2)</b><span>How much each cell’s embedding changed last year</span></span><span class="lane" title="AP 0.079, 95% interval 0.064 to 0.101"><span class="run"></span><span class="ci" style="left:12.5%;width:7.0%"></span></span><span class="n ">0.079</span><span class="n t">0.063</span><span class="n h">0.214</span></li><li data-ap="7.8"><span class="who"><b>Constant (B0)</b><span>The base rate everywhere: no skill</span></span><span class="lane" title="AP 0.040, 95% interval 0.035 to 0.046"><span class="run"></span><span class="ci" style="left:6.8%;width:2.0%"></span></span><span class="n ">0.040</span><span class="n t">0.035</span><span class="n h">0.051</span></li>
       </ul>
     </div>
-
-    <div class="duo">
+  </div>
+  <div class="wrap grid">
+    <div class="margin" data-reveal><span class="lbl gold">Calibration</span></div>
+    <div class="duo" style="margin-top:0">
       <div data-reveal>
-        <div class="chapter-no" style="padding:0 0 18px">CALIBRATION</div>
         <h3>Are the probabilities honest?</h3>
-        <p>Each point is a tenth of the forecast cells, least to most risky: forecast against what happened in 2025.
-        On the dashed line, a forecast means what it says. The model’s points fall below it, in every tenth: it
-        forecast more loss than happened. The trees were better calibrated, though they ranked worse.</p>
-        <div class="weak">
-          <h4>What is weak, said plainly</h4>
-          <ul>
-            <li>The probabilities ran high on 2025: read the map as a ranking of risk first.</li>
+        <p>Each point is a tenth of the forecast cells, from least to most at risk: what was forecast, against what
+        happened in 2025. On the dotted line a forecast means exactly what it says. The model’s points fall below it in
+        every tenth: it foresaw more loss than came. The trees were better calibrated, though they ranked worse.</p>
+        <div class="caveats"><span class="lbl gold">What is weak, said plainly</span>
+          <ol>
+            <li>The probabilities ran high on 2025: read the plate as a ranking of risk first.</li>
             <li>On the 2024 validation year the model was 4.6% <i>below</i> the reference; a small check, 146 tiles, but on the record.</li>
             <li>The 2025 test data were read twice, once against the protocol, for an independent re-grade of the same frozen forecasts. Nothing changed; both reads are logged.</li>
             <li>One region, one kind of event, one year ahead.</li>
-          </ul>
+          </ol>
         </div>
       </div>
       <div class="chart" id="relchart" data-reveal>
-        <div class="keys"><span><i style="background:var(--series-1)"></i>Model M (A2)</span><span><i style="background:var(--series-2)"></i>Trees (B4)</span><span><i class="dash"></i>Honest</span></div>
+        <div class="keys"><span><i style="background:var(--s1)"></i>Model M (A2)</span><span><i style="background:var(--s2)"></i>Trees (B4)</span><span><i class="dash"></i>Honest</span></div>
         <svg id="rel" viewBox="0 0 420 352" role="img" aria-label="Reliability on the 2025 backtest: observed loss rate against forecast probability in ten equal bins. The model's points lie below the diagonal; the trees lie close to it."></svg>
         <div class="ctip" id="ctip"></div>
       </div>
@@ -406,68 +425,75 @@ footer a { color: var(--muted); }
 </section>
 
 <section class="chapter" id="method">
-  <div class="wrap">
-    <div class="chapter-head" data-reveal>
-      <div class="chapter-no">III · THE METHOD</div>
-      <div><h2>From five years of light to <em>one</em> forecast</h2></div>
+  <div class="wrap grid">
+    <div class="margin" data-reveal><div class="numeral">III</div><span class="lbl gold">The method</span></div>
+    <div>
+      <h2 data-reveal>Five years of light, read as one forecast.</h2>
+      <div class="flow">
+        <div class="step" data-reveal style="--d:.05s"><div class="no">1</div>
+          <svg viewBox="0 0 240 58" aria-hidden="true"><line class="ln" x1="0" y1="50" x2="240" y2="50"/>
+            <g class="pulse"><rect class="gd" x="8" y="30" width="34" height="20" opacity=".25"/><rect class="gd" x="52" y="24" width="34" height="26" opacity=".4"/><rect class="gd" x="96" y="16" width="34" height="34" opacity=".55"/><rect class="gd" x="140" y="20" width="34" height="30" opacity=".75"/><rect class="gd" x="184" y="8" width="34" height="42"/></g></svg>
+          <h3>Five years of Earth</h3>
+          <p>For every 640&nbsp;m cell, AlphaEarth satellite embeddings for 2021 to 2025, sixty-four numbers a year, for the
+          cell and its neighbourhood, with past forest loss and how much forest and land it holds.</p></div>
+        <div class="step" data-reveal style="--d:.18s"><div class="no">2</div>
+          <svg viewBox="0 0 240 58" aria-hidden="true"><line class="ln" x1="0" y1="50" x2="240" y2="50"/>
+            <g class="gl2" stroke-width="1"><path d="M20 40 C 70 6, 170 6, 220 40" opacity=".5"/><path d="M50 40 C 90 16, 150 16, 190 40" opacity=".75"/><path d="M90 40 C 110 26, 130 26, 150 40"/></g>
+            <circle class="gd pulse" cx="120" cy="40" r="5"/></svg>
+          <h3>A model that reads time</h3>
+          <p>A transformer reads each cell’s five-year history together with its neighbours and returns the chance of loss
+          in the year to come. It was trained on 800 tiles that touch no exam tile.</p></div>
+        <div class="step" data-reveal style="--d:.31s"><div class="no">3</div>
+          <svg viewBox="0 0 240 58" aria-hidden="true"><line class="ln" x1="0" y1="50" x2="240" y2="50"/>
+            <circle class="gl2" cx="120" cy="28" r="20"/><circle class="gl2" cx="120" cy="28" r="14" opacity=".5"/><circle class="gd pulse" cx="120" cy="28" r="5"/></svg>
+          <h3>Frozen, then sealed</h3>
+          <p>Three independently trained copies, each calibrated on 2024, averaged. Frozen before the backtest, never
+          refitted, and sealed with a digest before any 2026 truth exists.</p></div>
+      </div>
+      <p class="aside" data-reveal>The reference is the same network without the neighbourhood, trained the same way. It was the best of six
+      candidates on the 2024 validation year, so the bar is the strongest simple competitor, chosen before the model’s backtest.</p>
     </div>
-    <div class="flow">
-      <svg class="wire" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="wireg" x1="0" x2="1"><stop offset="0" stop-color="#6fd8ee"/><stop offset="1" stop-color="#ff86c9"/></linearGradient></defs><path d="M60 2 H940"/></svg>
-      <div class="step" data-reveal style="--d:.05s"><div class="orb">01</div><h3>Five years of Earth</h3>
-        <p>For every 640&nbsp;m cell, AlphaEarth satellite embeddings for 2021–2025, sixty-four numbers a year, for the
-        cell and its neighbourhood, with past forest loss and how much forest and land it holds.</p></div>
-      <div class="step" data-reveal style="--d:.18s"><div class="orb">02</div><h3>A model that reads time</h3>
-        <p>A transformer reads each cell’s five-year history together with its neighbours and returns the chance of
-        loss the next year. Trained on 800 tiles that touch no exam tile.</p></div>
-      <div class="step" data-reveal style="--d:.31s"><div class="orb">03</div><h3>Frozen, then sealed</h3>
-        <p>Three independently trained copies, each calibrated on 2024, averaged. Frozen before the backtest, never
-        refitted, sealed with a digest before any 2026 truth exists.</p></div>
-    </div>
-    <p class="aside" data-reveal>The reference is the same network without the neighbourhood, trained the same way: the best of
-    six candidates on the 2024 validation year, so the bar is the strongest simple competitor, chosen before the
-    model’s backtest.</p>
   </div>
 </section>
 
 <section class="chapter" id="verify">
-  <div class="wrap">
-    <div class="chapter-head" data-reveal>
-      <div class="chapter-no">IV · THE SEAL</div>
-      <div><h2>Don’t trust it. <em>Check</em> it.</h2></div>
-    </div>
-    <div class="seal">
-      <div class="ring" data-reveal aria-hidden="true">
-        <svg viewBox="0 0 300 300"><defs><path id="circ" d="M150,150 m-130,0 a130,130 0 1,1 260,0 a130,130 0 1,1 -260,0"/>
-          <radialGradient id="rg"><stop offset=".7" stop-color="#ff86c9" stop-opacity="0"/><stop offset="1" stop-color="#ff86c9" stop-opacity=".22"/></radialGradient></defs>
-          <circle cx="150" cy="150" r="148" fill="url(#rg)"/>
-          <circle cx="150" cy="150" r="142" fill="none" stroke="rgba(255,134,201,.35)" stroke-width="1"/>
-          <circle cx="150" cy="150" r="116" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1" stroke-dasharray="2 4"/>
-          <g class="spin"><text><textPath href="#circ" textLength="812" lengthAdjust="spacing">bc834b2691f0f1c9fdee05a0c0fbae87958efe3a8d3e670aeff113f9b02b7949 · SHA&#8209;256 ·</textPath></text></g>
-        </svg>
-        <div class="core"><div><b>Sealed</b><span>22 · 11 · 2026</span></div></div>
-      </div>
-      <div>
-        <p data-reveal>The package is plain <code>.npy</code> layers, a tile list and a canonical manifest. Its digest is the SHA&#8209;256
-        of the manifest, committed in public on 22 November 2026, before any 2026 truth existed:</p>
-        <div class="code" data-reveal><pre id="digest">bc834b2691f0f1c9fdee05a0c0fbae87958efe3a8d3e670aeff113f9b02b7949</pre><button type="button" data-copy="digest">Copy</button></div>
-        <p data-reveal>Download the package, then run the verifier. It needs only Python and NumPy, and nothing else from the project:</p>
-        <div class="code" data-reveal><pre id="cmd">tar -xf almanac-2027.01.tar
+  <div class="wrap grid">
+    <div class="margin" data-reveal><div class="numeral">IV</div><span class="lbl gold">The seal</span></div>
+    <div>
+      <h2 data-reveal>Don’t take our word for it. Check the seal.</h2>
+      <div class="seal">
+        <div class="stamp" data-reveal aria-hidden="true">
+          <svg viewBox="0 0 300 300"><defs><path id="circ" d="M150,150 m-122,0 a122,122 0 1,1 244,0 a122,122 0 1,1 -244,0"/></defs>
+            <circle class="c" cx="150" cy="150" r="146" stroke-width="1"/><circle class="c" cx="150" cy="150" r="140" stroke-width=".6"/>
+            <circle class="c" cx="150" cy="150" r="104" stroke-width=".6"/><circle class="c" cx="150" cy="150" r="99" stroke-width="1"/>
+            <g class="ring"><text><textPath href="#circ" textLength="760" lengthAdjust="spacing">bc834b2691f0f1c9fdee05a0c0fbae87958efe3a8d3e670aeff113f9b02b7949 ✦</textPath></text></g>
+            <text class="sm" x="150" y="112" text-anchor="middle">ALMANAC · 2027.01</text>
+            <text class="big" x="150" y="160" text-anchor="middle">Sealed</text>
+            <line x1="104" y1="176" x2="196" y2="176" stroke="#b8892a" stroke-width=".6"/>
+            <text class="sm" x="150" y="196" text-anchor="middle">22 · XI · 2026</text>
+          </svg>
+        </div>
+        <div>
+          <p data-reveal>The package is plain <code>.npy</code> layers, a tile list and a canonical manifest. Its digest is the
+          SHA&#8209;256 of the manifest, committed in public on 22 November 2026, before any 2026 truth existed.</p>
+          <div class="code" data-reveal><pre id="digest">bc834b2691f0f1c9fdee05a0c0fbae87958efe3a8d3e670aeff113f9b02b7949</pre><button type="button" data-copy="digest">Copy</button></div>
+          <p data-reveal>Download the package, then run the verifier. It needs only Python and NumPy, and nothing else from the project.</p>
+          <div class="code" data-reveal><pre id="cmd">tar -xf almanac-2027.01.tar
 python tools/verify_issue.py almanac-2027.01 --digest bc834b2691f0f1c9fdee05a0c0fbae87958efe3a8d3e670aeff113f9b02b7949</pre><button type="button" data-copy="cmd">Copy</button></div>
-        <p data-reveal>The backtest was re-graded by separate code that shares nothing with the grader, reading the truth from the
-        source label files: <b>64 of 64</b> values matched; the largest difference, <span style="white-space:nowrap">4.3e-16</span>.</p>
+          <p data-reveal>The backtest was re-graded by separate code that shares nothing with the grader and reads the truth from
+          the source label files: <b>64 of 64</b> values matched, the largest difference <span style="white-space:nowrap">4.3e-16</span>.</p>
+        </div>
       </div>
     </div>
-
-    <div class="duo" style="align-items:start">
-      <div data-reveal>
-        <div class="chapter-no" style="padding:0 0 18px">EVERY READ OF THE TEST TRUTH · 4</div>
-        <ol class="log"><li data-reveal><time>2026-11-15</time><span>baselines B0-B4, test_2025 and held_out_2025</span></li><li data-reveal><time>2026-11-15</time><span>baselines B0-B4, test_2025 and held_out_2025</span></li><li data-reveal><time>2026-11-21</time><span>stage B: model M (A2) ensemble, reference B5 (A2) and B0-B4, test_2025 and held_out_2025</span></li><li data-reveal><time>2026-11-21</time><span>reproduction of stage B (task 2.8): forest loss, test_2025 and held_out_2025</span></li></ol>
-      </div>
-      <div data-reveal>
-        <div class="chapter-no" style="padding:0 0 18px">THE RULES, TIMESTAMPED</div>
+  </div>
+  <div class="wrap grid" style="margin-top:12vh">
+    <div class="margin" data-reveal><span class="lbl gold">The record</span></div>
+    <div class="duo" style="margin-top:0">
+      <div data-reveal><h3>Every read of the test truth</h3><ol class="ledger"><li data-reveal><time>2026-11-15</time><span>baselines B0-B4, test_2025 and held_out_2025</span></li><li data-reveal><time>2026-11-15</time><span>baselines B0-B4, test_2025 and held_out_2025</span></li><li data-reveal><time>2026-11-21</time><span>stage B: model M (A2) ensemble, reference B5 (A2) and B0-B4, test_2025 and held_out_2025</span></li><li data-reveal><time>2026-11-21</time><span>reproduction of stage B (task 2.8): forest loss, test_2025 and held_out_2025</span></li></ol></div>
+      <div data-reveal><h3>The rules, timestamped</h3>
         <ul class="rules">
-          <li><a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/prereg/2027.01.md"><b>Pre-registration</b><span>Task, exam tiles, metric and the win condition. Timestamped 15 Nov 2026, anchored in Bitcoin.</span></a></li>
-          <li><a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/prereg/2027.01.amendment-2.md"><b>Amendments</b><span>The model and the stable recipe, each timestamped before the runs it governs.</span></a></li>
+          <li><a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/prereg/2027.01.md"><b>The pre-registration</b><span>Task, exam tiles, metric and the win condition; timestamped 15 November 2026 and anchored in Bitcoin.</span></a></li>
+          <li><a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/prereg/2027.01.amendment-2.md"><b>The amendments</b><span>The model and its stable recipe, each timestamped before the runs it governs.</span></a></li>
           <li><a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/prereg/proofs/README.md"><b>The proofs</b><span>How to verify every timestamp yourself.</span></a></li>
           <li><a href="https://github.com/pranavpanchal1326/Almanac/blob/main/docs/phase2/STATUS.md"><b>Every run</b><span>Including the ones that collapsed, and the full backtest report.</span></a></li>
         </ul>
@@ -478,18 +504,22 @@ python tools/verify_issue.py almanac-2027.01 --digest bc834b2691f0f1c9fdee05a0c0
 
 <footer>
   <div class="wrap">
-    <p class="sig">Graded in public. <em>Misses included.</em></p>
-    <p>Generated from the project’s records by <code>tools/phase4/build_site.py</code>; forecast built at commit <code>63f66f9</code>.
-    Code: <a href="https://github.com/pranavpanchal1326/Almanac">github.com/pranavpanchal1326/Almanac</a> (Apache 2.0).</p>
-    <p>Input data: AlphaEarth Foundations Satellite Embedding dataset, produced by Google and Google DeepMind, used under
-    CC-BY 4.0. Forest labels and land mask: Hansen, M. C. et al. 2013, Science 342: 850–853; Global Forest Change
-    2000–2025 v1.13, University of Maryland, under CC-BY 4.0. Continents on the globe: Natural Earth, via world-atlas.</p>
+    <p class="sig">Graded in public. <i>Misses included.</i></p>
+    <div class="colophon">
+      <div><span class="lbl gold">Colophon</span><p>Set in Newsreader and Barlow Semi Condensed. Gold leaf on canopy: risk is drawn in one hue of
+      gold, brightening with rank. Generated from the project’s records by <code>build_site.py</code>; forecast built at commit <code>63f66f9</code>.</p></div>
+      <div><span class="lbl gold">Data</span><p>AlphaEarth Foundations Satellite Embedding dataset, Google and Google DeepMind, CC-BY 4.0.
+      Hansen, M. C. et al. 2013, Science 342: 850–853; Global Forest Change 2000–2025 v1.13, University of Maryland, CC-BY 4.0.
+      Continents: Natural Earth.</p></div>
+      <div><span class="lbl gold">Source</span><p><a href="https://github.com/pranavpanchal1326/Almanac">github.com/pranavpanchal1326/Almanac</a>, Apache 2.0.
+      Every number on this page is read from a committed record; none is typed by hand.</p></div>
+    </div>
   </div>
 </footer>
 </main>
 
 <script>
-const MAP = {"bounds":[-74.5,-24.5,-40.5,5.5],"res":0.015,"width":2267,"height":2000,"tiles":[[15.8,169.1,49.2,49.4],[15.8,119.7,49.2,49.3],[64.9,169.2,49.2,49.3],[64.9,119.8,49.2,49.3],[114.0,169.3,49.2,49.3],[114.1,119.9,49.2,49.2],[163.0,169.4,49.2,49.2],[163.2,120.1,49.2,49.2],[16.8,1107.5,49.9,49.6],[16.7,1058.1,49.8,49.6],[16.6,1008.7,49.7,49.6],[66.9,1107.2,49.7,49.7],[66.7,1057.8,49.6,49.7],[117.1,1106.7,49.6,49.8],[116.7,1057.4,49.5,49.8],[167.1,1106.2,49.4,49.9],[166.6,1056.9,49.3,49.8],[170.4,366.7,49.0,49.3],[170.4,317.3,49.0,49.4],[170.4,218.5,49.0,49.4],[170.4,267.9,49.0,49.4],[219.5,366.7,49.1,49.4],[219.5,317.3,49.0,49.4],[219.4,218.5,49.0,49.4],[219.5,267.9,49.0,49.4],[268.5,366.7,49.1,49.4],[268.5,317.3,49.1,49.4],[268.5,218.4,49.1,49.4],[268.5,267.9,49.1,49.4],[121.4,366.7,49.0,49.3],[121.4,317.3,49.0,49.3],[121.4,218.6,48.9,49.4],[121.4,268.0,49.0,49.4],[170.4,317.3,49.0,49.4],[219.5,317.3,49.0,49.4],[206.0,1897.1,54.1,48.6],[206.9,1847.7,53.8,48.6],[268.5,317.3,49.1,49.4],[259.5,1897.5,53.9,48.9],[260.1,1848.1,53.5,48.9],[312.8,1946.9,53.9,49.2],[314.5,1650.9,52.2,49.2],[314.7,1601.5,52.0,49.2],[314.9,1552.1,51.7,49.3],[366.7,1946.8,53.6,49.5],[366.7,1650.8,52.0,49.5],[366.7,1601.4,51.7,49.5],[366.7,1552.0,51.5,49.5],[417.1,1206.2,50.1,49.6],[416.9,1156.9,50.0,49.6],[416.8,1107.5,49.9,49.6],[416.7,1058.1,49.8,49.6],[416.6,1008.7,49.7,49.6],[416.4,959.3,49.6,49.5],[416.3,910.0,49.5,49.5],[416.2,860.6,49.4,49.5],[416.2,811.2,49.3,49.5],[467.5,1205.9,50.0,49.7],[467.2,1156.5,49.8,49.7],[466.9,1107.2,49.7,49.7],[466.7,1057.8,49.6,49.7],[466.4,1008.5,49.5,49.6],[466.2,959.1,49.4,49.6],[466.0,909.7,49.4,49.6],[465.8,860.4,49.3,49.6],[465.6,811.0,49.2,49.6],[517.9,1205.4,49.8,49.8],[517.5,1156.1,49.7,49.8],[517.1,1106.7,49.6,49.8],[516.7,1057.4,49.5,49.8],[516.3,1008.1,49.4,49.7],[516.0,958.8,49.3,49.7],[515.6,909.4,49.2,49.7],[515.4,860.1,49.2,49.7],[515.1,810.7,49.1,49.6],[567.1,1106.2,49.4,49.9],[566.6,1056.9,49.3,49.8],[566.1,1007.6,49.2,49.8],[565.7,958.3,49.2,49.8],[565.3,909.0,49.1,49.7],[564.9,859.7,49.1,49.7],[564.5,810.4,49.0,49.7],[121.4,317.3,49.0,49.3],[570.4,366.7,49.0,49.3],[570.4,317.3,49.0,49.4],[570.4,218.5,49.0,49.4],[570.4,267.9,49.0,49.4],[619.5,366.7,49.1,49.4],[619.5,317.3,49.0,49.4],[619.4,218.5,49.0,49.4],[619.5,267.9,49.0,49.4],[668.5,366.7,49.1,49.4],[668.5,317.3,49.1,49.4],[668.5,218.4,49.1,49.4],[668.5,267.9,49.1,49.4],[717.6,366.7,49.1,49.4],[717.6,317.3,49.1,49.4],[717.6,218.4,49.1,49.4],[717.6,267.8,49.1,49.4],[766.7,366.7,49.1,49.4],[766.7,317.3,49.1,49.4],[766.7,218.4,49.1,49.4],[766.7,267.9,49.1,49.4],[815.7,366.7,49.1,49.4],[815.7,317.3,49.1,49.4],[815.8,218.5,49.1,49.4],[815.7,267.9,49.1,49.4],[864.8,366.7,49.0,49.4],[864.8,317.3,49.1,49.4],[864.8,218.5,49.1,49.3],[864.8,267.9,49.1,49.4],[913.9,366.7,49.0,49.4],[913.9,317.3,49.0,49.3],[913.9,218.6,49.1,49.3],[913.9,268.0,49.1,49.3],[962.9,366.7,49.0,49.3],[962.9,317.4,49.0,49.3],[963.0,218.7,49.1,49.2],[962.9,268.1,49.1,49.3],[521.4,366.7,49.0,49.3],[521.4,317.3,49.0,49.3],[521.4,218.6,48.9,49.4],[521.4,268.0,49.0,49.4],[570.4,317.3,49.0,49.4],[551.3,1945.7,54.7,48.3],[552.5,1896.4,54.4,48.3],[553.7,1847.1,54.1,48.4],[562.3,1403.2,51.6,48.7],[563.0,1353.9,51.4,48.7],[563.7,1304.6,51.2,48.8],[565.0,1205.9,50.8,48.8],[565.6,1156.5,50.6,48.9],[566.2,1107.2,50.5,48.9],[566.7,1057.8,50.3,48.9],[567.2,1008.5,50.2,49.0],[567.7,959.1,50.0,49.0],[568.1,909.7,49.9,49.0],[568.4,860.4,49.8,49.0],[568.8,811.0,49.7,49.1],[570.0,564.2,49.2,49.2],[570.2,514.8,49.2,49.3],[619.5,317.3,49.0,49.4],[605.1,1946.4,54.5,48.6],[606.0,1897.1,54.1,48.6],[606.9,1847.7,53.8,48.6],[613.3,1403.7,51.5,48.9],[613.9,1354.3,51.3,48.9],[614.4,1305.0,51.1,48.9],[615.4,1206.2,50.7,49.0],[615.9,1156.9,50.5,49.0],[616.3,1107.5,50.4,49.0],[616.7,1058.1,50.2,49.1],[617.0,1008.7,50.1,49.1],[617.4,959.3,50.0,49.1],[617.7,910.0,49.8,49.1],[618.0,860.6,49.7,49.2],[618.2,811.2,49.6,49.2],[619.2,564.2,49.2,49.3],[619.3,514.8,49.2,49.3],[668.5,317.3,49.1,49.4],[658.9,1946.8,54.2,48.9],[659.5,1897.5,53.9,48.9],[660.1,1848.1,53.5,48.9],[664.4,1403.9,51.3,49.1],[664.8,1354.6,51.1,49.1],[665.2,1305.2,50.9,49.1],[665.8,1206.4,50.6,49.2],[666.1,1157.1,50.4,49.2],[666.4,1107.7,50.3,49.2],[666.7,1058.3,50.1,49.2],[666.9,1008.9,50.0,49.2],[667.1,959.5,49.9,49.2],[667.3,910.1,49.8,49.2],[667.5,860.7,49.7,49.3],[667.7,811.3,49.6,49.3],[668.3,564.3,49.2,49.3],[668.4,514.9,49.2,49.4],[717.6,317.3,49.1,49.4],[712.8,1946.9,53.9,49.2],[716.2,1206.5,50.4,49.3],[716.4,1157.1,50.3,49.3],[716.5,1107.7,50.1,49.3],[716.7,1058.3,50.0,49.3],[716.8,1008.9,49.9,49.3],[716.9,959.5,49.8,49.3],[717.0,910.1,49.7,49.3],[717.1,860.7,49.6,49.4],[717.2,811.3,49.5,49.4],[717.3,761.9,49.4,49.4],[717.5,564.3,49.2,49.4],[717.5,514.9,49.1,49.4],[766.7,317.3,49.1,49.4],[766.7,1946.8,53.6,49.5],[766.7,1206.4,50.3,49.5],[766.7,1157.1,50.1,49.5],[766.7,1107.7,50.0,49.5],[766.7,1058.3,49.9,49.5],[766.7,1008.9,49.8,49.4],[766.7,959.5,49.7,49.4],[766.7,910.1,49.6,49.4],[766.7,860.7,49.5,49.4],[766.7,811.3,49.4,49.4],[766.7,761.9,49.3,49.4],[766.7,564.3,49.1,49.4],[766.7,514.9,49.1,49.4],[815.7,317.3,49.1,49.4],[819.7,1798.4,52.4,49.7],[819.4,1749.1,52.2,49.7],[819.1,1699.8,51.9,49.7],[817.8,1403.7,50.7,49.6],[817.6,1354.3,50.6,49.6],[817.4,1305.0,50.4,49.6],[817.3,1255.6,50.3,49.6],[817.1,1206.2,50.1,49.6],[816.9,1156.9,50.0,49.6],[816.8,1107.5,49.9,49.6],[816.7,1058.1,49.8,49.6],[816.6,1008.7,49.7,49.6],[816.4,959.3,49.6,49.5],[816.3,910.0,49.5,49.5],[816.2,860.6,49.4,49.5],[816.2,811.2,49.3,49.5],[816.0,712.4,49.2,49.5],[815.9,663.0,49.2,49.5],[815.9,613.6,49.1,49.5],[864.8,317.3,49.1,49.4],[872.6,1797.8,52.1,49.9],[872.1,1748.5,51.9,49.9],[871.6,1699.2,51.7,49.9],[868.9,1403.2,50.5,49.8],[868.5,1353.9,50.4,49.8],[868.2,1304.6,50.2,49.8],[867.8,1255.2,50.1,49.7],[867.5,1205.9,50.0,49.7],[867.2,1156.5,49.8,49.7],[866.9,1107.2,49.7,49.7],[866.7,1057.8,49.6,49.7],[866.4,1008.5,49.5,49.6],[866.2,959.1,49.4,49.6],[866.0,909.7,49.4,49.6],[865.8,860.4,49.3,49.6],[865.6,811.0,49.2,49.6],[865.3,712.3,49.1,49.5],[865.2,662.9,49.1,49.5],[865.1,613.5,49.1,49.5],[913.9,317.3,49.0,49.3],[925.6,1796.9,51.8,50.2],[924.8,1747.6,51.6,50.1],[924.0,1698.4,51.4,50.1],[920.0,1402.6,50.3,50.0],[919.4,1353.3,50.2,49.9],[918.9,1304.0,50.0,49.9],[918.4,1254.7,49.9,49.9],[917.9,1205.4,49.8,49.8],[917.5,1156.1,49.7,49.8],[917.1,1106.7,49.6,49.8],[916.7,1057.4,49.5,49.8],[916.3,1008.1,49.4,49.7],[916.0,958.8,49.3,49.7],[915.6,909.4,49.2,49.7],[915.4,860.1,49.2,49.7],[915.1,810.7,49.1,49.6],[914.7,712.1,49.0,49.6],[914.5,662.7,49.0,49.5],[914.3,613.4,49.0,49.5],[962.9,317.4,49.0,49.3],[967.1,1106.2,49.4,49.9],[966.6,1056.9,49.3,49.8],[966.1,1007.6,49.2,49.8],[965.7,958.3,49.2,49.8],[965.3,909.0,49.1,49.7],[964.9,859.7,49.1,49.7],[964.5,810.4,49.0,49.7],[963.9,711.8,48.9,49.6],[963.7,662.5,48.9,49.6],[963.5,613.2,48.9,49.5],[521.4,317.3,49.0,49.3],[516.1,1106.7,50.6,48.7],[516.8,1057.4,50.4,48.8],[517.4,1008.1,50.3,48.8],[518.0,958.8,50.1,48.8],[518.5,909.4,50.0,48.9],[519.0,860.1,49.8,48.9],[519.4,810.7,49.7,49.0],[520.9,564.0,49.2,49.2],[521.1,514.7,49.2,49.2],[951.3,1945.7,54.7,48.3],[964.4,1255.2,51.0,48.8],[965.0,1205.9,50.8,48.8],[965.6,1156.5,50.6,48.9],[1005.1,1946.4,54.5,48.6],[1014.9,1255.6,50.9,49.0],[1015.4,1206.2,50.7,49.0],[1015.9,1156.9,50.5,49.0],[1058.9,1946.8,54.2,48.9],[1065.5,1255.8,50.7,49.1],[1065.8,1206.4,50.6,49.2],[1066.1,1157.1,50.4,49.2],[1114.5,1650.9,52.2,49.2],[1114.7,1601.5,52.0,49.2],[1114.9,1552.1,51.7,49.3],[1115.5,1404.0,51.1,49.3],[1115.7,1354.7,50.9,49.3],[1115.9,1305.3,50.8,49.3],[1116.1,1255.9,50.6,49.3],[1116.2,1206.5,50.4,49.3],[1116.4,1157.1,50.3,49.3],[1116.9,959.5,49.8,49.3],[1117.0,910.1,49.7,49.3],[1166.7,1650.8,52.0,49.5],[1166.7,1601.4,51.7,49.5],[1166.7,1552.0,51.5,49.5],[1166.7,1403.9,50.9,49.5],[1166.7,1354.6,50.8,49.5],[1166.7,1305.2,50.6,49.5],[1166.7,1255.8,50.4,49.5],[1166.7,1206.4,50.3,49.5],[1166.7,1157.1,50.1,49.5],[1166.7,959.5,49.7,49.4],[1166.7,910.1,49.6,49.4],[1218.2,1502.4,51.1,49.7],[1218.0,1453.0,50.9,49.6],[1216.4,959.3,49.6,49.5],[1216.3,910.0,49.5,49.5],[1269.7,1501.9,50.9,49.8],[1269.3,1452.6,50.7,49.8],[1266.4,1008.5,49.5,49.6],[1266.2,959.1,49.4,49.6],[1266.0,909.7,49.4,49.6],[1321.2,1501.2,50.6,50.0],[1320.6,1451.9,50.5,50.0],[1316.3,1008.1,49.4,49.7],[1316.0,958.8,49.3,49.7],[1315.6,909.4,49.2,49.7],[1366.1,1007.6,49.2,49.8],[1365.7,958.3,49.2,49.8],[1365.3,909.0,49.1,49.7],[1370.4,366.7,49.0,49.3],[1370.4,317.3,49.0,49.4],[1370.4,218.5,49.0,49.4],[1370.4,267.9,49.0,49.4],[1419.5,366.7,49.1,49.4],[1419.5,317.3,49.0,49.4],[1419.4,218.5,49.0,49.4],[1419.5,267.9,49.0,49.4],[1468.5,366.7,49.1,49.4],[1468.5,317.3,49.1,49.4],[1468.5,218.4,49.1,49.4],[1468.5,267.9,49.1,49.4],[1321.4,366.7,49.0,49.3],[1321.4,317.3,49.0,49.3],[1321.4,218.6,48.9,49.4],[1321.4,268.0,49.0,49.4],[1370.4,317.3,49.0,49.4],[1351.3,1945.7,54.7,48.3],[1419.5,317.3,49.0,49.4],[1405.1,1946.4,54.5,48.6],[1468.5,317.3,49.1,49.4],[1458.9,1946.8,54.2,48.9],[1513.7,1798.9,53.0,49.2],[1513.9,1749.6,52.7,49.2],[1514.2,1700.2,52.5,49.2],[1516.5,1107.7,50.1,49.3],[1516.7,1058.3,50.0,49.3],[1516.8,1008.9,49.9,49.3],[1517.1,860.7,49.6,49.4],[1517.2,811.3,49.5,49.4],[1517.3,761.9,49.4,49.4],[1517.6,465.5,49.1,49.4],[1517.6,416.1,49.1,49.4],[1517.6,366.7,49.1,49.4],[1566.7,1798.8,52.7,49.5],[1566.7,1749.4,52.5,49.5],[1566.7,1700.1,52.2,49.5],[1566.7,1107.7,50.0,49.5],[1566.7,1058.3,49.9,49.5],[1566.7,1008.9,49.8,49.4],[1566.7,860.7,49.5,49.4],[1566.7,811.3,49.4,49.4],[1566.7,761.9,49.3,49.4],[1566.7,465.5,49.1,49.4],[1566.7,416.1,49.1,49.4],[1566.7,366.7,49.1,49.4],[1620.5,1946.4,53.3,49.7],[1616.4,959.3,49.6,49.5],[1616.3,910.0,49.5,49.5],[1616.2,860.6,49.4,49.5],[1616.2,811.2,49.3,49.5],[1616.1,761.8,49.3,49.5],[1616.0,712.4,49.2,49.5],[1615.9,663.0,49.2,49.5],[1615.9,613.6,49.1,49.5],[1674.4,1945.7,52.9,50.0],[1666.4,1008.5,49.5,49.6],[1666.2,959.1,49.4,49.6],[1666.0,909.7,49.4,49.6],[1665.8,860.4,49.3,49.6],[1665.6,811.0,49.2,49.6],[1665.5,761.6,49.2,49.6],[1665.3,712.3,49.1,49.5],[1665.2,662.9,49.1,49.5],[1665.1,613.5,49.1,49.5],[1728.3,1944.7,52.6,50.3],[1716.3,1008.1,49.4,49.7],[1716.0,958.8,49.3,49.7],[1715.6,909.4,49.2,49.7],[1715.4,860.1,49.2,49.7],[1715.1,810.7,49.1,49.6],[1714.9,761.4,49.1,49.6],[1714.7,712.1,49.0,49.6],[1714.5,662.7,49.0,49.5],[1714.3,613.4,49.0,49.5],[1766.1,1007.6,49.2,49.8],[1765.7,958.3,49.2,49.8],[1765.3,909.0,49.1,49.7],[1764.9,859.7,49.1,49.7],[1764.5,810.4,49.0,49.7],[1764.2,761.1,49.0,49.6],[1763.9,711.8,48.9,49.6],[1763.7,662.5,48.9,49.6],[1763.5,613.2,48.9,49.5],[1321.4,317.3,49.0,49.3],[1770.4,218.5,49.0,49.4],[1770.4,267.9,49.0,49.4],[1819.5,317.3,49.0,49.4],[1819.4,218.5,49.0,49.4],[1819.5,267.9,49.0,49.4],[1868.5,366.7,49.1,49.4],[1868.5,317.3,49.1,49.4],[1868.5,267.9,49.1,49.4],[1917.6,366.7,49.1,49.4],[1917.6,317.3,49.1,49.4],[1966.7,317.3,49.1,49.4],[1721.4,366.7,49.0,49.3],[1721.4,317.3,49.0,49.3],[1721.4,218.6,48.9,49.4],[1757.9,1649.9,52.9,48.5],[1758.9,1600.5,52.6,48.5],[1759.8,1551.2,52.3,48.6],[1760.7,1501.9,52.1,48.6],[1761.5,1452.6,51.8,48.7],[1770.3,465.4,49.1,49.3],[1770.4,416.0,49.1,49.3],[1770.4,366.7,49.0,49.3],[1810.1,1650.4,52.7,48.8],[1810.8,1601.1,52.4,48.8],[1811.5,1551.7,52.1,48.8],[1812.1,1502.4,51.9,48.8],[1812.8,1453.0,51.7,48.9],[1819.4,465.5,49.1,49.3],[1819.4,416.1,49.1,49.4],[1819.5,366.7,49.1,49.4],[1868.5,317.3,49.1,49.4],[1862.3,1650.8,52.4,49.0],[1862.7,1601.4,52.2,49.0],[1863.2,1552.0,51.9,49.0],[1863.6,1502.7,51.7,49.1],[1864.0,1453.3,51.5,49.1],[1868.4,465.5,49.1,49.4],[1868.5,416.1,49.1,49.4],[1868.5,366.7,49.1,49.4],[1917.6,317.3,49.1,49.4],[1912.8,1946.9,53.9,49.2],[1917.6,465.5,49.1,49.4],[1917.6,416.1,49.1,49.4],[1917.6,366.7,49.1,49.4],[1966.7,1946.8,53.6,49.5],[1966.7,465.5,49.1,49.4],[1966.7,416.1,49.1,49.4],[1966.7,366.7,49.1,49.4],[2019.7,1798.4,52.4,49.7],[2019.4,1749.1,52.2,49.7],[2019.1,1699.8,51.9,49.7],[2017.3,1255.6,50.3,49.6],[2017.1,1206.2,50.1,49.6],[2016.9,1156.9,50.0,49.6],[2072.6,1797.8,52.1,49.9],[2072.1,1748.5,51.9,49.9],[2071.6,1699.2,51.7,49.9],[2067.8,1255.2,50.1,49.7],[2067.5,1205.9,50.0,49.7],[2067.2,1156.5,49.8,49.7],[2125.6,1796.9,51.8,50.2],[2124.8,1747.6,51.6,50.1],[2124.0,1698.4,51.4,50.1],[2118.4,1254.7,49.9,49.9],[2117.9,1205.4,49.8,49.8],[2117.5,1156.1,49.7,49.8],[1721.4,317.3,49.0,49.3],[1721.3,465.4,49.1,49.2],[1721.4,416.0,49.1,49.3],[1721.4,366.7,49.0,49.3],[2152.5,1896.4,54.4,48.3],[2153.7,1847.1,54.1,48.4],[2160.7,1501.9,52.1,48.6],[2161.5,1452.6,51.8,48.7],[2206.9,1847.7,53.8,48.6],[2212.1,1502.4,51.9,48.8],[2212.8,1453.0,51.7,48.9]],"heldOut":[-68.0,-13.0,-60.0,-7.0],"cuts":[0.025724461302161217,0.09438271075487137,0.19317032396793365,0.24546955525875092,0.3185015618801117],"bands":["Lowest half","Top 50%","Top 25%","Top 10%","Top 5%","Top 1%"],"ramp":["#2b0f2b","#561a4f","#93277a","#d23f9e","#ff86c9","#ffdcef"]};
+const MAP = {"bounds":[-74.5,-24.5,-40.5,5.5],"res":0.015,"width":2267,"height":2000,"tiles":[[15.8,169.1,49.2,49.4],[15.8,119.7,49.2,49.3],[64.9,169.2,49.2,49.3],[64.9,119.8,49.2,49.3],[114.0,169.3,49.2,49.3],[114.1,119.9,49.2,49.2],[163.0,169.4,49.2,49.2],[163.2,120.1,49.2,49.2],[16.8,1107.5,49.9,49.6],[16.7,1058.1,49.8,49.6],[16.6,1008.7,49.7,49.6],[66.9,1107.2,49.7,49.7],[66.7,1057.8,49.6,49.7],[117.1,1106.7,49.6,49.8],[116.7,1057.4,49.5,49.8],[167.1,1106.2,49.4,49.9],[166.6,1056.9,49.3,49.8],[170.4,366.7,49.0,49.3],[170.4,317.3,49.0,49.4],[170.4,218.5,49.0,49.4],[170.4,267.9,49.0,49.4],[219.5,366.7,49.1,49.4],[219.5,317.3,49.0,49.4],[219.4,218.5,49.0,49.4],[219.5,267.9,49.0,49.4],[268.5,366.7,49.1,49.4],[268.5,317.3,49.1,49.4],[268.5,218.4,49.1,49.4],[268.5,267.9,49.1,49.4],[121.4,366.7,49.0,49.3],[121.4,317.3,49.0,49.3],[121.4,218.6,48.9,49.4],[121.4,268.0,49.0,49.4],[170.4,317.3,49.0,49.4],[219.5,317.3,49.0,49.4],[206.0,1897.1,54.1,48.6],[206.9,1847.7,53.8,48.6],[268.5,317.3,49.1,49.4],[259.5,1897.5,53.9,48.9],[260.1,1848.1,53.5,48.9],[312.8,1946.9,53.9,49.2],[314.5,1650.9,52.2,49.2],[314.7,1601.5,52.0,49.2],[314.9,1552.1,51.7,49.3],[366.7,1946.8,53.6,49.5],[366.7,1650.8,52.0,49.5],[366.7,1601.4,51.7,49.5],[366.7,1552.0,51.5,49.5],[417.1,1206.2,50.1,49.6],[416.9,1156.9,50.0,49.6],[416.8,1107.5,49.9,49.6],[416.7,1058.1,49.8,49.6],[416.6,1008.7,49.7,49.6],[416.4,959.3,49.6,49.5],[416.3,910.0,49.5,49.5],[416.2,860.6,49.4,49.5],[416.2,811.2,49.3,49.5],[467.5,1205.9,50.0,49.7],[467.2,1156.5,49.8,49.7],[466.9,1107.2,49.7,49.7],[466.7,1057.8,49.6,49.7],[466.4,1008.5,49.5,49.6],[466.2,959.1,49.4,49.6],[466.0,909.7,49.4,49.6],[465.8,860.4,49.3,49.6],[465.6,811.0,49.2,49.6],[517.9,1205.4,49.8,49.8],[517.5,1156.1,49.7,49.8],[517.1,1106.7,49.6,49.8],[516.7,1057.4,49.5,49.8],[516.3,1008.1,49.4,49.7],[516.0,958.8,49.3,49.7],[515.6,909.4,49.2,49.7],[515.4,860.1,49.2,49.7],[515.1,810.7,49.1,49.6],[567.1,1106.2,49.4,49.9],[566.6,1056.9,49.3,49.8],[566.1,1007.6,49.2,49.8],[565.7,958.3,49.2,49.8],[565.3,909.0,49.1,49.7],[564.9,859.7,49.1,49.7],[564.5,810.4,49.0,49.7],[121.4,317.3,49.0,49.3],[570.4,366.7,49.0,49.3],[570.4,317.3,49.0,49.4],[570.4,218.5,49.0,49.4],[570.4,267.9,49.0,49.4],[619.5,366.7,49.1,49.4],[619.5,317.3,49.0,49.4],[619.4,218.5,49.0,49.4],[619.5,267.9,49.0,49.4],[668.5,366.7,49.1,49.4],[668.5,317.3,49.1,49.4],[668.5,218.4,49.1,49.4],[668.5,267.9,49.1,49.4],[717.6,366.7,49.1,49.4],[717.6,317.3,49.1,49.4],[717.6,218.4,49.1,49.4],[717.6,267.8,49.1,49.4],[766.7,366.7,49.1,49.4],[766.7,317.3,49.1,49.4],[766.7,218.4,49.1,49.4],[766.7,267.9,49.1,49.4],[815.7,366.7,49.1,49.4],[815.7,317.3,49.1,49.4],[815.8,218.5,49.1,49.4],[815.7,267.9,49.1,49.4],[864.8,366.7,49.0,49.4],[864.8,317.3,49.1,49.4],[864.8,218.5,49.1,49.3],[864.8,267.9,49.1,49.4],[913.9,366.7,49.0,49.4],[913.9,317.3,49.0,49.3],[913.9,218.6,49.1,49.3],[913.9,268.0,49.1,49.3],[962.9,366.7,49.0,49.3],[962.9,317.4,49.0,49.3],[963.0,218.7,49.1,49.2],[962.9,268.1,49.1,49.3],[521.4,366.7,49.0,49.3],[521.4,317.3,49.0,49.3],[521.4,218.6,48.9,49.4],[521.4,268.0,49.0,49.4],[570.4,317.3,49.0,49.4],[551.3,1945.7,54.7,48.3],[552.5,1896.4,54.4,48.3],[553.7,1847.1,54.1,48.4],[562.3,1403.2,51.6,48.7],[563.0,1353.9,51.4,48.7],[563.7,1304.6,51.2,48.8],[565.0,1205.9,50.8,48.8],[565.6,1156.5,50.6,48.9],[566.2,1107.2,50.5,48.9],[566.7,1057.8,50.3,48.9],[567.2,1008.5,50.2,49.0],[567.7,959.1,50.0,49.0],[568.1,909.7,49.9,49.0],[568.4,860.4,49.8,49.0],[568.8,811.0,49.7,49.1],[570.0,564.2,49.2,49.2],[570.2,514.8,49.2,49.3],[619.5,317.3,49.0,49.4],[605.1,1946.4,54.5,48.6],[606.0,1897.1,54.1,48.6],[606.9,1847.7,53.8,48.6],[613.3,1403.7,51.5,48.9],[613.9,1354.3,51.3,48.9],[614.4,1305.0,51.1,48.9],[615.4,1206.2,50.7,49.0],[615.9,1156.9,50.5,49.0],[616.3,1107.5,50.4,49.0],[616.7,1058.1,50.2,49.1],[617.0,1008.7,50.1,49.1],[617.4,959.3,50.0,49.1],[617.7,910.0,49.8,49.1],[618.0,860.6,49.7,49.2],[618.2,811.2,49.6,49.2],[619.2,564.2,49.2,49.3],[619.3,514.8,49.2,49.3],[668.5,317.3,49.1,49.4],[658.9,1946.8,54.2,48.9],[659.5,1897.5,53.9,48.9],[660.1,1848.1,53.5,48.9],[664.4,1403.9,51.3,49.1],[664.8,1354.6,51.1,49.1],[665.2,1305.2,50.9,49.1],[665.8,1206.4,50.6,49.2],[666.1,1157.1,50.4,49.2],[666.4,1107.7,50.3,49.2],[666.7,1058.3,50.1,49.2],[666.9,1008.9,50.0,49.2],[667.1,959.5,49.9,49.2],[667.3,910.1,49.8,49.2],[667.5,860.7,49.7,49.3],[667.7,811.3,49.6,49.3],[668.3,564.3,49.2,49.3],[668.4,514.9,49.2,49.4],[717.6,317.3,49.1,49.4],[712.8,1946.9,53.9,49.2],[716.2,1206.5,50.4,49.3],[716.4,1157.1,50.3,49.3],[716.5,1107.7,50.1,49.3],[716.7,1058.3,50.0,49.3],[716.8,1008.9,49.9,49.3],[716.9,959.5,49.8,49.3],[717.0,910.1,49.7,49.3],[717.1,860.7,49.6,49.4],[717.2,811.3,49.5,49.4],[717.3,761.9,49.4,49.4],[717.5,564.3,49.2,49.4],[717.5,514.9,49.1,49.4],[766.7,317.3,49.1,49.4],[766.7,1946.8,53.6,49.5],[766.7,1206.4,50.3,49.5],[766.7,1157.1,50.1,49.5],[766.7,1107.7,50.0,49.5],[766.7,1058.3,49.9,49.5],[766.7,1008.9,49.8,49.4],[766.7,959.5,49.7,49.4],[766.7,910.1,49.6,49.4],[766.7,860.7,49.5,49.4],[766.7,811.3,49.4,49.4],[766.7,761.9,49.3,49.4],[766.7,564.3,49.1,49.4],[766.7,514.9,49.1,49.4],[815.7,317.3,49.1,49.4],[819.7,1798.4,52.4,49.7],[819.4,1749.1,52.2,49.7],[819.1,1699.8,51.9,49.7],[817.8,1403.7,50.7,49.6],[817.6,1354.3,50.6,49.6],[817.4,1305.0,50.4,49.6],[817.3,1255.6,50.3,49.6],[817.1,1206.2,50.1,49.6],[816.9,1156.9,50.0,49.6],[816.8,1107.5,49.9,49.6],[816.7,1058.1,49.8,49.6],[816.6,1008.7,49.7,49.6],[816.4,959.3,49.6,49.5],[816.3,910.0,49.5,49.5],[816.2,860.6,49.4,49.5],[816.2,811.2,49.3,49.5],[816.0,712.4,49.2,49.5],[815.9,663.0,49.2,49.5],[815.9,613.6,49.1,49.5],[864.8,317.3,49.1,49.4],[872.6,1797.8,52.1,49.9],[872.1,1748.5,51.9,49.9],[871.6,1699.2,51.7,49.9],[868.9,1403.2,50.5,49.8],[868.5,1353.9,50.4,49.8],[868.2,1304.6,50.2,49.8],[867.8,1255.2,50.1,49.7],[867.5,1205.9,50.0,49.7],[867.2,1156.5,49.8,49.7],[866.9,1107.2,49.7,49.7],[866.7,1057.8,49.6,49.7],[866.4,1008.5,49.5,49.6],[866.2,959.1,49.4,49.6],[866.0,909.7,49.4,49.6],[865.8,860.4,49.3,49.6],[865.6,811.0,49.2,49.6],[865.3,712.3,49.1,49.5],[865.2,662.9,49.1,49.5],[865.1,613.5,49.1,49.5],[913.9,317.3,49.0,49.3],[925.6,1796.9,51.8,50.2],[924.8,1747.6,51.6,50.1],[924.0,1698.4,51.4,50.1],[920.0,1402.6,50.3,50.0],[919.4,1353.3,50.2,49.9],[918.9,1304.0,50.0,49.9],[918.4,1254.7,49.9,49.9],[917.9,1205.4,49.8,49.8],[917.5,1156.1,49.7,49.8],[917.1,1106.7,49.6,49.8],[916.7,1057.4,49.5,49.8],[916.3,1008.1,49.4,49.7],[916.0,958.8,49.3,49.7],[915.6,909.4,49.2,49.7],[915.4,860.1,49.2,49.7],[915.1,810.7,49.1,49.6],[914.7,712.1,49.0,49.6],[914.5,662.7,49.0,49.5],[914.3,613.4,49.0,49.5],[962.9,317.4,49.0,49.3],[967.1,1106.2,49.4,49.9],[966.6,1056.9,49.3,49.8],[966.1,1007.6,49.2,49.8],[965.7,958.3,49.2,49.8],[965.3,909.0,49.1,49.7],[964.9,859.7,49.1,49.7],[964.5,810.4,49.0,49.7],[963.9,711.8,48.9,49.6],[963.7,662.5,48.9,49.6],[963.5,613.2,48.9,49.5],[521.4,317.3,49.0,49.3],[516.1,1106.7,50.6,48.7],[516.8,1057.4,50.4,48.8],[517.4,1008.1,50.3,48.8],[518.0,958.8,50.1,48.8],[518.5,909.4,50.0,48.9],[519.0,860.1,49.8,48.9],[519.4,810.7,49.7,49.0],[520.9,564.0,49.2,49.2],[521.1,514.7,49.2,49.2],[951.3,1945.7,54.7,48.3],[964.4,1255.2,51.0,48.8],[965.0,1205.9,50.8,48.8],[965.6,1156.5,50.6,48.9],[1005.1,1946.4,54.5,48.6],[1014.9,1255.6,50.9,49.0],[1015.4,1206.2,50.7,49.0],[1015.9,1156.9,50.5,49.0],[1058.9,1946.8,54.2,48.9],[1065.5,1255.8,50.7,49.1],[1065.8,1206.4,50.6,49.2],[1066.1,1157.1,50.4,49.2],[1114.5,1650.9,52.2,49.2],[1114.7,1601.5,52.0,49.2],[1114.9,1552.1,51.7,49.3],[1115.5,1404.0,51.1,49.3],[1115.7,1354.7,50.9,49.3],[1115.9,1305.3,50.8,49.3],[1116.1,1255.9,50.6,49.3],[1116.2,1206.5,50.4,49.3],[1116.4,1157.1,50.3,49.3],[1116.9,959.5,49.8,49.3],[1117.0,910.1,49.7,49.3],[1166.7,1650.8,52.0,49.5],[1166.7,1601.4,51.7,49.5],[1166.7,1552.0,51.5,49.5],[1166.7,1403.9,50.9,49.5],[1166.7,1354.6,50.8,49.5],[1166.7,1305.2,50.6,49.5],[1166.7,1255.8,50.4,49.5],[1166.7,1206.4,50.3,49.5],[1166.7,1157.1,50.1,49.5],[1166.7,959.5,49.7,49.4],[1166.7,910.1,49.6,49.4],[1218.2,1502.4,51.1,49.7],[1218.0,1453.0,50.9,49.6],[1216.4,959.3,49.6,49.5],[1216.3,910.0,49.5,49.5],[1269.7,1501.9,50.9,49.8],[1269.3,1452.6,50.7,49.8],[1266.4,1008.5,49.5,49.6],[1266.2,959.1,49.4,49.6],[1266.0,909.7,49.4,49.6],[1321.2,1501.2,50.6,50.0],[1320.6,1451.9,50.5,50.0],[1316.3,1008.1,49.4,49.7],[1316.0,958.8,49.3,49.7],[1315.6,909.4,49.2,49.7],[1366.1,1007.6,49.2,49.8],[1365.7,958.3,49.2,49.8],[1365.3,909.0,49.1,49.7],[1370.4,366.7,49.0,49.3],[1370.4,317.3,49.0,49.4],[1370.4,218.5,49.0,49.4],[1370.4,267.9,49.0,49.4],[1419.5,366.7,49.1,49.4],[1419.5,317.3,49.0,49.4],[1419.4,218.5,49.0,49.4],[1419.5,267.9,49.0,49.4],[1468.5,366.7,49.1,49.4],[1468.5,317.3,49.1,49.4],[1468.5,218.4,49.1,49.4],[1468.5,267.9,49.1,49.4],[1321.4,366.7,49.0,49.3],[1321.4,317.3,49.0,49.3],[1321.4,218.6,48.9,49.4],[1321.4,268.0,49.0,49.4],[1370.4,317.3,49.0,49.4],[1351.3,1945.7,54.7,48.3],[1419.5,317.3,49.0,49.4],[1405.1,1946.4,54.5,48.6],[1468.5,317.3,49.1,49.4],[1458.9,1946.8,54.2,48.9],[1513.7,1798.9,53.0,49.2],[1513.9,1749.6,52.7,49.2],[1514.2,1700.2,52.5,49.2],[1516.5,1107.7,50.1,49.3],[1516.7,1058.3,50.0,49.3],[1516.8,1008.9,49.9,49.3],[1517.1,860.7,49.6,49.4],[1517.2,811.3,49.5,49.4],[1517.3,761.9,49.4,49.4],[1517.6,465.5,49.1,49.4],[1517.6,416.1,49.1,49.4],[1517.6,366.7,49.1,49.4],[1566.7,1798.8,52.7,49.5],[1566.7,1749.4,52.5,49.5],[1566.7,1700.1,52.2,49.5],[1566.7,1107.7,50.0,49.5],[1566.7,1058.3,49.9,49.5],[1566.7,1008.9,49.8,49.4],[1566.7,860.7,49.5,49.4],[1566.7,811.3,49.4,49.4],[1566.7,761.9,49.3,49.4],[1566.7,465.5,49.1,49.4],[1566.7,416.1,49.1,49.4],[1566.7,366.7,49.1,49.4],[1620.5,1946.4,53.3,49.7],[1616.4,959.3,49.6,49.5],[1616.3,910.0,49.5,49.5],[1616.2,860.6,49.4,49.5],[1616.2,811.2,49.3,49.5],[1616.1,761.8,49.3,49.5],[1616.0,712.4,49.2,49.5],[1615.9,663.0,49.2,49.5],[1615.9,613.6,49.1,49.5],[1674.4,1945.7,52.9,50.0],[1666.4,1008.5,49.5,49.6],[1666.2,959.1,49.4,49.6],[1666.0,909.7,49.4,49.6],[1665.8,860.4,49.3,49.6],[1665.6,811.0,49.2,49.6],[1665.5,761.6,49.2,49.6],[1665.3,712.3,49.1,49.5],[1665.2,662.9,49.1,49.5],[1665.1,613.5,49.1,49.5],[1728.3,1944.7,52.6,50.3],[1716.3,1008.1,49.4,49.7],[1716.0,958.8,49.3,49.7],[1715.6,909.4,49.2,49.7],[1715.4,860.1,49.2,49.7],[1715.1,810.7,49.1,49.6],[1714.9,761.4,49.1,49.6],[1714.7,712.1,49.0,49.6],[1714.5,662.7,49.0,49.5],[1714.3,613.4,49.0,49.5],[1766.1,1007.6,49.2,49.8],[1765.7,958.3,49.2,49.8],[1765.3,909.0,49.1,49.7],[1764.9,859.7,49.1,49.7],[1764.5,810.4,49.0,49.7],[1764.2,761.1,49.0,49.6],[1763.9,711.8,48.9,49.6],[1763.7,662.5,48.9,49.6],[1763.5,613.2,48.9,49.5],[1321.4,317.3,49.0,49.3],[1770.4,218.5,49.0,49.4],[1770.4,267.9,49.0,49.4],[1819.5,317.3,49.0,49.4],[1819.4,218.5,49.0,49.4],[1819.5,267.9,49.0,49.4],[1868.5,366.7,49.1,49.4],[1868.5,317.3,49.1,49.4],[1868.5,267.9,49.1,49.4],[1917.6,366.7,49.1,49.4],[1917.6,317.3,49.1,49.4],[1966.7,317.3,49.1,49.4],[1721.4,366.7,49.0,49.3],[1721.4,317.3,49.0,49.3],[1721.4,218.6,48.9,49.4],[1757.9,1649.9,52.9,48.5],[1758.9,1600.5,52.6,48.5],[1759.8,1551.2,52.3,48.6],[1760.7,1501.9,52.1,48.6],[1761.5,1452.6,51.8,48.7],[1770.3,465.4,49.1,49.3],[1770.4,416.0,49.1,49.3],[1770.4,366.7,49.0,49.3],[1810.1,1650.4,52.7,48.8],[1810.8,1601.1,52.4,48.8],[1811.5,1551.7,52.1,48.8],[1812.1,1502.4,51.9,48.8],[1812.8,1453.0,51.7,48.9],[1819.4,465.5,49.1,49.3],[1819.4,416.1,49.1,49.4],[1819.5,366.7,49.1,49.4],[1868.5,317.3,49.1,49.4],[1862.3,1650.8,52.4,49.0],[1862.7,1601.4,52.2,49.0],[1863.2,1552.0,51.9,49.0],[1863.6,1502.7,51.7,49.1],[1864.0,1453.3,51.5,49.1],[1868.4,465.5,49.1,49.4],[1868.5,416.1,49.1,49.4],[1868.5,366.7,49.1,49.4],[1917.6,317.3,49.1,49.4],[1912.8,1946.9,53.9,49.2],[1917.6,465.5,49.1,49.4],[1917.6,416.1,49.1,49.4],[1917.6,366.7,49.1,49.4],[1966.7,1946.8,53.6,49.5],[1966.7,465.5,49.1,49.4],[1966.7,416.1,49.1,49.4],[1966.7,366.7,49.1,49.4],[2019.7,1798.4,52.4,49.7],[2019.4,1749.1,52.2,49.7],[2019.1,1699.8,51.9,49.7],[2017.3,1255.6,50.3,49.6],[2017.1,1206.2,50.1,49.6],[2016.9,1156.9,50.0,49.6],[2072.6,1797.8,52.1,49.9],[2072.1,1748.5,51.9,49.9],[2071.6,1699.2,51.7,49.9],[2067.8,1255.2,50.1,49.7],[2067.5,1205.9,50.0,49.7],[2067.2,1156.5,49.8,49.7],[2125.6,1796.9,51.8,50.2],[2124.8,1747.6,51.6,50.1],[2124.0,1698.4,51.4,50.1],[2118.4,1254.7,49.9,49.9],[2117.9,1205.4,49.8,49.8],[2117.5,1156.1,49.7,49.8],[1721.4,317.3,49.0,49.3],[1721.3,465.4,49.1,49.2],[1721.4,416.0,49.1,49.3],[1721.4,366.7,49.0,49.3],[2152.5,1896.4,54.4,48.3],[2153.7,1847.1,54.1,48.4],[2160.7,1501.9,52.1,48.6],[2161.5,1452.6,51.8,48.7],[2206.9,1847.7,53.8,48.6],[2212.1,1502.4,51.9,48.8],[2212.8,1453.0,51.7,48.9]],"heldOut":[-68.0,-13.0,-60.0,-7.0],"cuts":[0.025724461302161217,0.09438271075487137,0.19317032396793365,0.24546955525875092,0.3185015618801117],"bands":["Lowest half","Top 50%","Top 25%","Top 10%","Top 5%","Top 1%"],"ramp":["#2b2614","#55461a","#8a6d22","#c19a30","#e6c25a","#faecb4"]};
 const REL = {"M_A2":{"mean_forecast":[0.0018361780640505955,0.003501471662805319,0.006315886259997776,0.010952571059362565,0.017439943020465906,0.0314041017495278,0.0560638873252141,0.09305820726989948,0.15997666301136557,0.3075325168292463],"observed_rate":[0.0003738535158846205,0.0006230891931410342,0.0010384819885683903,0.0018900372191944703,0.004045925827462448,0.008399242323541141,0.015116175221352895,0.02756552315715796,0.061665188557566294,0.2796409337218649]},"B4":{"mean_forecast":[0.0004654204877802839,0.0007748132743401801,0.0017197637912341607,0.00405239077486272,0.008112363286386138,0.01408113670459653,0.023223573365982284,0.03953828390411737,0.07651829486825294,0.26282905246927],"observed_rate":[0.00040916190349594576,0.0005150870663299216,0.0013666422969560016,0.0028288249368602953,0.005618187558154991,0.010511514688289246,0.018873410859636407,0.03384835223720639,0.06490525909140946,0.2614819999543067]}};
 const VERDICT = {"imp":0.16026531456863835,"lo":0.10664794733788704,"hi":0.2228725127731165,"test":0.14370954141229952,"held":0.15654501681384647,"win":false};
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -500,16 +530,21 @@ const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const ease = (t) => 1 - Math.pow(1 - t, 3);
 const onView = (el, fn, threshold = 0.3) => { const o = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { o.disconnect(); fn(); } }, { threshold }); o.observe(el); };
 
-/* reveal on scroll */
+/* masthead, reveal, nav */
+const mast = document.getElementById("mast");
+addEventListener("scroll", () => mast.classList.toggle("solid", scrollY > innerHeight * 0.9), { passive: true });
 const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
 document.querySelectorAll("[data-reveal], .race li").forEach((el) => io.observe(el));
+const navLinks = [...document.querySelectorAll(".mast nav a[href^='#']")];
+const so = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) navLinks.forEach((a) => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id)); }), { rootMargin: "-45% 0px -50% 0px" });
+document.querySelectorAll("section.chapter").forEach((s) => so.observe(s));
 
 /* data */
 function load(src) { return new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = src; }); }
 function pixels(im) { const c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d", { willReadFrequently: true }); x.drawImage(im, 0, 0); return x.getImageData(0, 0, W, H).data; }
 const ready = Promise.all([load("map-data.png"), load("map-land.png")]).then(([d, l]) => ({ data: pixels(d), land: pixels(l) }));
 
-/* layers: the night base (land, with water as faint cyan inside the region), one canvas per band, a glow of the brightest */
+/* plate layers: the ground (land, and inside the region water in deep blue), one canvas per band, a glow of the two brightest */
 function layers({ data, land }) {
   const mk = () => { const c = document.createElement("canvas"); c.width = W; c.height = H; return c; };
   const base = mk(), bands = RAMP.map(mk), glow = mk();
@@ -518,7 +553,7 @@ function layers({ data, land }) {
   const gi = glow.getContext("2d").createImageData(W, H), g = gi.data;
   for (let j = 0; j < b.length; j += 4) {
     const a = land[j] / 255, inside = land[j] > 0;
-    b[j] = inside ? 11 + 5 * a : 5; b[j + 1] = inside ? 38 - 16 * a : 7; b[j + 2] = inside ? 50 - 14 * a : 13; b[j + 3] = 255;
+    b[j] = inside ? 12 + 7 * a : 10; b[j + 1] = inside ? 27 + 2 * a : 17; b[j + 2] = inside ? 36 - 13 * a : 14; b[j + 3] = 255;
     const k = data[j + 1];
     if (k !== 255) {
       const c = RAMP[k], o = imgs[k].data; o[j] = c[0]; o[j + 1] = c[1]; o[j + 2] = c[2]; o[j + 3] = 255;
@@ -531,25 +566,31 @@ function layers({ data, land }) {
   return { base, bands, glow };
 }
 
-/* the map */
 const canvas = document.getElementById("map"), glowC = document.getElementById("glow"), svg = document.getElementById("overlay");
 canvas.width = glowC.width = W; canvas.height = glowC.height = H;
 svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
 const toPx = (lon, lat) => [(lon - W0) / MAP.res, (N0 - lat) / MAP.res];
 (function overlay() {
   let s = "";
-  for (let lon = -70; lon <= -45; lon += 5) { const [x] = toPx(lon, 0); s += `<line class="grid" x1="${x}" y1="0" x2="${x}" y2="${H}"/><text x="${x + 10}" y="${H - 18}">${-lon}°W</text>`; }
-  for (let lat = 5; lat >= -20; lat -= 5) { const [, y] = toPx(0, lat); s += `<line class="grid" x1="0" y1="${y}" x2="${W}" y2="${y}"/><text x="14" y="${y - 12}">${lat === 0 ? "0°" : Math.abs(lat) + "°" + (lat > 0 ? "N" : "S")}</text>`; }
+  for (let lon = -70; lon <= -45; lon += 5) { const [x] = toPx(lon, 0); s += `<line class="grid" x1="${x}" y1="0" x2="${x}" y2="${H}"/>`; }
+  for (let lat = 5; lat >= -20; lat -= 5) { const [, y] = toPx(0, lat); s += `<line class="grid" x1="0" y1="${y}" x2="${W}" y2="${y}"/>`; }
   for (const [x, y, w, h] of MAP.tiles) s += `<rect class="tile" x="${x}" y="${y}" width="${w}" height="${h}"/>`;
   const [hw, hs, he, hn] = MAP.heldOut, [x0, y0] = toPx(hw, hn), [x1, y1] = toPx(he, hs);
-  s += `<rect class="held" x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}"/><text class="held-label" x="${x0 + 12}" y="${y0 - 16}">HELD-OUT REGION</text>`;
-  const km = 500, lat = -23.2, len = km / (111.32 * Math.cos(lat * Math.PI / 180)) / MAP.res, [sx, sy] = toPx(-73.8, lat);
-  s += `<line class="scale" x1="${sx}" y1="${sy}" x2="${sx + len}" y2="${sy}"/><line class="scale" x1="${sx}" y1="${sy - 12}" x2="${sx}" y2="${sy + 12}"/><line class="scale" x1="${sx + len}" y1="${sy - 12}" x2="${sx + len}" y2="${sy + 12}"/><text x="${sx}" y="${sy - 22}">${km} KM</text>`;
+  s += `<rect class="held" x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}"/><text x="${x0 + 14}" y="${y0 - 18}">HELD-OUT REGION</text>`;
+  const km = 500, lat = -23.4, len = km / (111.32 * Math.cos(lat * Math.PI / 180)) / MAP.res, [sx, sy] = toPx(-73.6, lat);
+  s += `<line class="scale" x1="${sx}" y1="${sy}" x2="${sx + len}" y2="${sy}"/>`;
+  for (let i = 0; i <= 5; i++) { const x = sx + len * i / 5; s += `<line class="scale" x1="${x}" y1="${sy - (i % 5 ? 8 : 14)}" x2="${x}" y2="${sy}"/>`; }
+  s += `<text class="scale-t" x="${sx}" y="${sy - 26}">0</text><text class="scale-t" x="${sx + len}" y="${sy - 26}" text-anchor="end">500 KM</text>`;
   s += `<rect class="hover" id="hov" x="-99" y="-99" width="16" height="16"/>`;
   svg.innerHTML = s;
+  // coordinates in the margin of the frame, as on an engraved plate
+  const t = document.getElementById("ticks"); let h = "";
+  for (let lon = -70; lon <= -45; lon += 5) { const p = (lon - W0) / (E0 - W0) * 100; h += `<span class="top" style="left:calc(26px + (100% - 52px) * ${p / 100})">${-lon}°W</span><span class="bot" style="left:calc(26px + (100% - 52px) * ${p / 100})">${-lon}°W</span>`; }
+  for (let lat = 5; lat >= -20; lat -= 5) { const p = (N0 - lat) / (N0 - S0) * 100; const l = lat === 0 ? "0°" : Math.abs(lat) + "°" + (lat > 0 ? "N" : "S"); h += `<span class="lft" style="top:calc(26px + (100% - 52px) * ${p / 100})">${l}</span><span class="rgt" style="top:calc(26px + (100% - 52px) * ${p / 100})">${l}</span>`; }
+  t.innerHTML = h;
 })();
 
-let LY = null, D = null;
+let LY = null, D = null, paintGlobe = null;
 function compose(alphas) {
   const ctx = canvas.getContext("2d");
   ctx.globalAlpha = 1; ctx.drawImage(LY.base, 0, 0);
@@ -559,29 +600,27 @@ function compose(alphas) {
 function drawGlow(a) {
   const g = glowC.getContext("2d"); g.clearRect(0, 0, W, H);
   if (a <= 0) return;
-  g.globalAlpha = a; g.filter = "blur(8px)"; g.drawImage(LY.glow, 0, 0); g.filter = "blur(2px)"; g.drawImage(LY.glow, 0, 0); g.filter = "none"; g.globalAlpha = 1;
+  g.globalAlpha = a; g.filter = "blur(9px)"; g.drawImage(LY.glow, 0, 0); g.filter = "none"; g.globalAlpha = 1;
 }
-/* ignition: bands light up in rank order, the lowest half first and the top 1% last */
-function ignite() {
+/* the plate develops like a print: the safest half first, the top one per cent last */
+function develop() {
   if (REDUCED) { compose(RAMP.map(() => 1)); drawGlow(1); return; }
-  const t0 = performance.now(), dur = 3600;
+  const t0 = performance.now(), dur = 3800;
   (function frame(now) {
     const t = (now - t0) / dur;
     compose(RAMP.map((_, i) => ease(clamp((t - i * 0.12) / 0.3, 0, 1))));
-    drawGlow(ease(clamp((t - 0.7) / 0.3, 0, 1)));
+    drawGlow(ease(clamp((t - 0.72) / 0.28, 0, 1)));
     if (t < 1) requestAnimationFrame(frame);
   })(t0);
 }
-let paintGlobe = null;
 ready.then((d) => {
-  D = d; LY = layers(d);
-  compose(RAMP.map(() => 0));
-  onView(document.getElementById("viewport"), ignite, 0.3);
+  D = d; LY = layers(d); compose(RAMP.map(() => 0));
+  onView(document.getElementById("viewport"), develop, 0.3);
   if (paintGlobe) paintGlobe(d);
-}).catch(() => { document.getElementById("status").textContent = "The map could not be loaded"; });
+}).catch(() => { document.getElementById("status").textContent = "The plate could not be loaded"; });
 
-/* zoom, pan, hover */
-const vp = document.getElementById("viewport"), stage = document.getElementById("stage"), tip = document.getElementById("tip"), status = document.getElementById("status");
+/* zoom, pan, read */
+const vp = document.getElementById("viewport"), stage = document.getElementById("stage"), frame = document.getElementById("frame"), tip = document.getElementById("tip"), status = document.getElementById("status");
 let k = 1, tx = 0, ty = 0;
 function apply() {
   const w = vp.clientWidth, h = vp.clientHeight;
@@ -589,7 +628,7 @@ function apply() {
   stage.style.transform = `translate(${tx}px, ${ty}px) scale(${k})`;
   stage.style.setProperty("--k", k); stage.style.setProperty("--u", W / Math.max(1, w));
   const m = document.getElementById("hov"); if (m) { m.setAttribute("width", 16 / k); m.setAttribute("height", 16 / k); }
-  vp.classList.toggle("zoomed", k > 1);
+  vp.classList.toggle("zoomed", k > 1); frame.classList.toggle("zoomed", k > 1);
 }
 function zoomAt(f, cx, cy) { const nk = clamp(k * f, 1, 8); tx = cx - (cx - tx) * nk / k; ty = cy - (cy - ty) * nk / k; k = nk; apply(); }
 document.getElementById("zin").onclick = () => zoomAt(1.8, vp.clientWidth / 2, vp.clientHeight / 2);
@@ -618,11 +657,11 @@ function read(e) {
   const lon = W0 + (x + .5) * MAP.res, lat = N0 - (y + .5) * MAP.res, j = (y * W + x) * 4, b = D.data[j + 1];
   const where = `${Math.abs(lat).toFixed(2)}°${lat < 0 ? "S" : "N"} · ${Math.abs(lon).toFixed(2)}°W`;
   let html;
-  if (b === 255) { const l = D.land[j]; html = `${where}<b>${l > 127 ? "No forecast here" : l > 0 ? "Water" : "Outside the region"}</b>${l > 127 ? "land without an eligible forest cell" : ""}`; mark(-99, -99); }
-  else { const p = Math.pow(D.data[j] / 255, 2) * 100; html = `${where}<b>${MAP.bands[b]}</b><span class="sw" style="color:${MAP.ramp[b]};background:${MAP.ramp[b]}"></span>forecast ${p < 1 ? p.toFixed(1) : p.toFixed(0)}% chance of loss`; mark(x + .5, y + .5); }
+  if (b === 255) { const l = D.land[j]; html = `<span class="lbl">${where}</span><b>${l > 127 ? "No forecast here" : l > 0 ? "Water" : "Beyond the region"}</b>${l > 127 ? "<span>land without an eligible forest cell</span>" : ""}`; mark(-99, -99); }
+  else { const p = Math.pow(D.data[j] / 255, 2) * 100; html = `<span class="lbl">${where}</span><b>${MAP.bands[b]} of forest cells</b><span>forecast ${p < 1 ? p.toFixed(1) : p.toFixed(0)}% chance of loss in 2026</span>`; mark(x + .5, y + .5); }
   tip.innerHTML = html;
   const vr = vp.getBoundingClientRect(), px = e.clientX - vr.left, py = e.clientY - vr.top;
-  tip.style.left = Math.min(px, vr.width - 230) + "px"; tip.style.top = Math.min(py, vr.height - 100) + "px"; tip.style.opacity = 1;
+  tip.style.left = Math.min(px, vr.width - 240) + "px"; tip.style.top = Math.min(py, vr.height - 100) + "px"; tip.style.opacity = 1;
   status.textContent = b === 255 ? where : `${where} · ${MAP.bands[b]}`;
 }
 
@@ -632,17 +671,30 @@ document.querySelectorAll("[data-copy]").forEach((b) => b.addEventListener("clic
   catch (e) { b.textContent = "Select it"; }
 }));
 
-/* the verdict: count up and the gauge */
+/* the verdict: an instrument's ruler, a needle and the interval */
 (function verdict() {
-  const el = document.getElementById("bignum"), max = 0.25, pos = (v) => (clamp(v, 0, max) / max * 100) + "%";
-  document.getElementById("g10").style.left = pos(0.10); document.getElementById("g20").style.left = pos(0.20);
-  onView(document.getElementById("gauge"), () => {
-    document.getElementById("gdot").style.left = pos(VERDICT.imp);
-    const ci = document.getElementById("gci"); ci.style.left = pos(VERDICT.lo); ci.style.width = `calc(${pos(VERDICT.hi)} - ${pos(VERDICT.lo)})`;
-    if (REDUCED) return;
-    const t0 = performance.now(), dur = 1900;
-    (function f(now) { const t = clamp((now - t0) / dur, 0, 1); el.textContent = "+" + (VERDICT.imp * 100 * ease(t)).toFixed(1) + "%"; if (t < 1) requestAnimationFrame(f); })(t0);
-  }, 0.6);
+  const fig = document.getElementById("figure"), s = document.getElementById("rulersvg");
+  const L = 10, R = 510, Y = 62, max = 0.25, X = (v) => L + clamp(v, 0, max) / max * (R - L);
+  const fmt = (v) => "+" + (v * 100).toFixed(1) + "%";
+  let h = `<line class="base" x1="${L}" y1="${Y}" x2="${R}" y2="${Y}"/>`;
+  for (let i = 0; i <= 25; i++) { const x = X(i / 100), big = i % 5 === 0; h += `<line class="${big ? "t5" : "t1"}" x1="${x}" y1="${Y}" x2="${x}" y2="${Y + (big ? 12 : 6)}"/>`; if (big) h += `<text x="${x}" y="${Y + 28}" text-anchor="middle">${i}%</text>`; }
+  h += `<line class="bar10" x1="${X(.10)}" y1="${Y - 40}" x2="${X(.10)}" y2="${Y}"/><text x="${X(.10) - 6}" y="${Y - 44}" text-anchor="end">LOWER END NEEDS 10%</text>`;
+  h += `<line class="bar20" x1="${X(.20)}" y1="${Y - 52}" x2="${X(.20)}" y2="${Y + 12}"/><text class="paper" x="${X(.20) + 6}" y="${Y - 44}">THE BAR · 20%</text>`;
+  h += `<path class="ci" id="rci" d="M${X(VERDICT.lo)} ${Y - 14} v-8 H${X(VERDICT.hi)} v8"/><text class="gold" id="rcit" x="${(X(VERDICT.lo) + X(VERDICT.hi)) / 2}" y="${Y - 28}" text-anchor="middle" opacity="0">95% INTERVAL</text>`;
+  h += `<path class="needle" id="needle" d="M0 ${Y} l-6 -11 h12 z" transform="translate(${X(0)} 0)"/>`;
+  s.innerHTML = h;
+  const ci = document.getElementById("rci"), ciLen = ci.getTotalLength(); ci.style.strokeDasharray = ciLen; ci.style.strokeDashoffset = REDUCED ? 0 : ciLen;
+  const show = () => {
+    const needle = document.getElementById("needle");
+    if (REDUCED) { needle.setAttribute("transform", `translate(${X(VERDICT.imp)} 0)`); document.getElementById("rcit").setAttribute("opacity", 1); return; }
+    const t0 = performance.now(), dur = 2200;
+    (function f(now) {
+      const t = clamp((now - t0) / dur, 0, 1), e = ease(t);
+      fig.textContent = fmt(VERDICT.imp * e); needle.setAttribute("transform", `translate(${X(VERDICT.imp * e)} 0)`);
+      if (t < 1) requestAnimationFrame(f); else { ci.style.transition = "stroke-dashoffset 1.2s cubic-bezier(.22,.7,.12,1)"; ci.style.strokeDashoffset = 0; document.getElementById("rcit").style.transition = "opacity 1s ease .6s"; document.getElementById("rcit").setAttribute("opacity", 1); }
+    })(t0);
+  };
+  onView(document.getElementById("ruler"), show, 0.6);
 })();
 
 /* the field */
@@ -651,7 +703,7 @@ document.querySelectorAll(".race li[data-ap]").forEach((li, i) => {
   onView(li, () => { li.querySelector(".run").style.width = li.dataset.ap + "%"; }, 0.5);
 });
 
-/* reliability chart: lines draw themselves */
+/* calibration */
 (function rel() {
   const el = document.getElementById("rel"), tipc = document.getElementById("ctip"), box = document.getElementById("relchart");
   const Lx = 58, R = 408, T = 10, B = 298, max = 0.35;
@@ -659,20 +711,20 @@ document.querySelectorAll(".race li[data-ap]").forEach((li, i) => {
   let s = "";
   for (let i = 0; i <= 7; i++) { const v = i * 0.05; s += `<line class="gl" x1="${Lx}" y1="${sy(v)}" x2="${R}" y2="${sy(v)}"/>`; if (i % 2 === 0) s += `<text x="${sx(v)}" y="${B + 20}" text-anchor="middle">${Math.round(v * 100)}%</text><text x="${Lx - 10}" y="${sy(v) + 4}" text-anchor="end">${Math.round(v * 100)}%</text>`; }
   s += `<g class="axis"><line x1="${Lx}" y1="${B}" x2="${R}" y2="${B}"/><line x1="${Lx}" y1="${T}" x2="${Lx}" y2="${B}"/></g>`;
-  s += `<text x="${(Lx + R) / 2}" y="${B + 44}" text-anchor="middle">FORECAST, MEAN OF EACH TENTH</text>`;
-  s += `<text transform="translate(12 ${(T + B) / 2}) rotate(-90)" text-anchor="middle">OBSERVED, 2025</text>`;
+  s += `<text x="${(Lx + R) / 2}" y="${B + 44}" text-anchor="middle">FORECAST · MEAN OF EACH TENTH</text>`;
+  s += `<text transform="translate(12 ${(T + B) / 2}) rotate(-90)" text-anchor="middle">OBSERVED IN 2025</text>`;
   s += `<line class="diag" x1="${sx(0)}" y1="${sy(0)}" x2="${sx(max)}" y2="${sy(max)}"/>`;
   [["B4", 2, "Trees (B4)"], ["M_A2", 1, "Model M (A2)"]].forEach(([key, n, name]) => {
     const r = REL[key], pts = r.mean_forecast.map((f, i) => [f, r.observed_rate[i]]);
     s += `<path class="s s${n}" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:${REDUCED ? 0 : 1}" d="${pts.map(([f, o], i) => (i ? "L" : "M") + sx(f).toFixed(1) + " " + sy(o).toFixed(1)).join(" ")}"/>`;
-    pts.forEach(([f, o], i) => { s += `<circle class="d${n}" cx="${sx(f)}" cy="${sy(o)}" r="${REDUCED ? 4.5 : 0}"/><circle class="hit" cx="${sx(f)}" cy="${sy(o)}" r="12" data-t="${name} · tenth ${i + 1}: forecast ${(f * 100).toFixed(1)}%, observed ${(o * 100).toFixed(1)}%"/>`; });
+    pts.forEach(([f, o], i) => { s += `<circle class="d${n}" cx="${sx(f)}" cy="${sy(o)}" r="${REDUCED ? 4 : 0}"/><circle class="hit" cx="${sx(f)}" cy="${sy(o)}" r="12" data-t="${name}, tenth ${i + 1}: forecast ${(f * 100).toFixed(1)}%, observed ${(o * 100).toFixed(1)}%"/>`; });
     const [lf, lo] = pts[8];
     s += n === 1 ? `<text class="lab" x="${sx(lf) + 12}" y="${sy(lo) + 20}">${name}</text>` : `<text class="lab" x="${sx(lf) - 12}" y="${sy(lo) - 12}" text-anchor="end">${name}</text>`;
   });
   el.innerHTML = s;
   onView(box, () => {
-    el.querySelectorAll("path.s").forEach((p, i) => { p.style.transition = `stroke-dashoffset 2.2s cubic-bezier(.2,.7,.1,1) ${i * .35}s`; p.style.strokeDashoffset = 0; });
-    el.querySelectorAll("circle:not(.hit)").forEach((c, i) => setTimeout(() => c.setAttribute("r", 4.5), REDUCED ? 0 : 500 + i * 70));
+    el.querySelectorAll("path.s").forEach((p, i) => { p.style.transition = `stroke-dashoffset 2.4s cubic-bezier(.22,.7,.12,1) ${i * .4}s`; p.style.strokeDashoffset = 0; });
+    el.querySelectorAll("circle:not(.hit)").forEach((c, i) => setTimeout(() => c.setAttribute("r", 4), REDUCED ? 0 : 600 + i * 70));
   }, 0.35);
   el.querySelectorAll(".hit").forEach((c) => {
     const show = () => { const b = box.getBoundingClientRect(), cr = c.getBoundingClientRect(); tipc.textContent = c.dataset.t; tipc.style.left = (cr.left - b.left + cr.width / 2) + "px"; tipc.style.top = (cr.top - b.top + 8) + "px"; tipc.style.opacity = 1; };
@@ -680,12 +732,7 @@ document.querySelectorAll(".race li[data-ap]").forEach((li, i) => {
   });
 })();
 
-/* nav highlight */
-const navLinks = [...document.querySelectorAll(".nav .links a[href^='#']")];
-const so = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) navLinks.forEach((a) => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id)); }), { rootMargin: "-45% 0px -50% 0px" });
-document.querySelectorAll("section.chapter").forEach((s) => so.observe(s));
-
-/* the orbit: a night Earth that turns, then descends on the Amazon as you scroll */
+/* the globe: an engraved night Earth that turns, then descends on the Amazon */
 (async function orbit() {
   const cvs = document.getElementById("globe");
   let THREE, topo, geo;
@@ -700,29 +747,30 @@ document.querySelectorAll("section.chapter").forEach((s) => so.observe(s));
   try { renderer = new THREE.WebGLRenderer({ canvas: cvs, antialias: true, alpha: true, powerPreference: "high-performance" }); } catch (e) { return; }
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(32, 1, 0.1, 200);
-  const small = innerWidth < 700, TW = small ? 2048 : 4096, TH = TW / 2;
+  const small = innerWidth < 700, TW = small ? 2048 : 4096, TH = TW / 2, S = TW / 4096;
 
-  // the planet's skin: dot-matrix continents at night, a faint graticule, glowing coasts
+  // the engraving: ocean in ink with a fine graticule, land hatched like a copperplate, coasts in gold
   const tex = document.createElement("canvas"); tex.width = TW; tex.height = TH;
   const t = tex.getContext("2d");
-  t.fillStyle = "#03050a"; t.fillRect(0, 0, TW, TH);
+  t.fillStyle = "#070d0a"; t.fillRect(0, 0, TW, TH);
   const proj = geo.geoEquirectangular().scale(TW / (2 * Math.PI)).translate([TW / 2, TH / 2]), path = geo.geoPath(proj, t);
-  t.strokeStyle = "rgba(111,216,238,.07)"; t.lineWidth = 1; t.beginPath(); path(geo.geoGraticule10()); t.stroke();
+  t.strokeStyle = "rgba(236,229,211,.07)"; t.lineWidth = 1; t.beginPath(); path(geo.geoGraticule().step([10, 10])()); t.stroke();
   const world = await fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json").then((r) => r.json()).catch(() => null);
   if (world) {
     const land = topo.feature(world, world.objects.land), borders = topo.mesh(world, world.objects.countries, (a, b) => a !== b);
     t.save(); t.beginPath(); path(land); t.clip();
-    t.fillStyle = "#0a1020"; t.fillRect(0, 0, TW, TH);
-    const step = small ? 5 : 7; t.fillStyle = "rgba(150,178,220,.5)";
-    for (let y = 0; y < TH; y += step) for (let x = (y / step) % 2 ? step / 2 : 0; x < TW; x += step) t.fillRect(x, y, small ? 1.4 : 1.8, small ? 1.4 : 1.8);
+    t.fillStyle = "#111c16"; t.fillRect(0, 0, TW, TH);
+    t.strokeStyle = "rgba(236,229,211,.13)"; t.lineWidth = 1.1 * S;
+    const gap = 5.5 * S; t.beginPath();
+    for (let x = -TH; x < TW; x += gap) { t.moveTo(x, TH); t.lineTo(x + TH, 0); }
+    t.stroke();
     t.restore();
-    t.strokeStyle = "rgba(111,216,238,.42)"; t.lineWidth = small ? 1 : 1.5; t.beginPath(); path(land); t.stroke();
-    t.strokeStyle = "rgba(150,178,220,.16)"; t.lineWidth = 1; t.beginPath(); path(borders); t.stroke();
+    t.strokeStyle = "rgba(217,177,79,.6)"; t.lineWidth = 1.6 * S; t.beginPath(); path(land); t.stroke();
+    t.strokeStyle = "rgba(236,229,211,.14)"; t.lineWidth = 1 * S; t.setLineDash([4 * S, 4 * S]); t.beginPath(); path(borders); t.stroke(); t.setLineDash([]);
   }
   const texture = new THREE.CanvasTexture(tex); texture.colorSpace = THREE.SRGBColorSpace; texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
   const embers = document.createElement("canvas"); embers.width = TW; embers.height = TH;
   const emberTex = new THREE.CanvasTexture(embers); emberTex.colorSpace = THREE.SRGBColorSpace;
-  // the forecast, painted onto the planet; the hottest bands also into a glowing ember layer
   paintGlobe = ({ data }) => {
     const x0 = (W0 + 180) / 360 * TW, y0 = (90 - N0) / 180 * TH, ww = (E0 - W0) / 360 * TW, hh = (N0 - S0) / 180 * TH;
     const all = document.createElement("canvas"), hot = document.createElement("canvas"); all.width = hot.width = W; all.height = hot.height = H;
@@ -730,7 +778,7 @@ document.querySelectorAll("section.chapter").forEach((s) => so.observe(s));
     for (let j = 0; j < a.length; j += 4) { const b = data[j + 1]; if (b !== 255) { const c = RAMP[b]; a[j] = c[0]; a[j + 1] = c[1]; a[j + 2] = c[2]; a[j + 3] = 255; if (b >= 3) { h2[j] = c[0]; h2[j + 1] = c[1]; h2[j + 2] = c[2]; h2[j + 3] = 255; } } }
     all.getContext("2d").putImageData(ai, 0, 0); hot.getContext("2d").putImageData(hi, 0, 0);
     t.imageSmoothingQuality = "high"; t.drawImage(all, x0, y0, ww, hh); texture.needsUpdate = true;
-    const e = embers.getContext("2d"); e.filter = "blur(3px)"; e.drawImage(hot, x0, y0, ww, hh); e.filter = "none"; e.drawImage(hot, x0, y0, ww, hh); emberTex.needsUpdate = true;
+    const e = embers.getContext("2d"); e.filter = "blur(3px)"; e.drawImage(hot, x0, y0, ww, hh); e.filter = "none"; emberTex.needsUpdate = true;
   };
   if (D) paintGlobe(D);
 
@@ -738,32 +786,30 @@ document.querySelectorAll("section.chapter").forEach((s) => so.observe(s));
   spin.add(new THREE.Mesh(new THREE.SphereGeometry(1, 160, 160), new THREE.MeshBasicMaterial({ map: texture })));
   const emberMat = new THREE.MeshBasicMaterial({ map: emberTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
   spin.add(new THREE.Mesh(new THREE.SphereGeometry(1.004, 160, 160), emberMat));
-  // night-side shading, fixed to the camera, so the globe has depth
+  // terminator: the night side falls into shadow
   tilt.add(new THREE.Mesh(new THREE.SphereGeometry(1.002, 96, 96), new THREE.ShaderMaterial({
     transparent: true, depthWrite: false,
     vertexShader: "varying vec3 vN; void main(){ vN = normalize(normalMatrix*normal); gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }",
-    fragmentShader: "varying vec3 vN; void main(){ float l = dot(vN, normalize(vec3(-.55,.35,.78))); gl_FragColor = vec4(.005,.008,.025, smoothstep(.2,-.6,l)*.85); }",
+    fragmentShader: "varying vec3 vN; void main(){ float l = dot(vN, normalize(vec3(-.55,.4,.75))); gl_FragColor = vec4(.02,.035,.028, smoothstep(.25,-.55,l)*.86); }",
   })));
-  // the atmosphere: a fresnel rim, cyan at the equator warming to magenta at the poles
-  scene.add(new THREE.Mesh(new THREE.SphereGeometry(1.12, 96, 96), new THREE.ShaderMaterial({
+  // a thin warm limb, like gilt on the edge of a page
+  scene.add(new THREE.Mesh(new THREE.SphereGeometry(1.09, 96, 96), new THREE.ShaderMaterial({
     side: THREE.BackSide, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false,
     vertexShader: "varying vec3 vN; varying vec3 vP; void main(){ vN = normalize(normalMatrix*normal); vec4 p = modelViewMatrix*vec4(position,1.); vP = p.xyz; gl_Position = projectionMatrix*p; }",
-    fragmentShader: "varying vec3 vN; varying vec3 vP; void main(){ float d = dot(vN, normalize(-vP)); float f = pow(smoothstep(0., -.5, d), 2.2); vec3 c = mix(vec3(.30,.72,.88), vec3(.92,.38,.70), smoothstep(.15,.95,abs(vN.y))); gl_FragColor = vec4(c, 1.) * f * .85; }",
+    fragmentShader: "varying vec3 vN; varying vec3 vP; void main(){ float d = dot(vN, normalize(-vP)); float f = pow(smoothstep(0., -.55, d), 3.); gl_FragColor = vec4(vec3(.85,.69,.31), 1.) * f * .5; }",
   })));
-  // stars
-  const N = small ? 1400 : 2800, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+  const N = small ? 900 : 1700, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
   for (let i = 0; i < N; i++) {
     const u = Math.random() * 2 - 1, a = Math.random() * Math.PI * 2, r = 40 + Math.random() * 30, s = Math.sqrt(1 - u * u);
     pos.set([r * s * Math.cos(a), r * u, r * s * Math.sin(a)], i * 3);
-    const w = .3 + Math.random() * .7, tint = Math.random();
-    col.set(tint < .1 ? [w, w * .62, w * .86] : tint < .22 ? [w * .7, w * .9, w] : [w, w, w], i * 3);
+    const w = .25 + Math.random() * .55; col.set([w * .98, w * .93, w * .82], i * 3);
   }
   const sg = new THREE.BufferGeometry(); sg.setAttribute("position", new THREE.BufferAttribute(pos, 3)); sg.setAttribute("color", new THREE.BufferAttribute(col, 3));
-  const stars = new THREE.Points(sg, new THREE.PointsMaterial({ size: small ? .17 : .13, vertexColors: true, transparent: true, opacity: .9, depthWrite: false }));
+  const stars = new THREE.Points(sg, new THREE.PointsMaterial({ size: small ? .15 : .11, vertexColors: true, transparent: true, opacity: .8, depthWrite: false }));
   scene.add(stars);
   document.querySelector(".orbit .fallback").style.opacity = 0;
 
-  const hero = document.getElementById("hero"), arrive = document.getElementById("arrive"), coords = document.getElementById("coords"), orbitEl = document.querySelector(".orbit");
+  const descend = document.getElementById("descend"), title = document.getElementById("title"), arrive = document.getElementById("arrive"), coords = document.getElementById("coords"), orbitEl = document.querySelector(".orbit");
   function size() { const w = cvs.clientWidth, h = cvs.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
   size(); addEventListener("resize", size);
   const rad = Math.PI / 180, target = { lon: -57.5, lat: -9.5 };
@@ -777,18 +823,18 @@ document.querySelectorAll("section.chapter").forEach((s) => so.observe(s));
     if (!visible) return;
     const time = (now - t0) / 1000;
     sm += (p - sm) * (REDUCED ? 1 : 0.07);
-    const e = ease(clamp(sm / 0.85, 0, 1)), wide = innerWidth > 900;
-    const drift = REDUCED ? 0 : (22 * Math.sin(time * 0.05) - 14);
-    const lon = target.lon + drift * (1 - e), lat = (1 - e) * 4 + e * target.lat;
+    const e = ease(clamp(sm / 0.85, 0, 1)), wide = innerWidth > 900, aspect = cvs.clientWidth / Math.max(1, cvs.clientHeight);
+    const drift = REDUCED ? 0 : (20 * Math.sin(time * 0.05) - 12);
+    const lon = target.lon + drift * (1 - e), lat = (1 - e) * 6 + e * target.lat;
     spin.rotation.y = Math.PI / 2 - (lon + 180) * rad; tilt.rotation.x = lat * rad;
-    const aspect = cvs.clientWidth / Math.max(1, cvs.clientHeight), far = aspect < 1 ? 6.2 : 5.3, near = aspect < 1 ? 3.1 : 2.45;
-    const dist = far - e * (far - near), off = wide ? -1.25 * (1 - e) : 0, offY = wide ? 0 : 0.95 * (1 - e);
+    const far = aspect < 1 ? 6.2 : 4.9, near = aspect < 1 ? 3.1 : 2.45;
+    const dist = far - e * (far - near), off = wide ? -1.15 * (1 - e) : 0, offY = wide ? 0 : 0.95 * (1 - e);
     camera.position.set(off, offY, dist); camera.lookAt(off, offY, 0);
-    emberMat.opacity = REDUCED ? 1 : 0.6 + 0.4 * (0.5 + 0.5 * Math.sin(time * 1.2));
-    stars.rotation.y = time * 0.004;
-    hero.style.opacity = clamp(1 - sm * 3.2, 0, 1); hero.style.transform = `translateY(${-sm * 70}px)`;
-    arrive.style.opacity = clamp((sm - 0.62) / 0.2, 0, 1);
-    coords.innerHTML = `LAT ${Math.abs(lat).toFixed(1)}°${lat < 0 ? "S" : "N"} · LON ${Math.abs(lon).toFixed(1)}°W<br>ALT ${Math.round((dist - 1) * 6371).toLocaleString("en")} KM`;
+    emberMat.opacity = REDUCED ? .8 : 0.45 + 0.35 * (0.5 + 0.5 * Math.sin(time * 0.9));
+    stars.rotation.y = time * 0.003;
+    title.style.opacity = clamp(1 - sm * 3, 0, 1); title.style.transform = `translateY(${-sm * 60}px)`;
+    arrive.style.opacity = clamp((sm - 0.62) / 0.2, 0, 1); descend.style.opacity = clamp(1 - sm * 5, 0, 1);
+    coords.innerHTML = `${Math.abs(lat).toFixed(1)}° ${lat < 0 ? "S" : "N"} · ${Math.abs(lon).toFixed(1)}° W<br>ALTITUDE ${Math.round((dist - 1) * 6371).toLocaleString("en")} KM`;
     renderer.render(scene, camera);
   })(t0);
 })();
